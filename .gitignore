@@ -2,6 +2,5 @@ package-lock.json
 package.json
 .env
 test.js
-
 #ignore all files in the node_modules folder
 node_modules/
