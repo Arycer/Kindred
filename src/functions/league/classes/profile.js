@@ -57,13 +57,13 @@ class Profile {
     async init(username, interaction) {
         await this.summoner_data.get_summoner(username);
         if (!this.summoner_data.summoner_id) return this;
-        interaction.editReply({ content: 'Obteniendo datos (1/6)' });
+        var msg = await interaction.channel.send('Obteniendo datos (1/6)');
         await wait(1);
         await this.ranked.get_ranked(this.summoner_data.summoner_id);
-        interaction.editReply({ content: 'Obteniendo datos (2/6)' });
+        await msg.edit('Obteniendo datos (2/6)');
         await wait(1);
         await this.get_masteries();
-        interaction.editReply({ content: 'Obteniendo datos (3/6)' });
+        await msg.edit('Obteniendo datos (3/6)');
         await wait(1);
         
         var last_10_endpoint = `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${this.summoner_data.puuid}/ids?start=0&count=10`;
@@ -74,7 +74,7 @@ class Profile {
             }
         });
         var last_10_ids = await last_10_response.json();
-        interaction.editReply({ content: 'Obteniendo datos (4/6)' });
+        await msg.edit('Obteniendo datos (4/6)');
         await wait(1);
 
         for (const id of last_10_ids) {
@@ -82,12 +82,12 @@ class Profile {
             if (this.history.last_10.matches[last_10_ids.indexOf(id)].win) this.history.last_10.wins++;
             else if (!this.history.last_10.matches[last_10_ids.indexOf(id)].win) this.history.last_10.losses++;
             this.history.last_10.winrate = (this.history.last_10.wins / (this.history.last_10.wins + this.history.last_10.losses)) * 100;
-            interaction.editReply({ content: `Obteniendo datos (5.${last_10_ids.indexOf(id)+1}/6)` });
+            await msg.edit(`Obteniendo datos (5.${last_10_ids.indexOf(id)+1}/6)`);
             await wait(1);
         }
 
         await this.livegame.get_livegame(this.summoner_data.summoner_id);
-        interaction.editReply({ content: 'Obteniendo datos (6/6)' });
+        await msg.delete();
         return this;
     }
 }

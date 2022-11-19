@@ -10,8 +10,7 @@ module.exports = {
         try {
             const username = interaction.options.getString('usuario');
             const embed = await embed_profile(username, interaction);
-            await interaction.channel.send({ embeds: [embed] });
-            await interaction.deleteReply();
+            await interaction.followUp({ embeds: [embed] });
         }
         catch (error) {
             console.log(error);
