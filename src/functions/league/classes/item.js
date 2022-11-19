@@ -7,16 +7,11 @@ class Item {
     }
 
     async get_item(id) {
-        var ver_endpoint = `https://ddragon.leagueoflegends.com/api/versions.json`;
-        var ver_response = await fetch(ver_endpoint);
-        var ver_json = await ver_response.json();
-        var version = ver_json[0];
-
-        var item_endpoint = `http://ddragon.leagueoflegends.com/cdn/${version}/data/es_ES/item.json`;
-        var item_response = await fetch(item_endpoint);
-        var item_json = await item_response.json();
-        var items = Object.values(item_json.data);
-        var item = items.find(item => item.image.full == `${id}.png`);
+        var endpoint = `https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/items.json`;
+        var response = await fetch(endpoint);
+        var json = await response.json();
+        var items = Object.values(json);
+        var item = items.find(item => item.id == id);
         if (!item) return;
         this.name = item.name;
         this.id = id;
