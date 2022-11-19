@@ -28,7 +28,6 @@ class LiveGame {
             }
         });
         var json = await response.json();
-        console.log(json);
         if (!json.gameId) return this;
         this.ingame = true;
         this.gamedata.game_id = json.gameId;

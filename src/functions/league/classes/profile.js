@@ -56,6 +56,7 @@ class Profile {
 
     async init(username) {
         await this.summoner_data.get_summoner(username);
+        if (!this.summoner_data.summoner_id) return this;
         await this.ranked.get_ranked(this.summoner_data.summoner_id);
         await this.get_masteries();
         
