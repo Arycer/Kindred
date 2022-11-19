@@ -34,7 +34,7 @@ class Mastery {
         this.chest_granted = json.chestGranted;
         this.tokens_earned = json.tokensEarned;
         this.summoner_id = json.summonerId;
-        this.text = `**[${this.champion_level}]** ${this.champion.name} - ${this.champion_points.toLocaleString('es-ES')} points`;
+        this.text = `**[${this.champion_level}]** ${this.champion.name} - ${this.champion_points.toLocaleString('es-ES')} puntos`;
         return this;
     }
 }

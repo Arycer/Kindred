@@ -39,7 +39,7 @@ async function play_song (interaction, query) {
         } while (queue.songs.length > 0);
 		queue.clear();
 		connection.destroy();
-    } else interaction.followUp({ embeds: [embed] });
+    } else interaction.editReply({ embeds: [embed] });
 }
 
 module.exports = play_song;

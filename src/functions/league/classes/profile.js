@@ -54,14 +54,17 @@ class Profile {
         this.mastery.score = score_json;
     }
 
-    async init(username) {
+    async init(username, interaction) {
         await this.summoner_data.get_summoner(username);
         if (!this.summoner_data.summoner_id) return this;
-        console.log('Summoner data fetched');
+        interaction.editReply({ content: 'Obteniendo datos (1/6)' });
+        await wait(1);
         await this.ranked.get_ranked(this.summoner_data.summoner_id);
-        console.log('Ranked data fetched');
+        interaction.editReply({ content: 'Obteniendo datos (2/6)' });
+        await wait(1);
         await this.get_masteries();
-        console.log('Mastery data fetched');
+        interaction.editReply({ content: 'Obteniendo datos (3/6)' });
+        await wait(1);
         
         var last_10_endpoint = `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${this.summoner_data.puuid}/ids?start=0&count=10`;
         var last_10_response = await fetch(last_10_endpoint, {
@@ -71,18 +74,20 @@ class Profile {
             }
         });
         var last_10_ids = await last_10_response.json();
-        console.log('Last 10 matches fetched');
+        interaction.editReply({ content: 'Obteniendo datos (4/6)' });
+        await wait(1);
 
         for (const id of last_10_ids) {
             await this.history.last_10.matches[last_10_ids.indexOf(id)].get_match(id, this.summoner_data.puuid);
             if (this.history.last_10.matches[last_10_ids.indexOf(id)].win) this.history.last_10.wins++;
             else if (!this.history.last_10.matches[last_10_ids.indexOf(id)].win) this.history.last_10.losses++;
             this.history.last_10.winrate = (this.history.last_10.wins / (this.history.last_10.wins + this.history.last_10.losses)) * 100;
-            console.log(`Match ${last_10_ids.indexOf(id) + 1} fetched`);
+            interaction.editReply({ content: `Obteniendo datos (5.${last_10_ids.indexOf(id)+1}/6)` });
+            await wait(1);
         }
 
         await this.livegame.get_livegame(this.summoner_data.summoner_id);
-        console.log('Livegame data fetched');
+        interaction.editReply({ content: 'Obteniendo datos (6/6)' });
         return this;
     }
 }
@@ -101,6 +106,12 @@ function gen_array_masteries(length) {
         arr.push(new Mastery());
     }
     return arr;
+}
+
+async function wait(seconds) {
+    return new Promise(resolve => {
+        setTimeout(resolve, seconds * 1000);
+    });
 }
 
 module.exports = Profile;

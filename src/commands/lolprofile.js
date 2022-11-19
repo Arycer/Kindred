@@ -9,8 +9,9 @@ module.exports = {
     async execute(interaction) {
         try {
             const username = interaction.options.getString('usuario');
-            const embed = await embed_profile(username, interaction.user.tag);
-            await interaction.followUp({ embeds: [embed] });
+            const embed = await embed_profile(username, interaction);
+            await interaction.channel.send({ embeds: [embed] });
+            await interaction.deleteReply();
         }
         catch (error) {
             console.log(error);

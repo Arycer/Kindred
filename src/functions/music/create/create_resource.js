@@ -3,7 +3,7 @@ const ytdl = require('ytdl-core');
 
 async function create_resource (url) {
     const audio = ytdl(url, {
-        highWaterMark: 33554432,
+        highWaterMark: 52428800,
         filter: 'audioonly'
     });
     const resource = createAudioResource(audio, {
