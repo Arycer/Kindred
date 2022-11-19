@@ -57,8 +57,11 @@ class Profile {
     async init(username) {
         await this.summoner_data.get_summoner(username);
         if (!this.summoner_data.summoner_id) return this;
+        console.log('Summoner data fetched');
         await this.ranked.get_ranked(this.summoner_data.summoner_id);
+        console.log('Ranked data fetched');
         await this.get_masteries();
+        console.log('Mastery data fetched');
         
         var last_10_endpoint = `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${this.summoner_data.puuid}/ids?start=0&count=10`;
         var last_10_response = await fetch(last_10_endpoint, {
@@ -68,16 +71,18 @@ class Profile {
             }
         });
         var last_10_ids = await last_10_response.json();
+        console.log('Last 10 matches fetched');
 
         for (const id of last_10_ids) {
             await this.history.last_10.matches[last_10_ids.indexOf(id)].get_match(id, this.summoner_data.puuid);
             if (this.history.last_10.matches[last_10_ids.indexOf(id)].win) this.history.last_10.wins++;
             else this.history.last_10.losses++;
             this.history.last_10.winrate = (this.history.last_10.wins / (this.history.last_10.wins + this.history.last_10.losses)) * 100;
+            console.log(`Match ${last_10_ids.indexOf(id) + 1} fetched`);
         }
 
         await this.livegame.get_livegame(this.summoner_data.summoner_id);
-
+        console.log('Livegame data fetched');
         return this;
     }
 }

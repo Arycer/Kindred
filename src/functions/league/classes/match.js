@@ -19,6 +19,8 @@ class Match {
             spell1: null,
             spell2: null,
         }
+        this.game_queue_id = null;
+        this.game_queue_name = null;
         this.game_duration = null;
         this.timestamp = null;
         this.champ_id = null;
