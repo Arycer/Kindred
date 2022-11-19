@@ -8,7 +8,7 @@ class Summoner {
         this.name = null;
         this.profile_icon = null;
         this.summoner_level = null;
-        this.opgg = null;
+        this.url = null;
     }
 
     async get_summoner(username) {
@@ -32,7 +32,7 @@ class Summoner {
         this.name = json.name;
         this.profile_icon = `http://ddragon.leagueoflegends.com/cdn/${version}/img/profileicon/${json.profileIconId}.png`;
         this.summoner_level = json.summonerLevel;
-        this.opgg = `https://euw.op.gg/summoner/userName=${json.name.split(' ').join('%20')}`;
+        this.url = `https://www.leagueofgraphs.com/es/summoner/euw/${json.name.split(' ').join('%20')}`;
         return this;
     }
 }

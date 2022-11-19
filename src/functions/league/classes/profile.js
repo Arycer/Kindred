@@ -76,7 +76,7 @@ class Profile {
         for (const id of last_10_ids) {
             await this.history.last_10.matches[last_10_ids.indexOf(id)].get_match(id, this.summoner_data.puuid);
             if (this.history.last_10.matches[last_10_ids.indexOf(id)].win) this.history.last_10.wins++;
-            else this.history.last_10.losses++;
+            else if (!this.history.last_10.matches[last_10_ids.indexOf(id)].win) this.history.last_10.losses++;
             this.history.last_10.winrate = (this.history.last_10.wins / (this.history.last_10.wins + this.history.last_10.losses)) * 100;
             console.log(`Match ${last_10_ids.indexOf(id) + 1} fetched`);
         }
