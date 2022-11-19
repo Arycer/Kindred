@@ -28,18 +28,25 @@ async function play_song (interaction, query) {
 	});
 
     if (!queue.playing) {
-        interaction.deleteReply();
         queue.playing = true;
+        const embed = create_embed('firstplay', {
+			requester: requester,
+			title: await get_title(url),
+			url: url
+		});
+        await interaction.followUp({ embeds: [embed] });
+        var nosend = true;
         do {
             queue.next();
             do {
-                await play(interaction.channel, player, queue);
+                await play(interaction.channel, player, queue, nosend);
                 await wait(player);
             } while (queue.looped());
+            nosend = false;
         } while (queue.songs.length > 0);
 		queue.clear();
 		connection.destroy();
-    } else interaction.editReply({ embeds: [embed] });
+    } else interaction.followUp({ embeds: [embed] });
 }
 
 module.exports = play_song;

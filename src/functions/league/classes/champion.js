@@ -1,3 +1,4 @@
+const get_emote = require('../fetch/get_emote');
 const fetch = require('node-fetch');
 
 class Champion {
@@ -5,6 +6,7 @@ class Champion {
         this.name = null;
         this.key = null;
         this.id = null;
+        this.emote = null;
     }
 
     async get_champion(query) {
@@ -26,6 +28,8 @@ class Champion {
         this.name = champ.name;
         this.key = champ.key;
         this.id = champ.id;
+        this.emote = get_emote(champ.id);
+
         return this;
     }
 }

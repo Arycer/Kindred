@@ -14,7 +14,7 @@ async function embed_profile(username, interaction) {
     }
     var r_field = {
         name: 'Estadísticas de Ranked',
-        value: `Sin Clasificar`,
+        value: `<:unranked:1043560446357143592> Sin Clasificar`,
         inline: true
     };
     if (profile.ranked.solo.text != 'Unranked') {

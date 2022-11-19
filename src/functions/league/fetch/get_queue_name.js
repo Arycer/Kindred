@@ -9,10 +9,10 @@ async function get_queue_name(id) {
     if (queue.description.includes('ARAM')) return 'ARAM';
     if (queue.description.includes('URF')) return 'URF';
     if (queue.description.includes('One for All')) return 'One for All';
-    if (queue.description.includes('Ranked Solo')) return 'Ranked Solo/Dúo';
-    if (queue.description.includes('Ranked Flex')) return 'Ranked Flex';
-    if (queue.description.includes('Draft')) return 'Normal Reclutamiento';
-    if (queue.description.includes('Blind')) return 'Normal A ciegas';
+    if (queue.description.includes('Ranked Solo')) return 'Ranked (Solo/Dúo)';
+    if (queue.description.includes('Ranked Flex')) return 'Ranked (Flexible)';
+    if (queue.description.includes('Draft')) return 'Normal (Reclutamiento)';
+    if (queue.description.includes('Blind')) return 'Normal (A ciegas)';
     if (queue.description.includes('Tutorial')) return 'Tutorial';
     if (queue.description.includes('Co-op vs. AI')) return 'Co-op vs. AI';
     if (queue.description.includes('Clash')) return 'Clash';

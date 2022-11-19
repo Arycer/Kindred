@@ -15,6 +15,11 @@ function create_embed(type, options) {
 		} else {
 			embed.setDescription(`Quedan ${queue.songs.length} canciones en la cola.`);
 		}
+	} else if (type === 'firstplay') {
+		embed.setAuthor({ name: '🎵 Ahora suena:' });
+		embed.setTitle(options.title);
+		embed.setURL(options.url);
+		embed.setDescription('No hay más canciones en la cola.');
 	} else if (type === 'queue') {
 		embed.setAuthor({ name: '🎵 Cola de reproducción:' });
 		var queue = options.queue;

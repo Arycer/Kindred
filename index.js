@@ -2,6 +2,7 @@ const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { readdirSync } = require('node:fs');
 const { join }= require('node:path');
 const dotenv = require('dotenv');
+dotenv.config();
 
 const client = new Client({
 	intents: [
@@ -41,5 +42,5 @@ for (const file of event_files) {
 	}
 }
 
-dotenv.config(); client.login(process.env.DISCORD_TOKEN);
+client.login(process.env.DISCORD_TOKEN);
 

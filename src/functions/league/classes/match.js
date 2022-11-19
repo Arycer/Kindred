@@ -91,7 +91,7 @@ function gen_text (obj) {
     } else {
         var wintext = `🔴 **Derrota**`;
     }
-    var l1 = `${wintext} con ${obj.champ.name} - ${obj.stats.kills}/${obj.stats.deaths}/${obj.stats.assists} - ${obj.stats.cs} cs (${obj.stats.cs_per_min.toFixed(1)} cs/min) - ${obj.game_queue_name}`;
+    var l1 = `${wintext} con ${obj.champ.emote} ${obj.champ.name} - ${obj.stats.kills}/${obj.stats.deaths}/${obj.stats.assists} - ${obj.stats.cs}cs (${obj.stats.cs_per_min.toFixed(1)}cs/min) - ${obj.game_queue_name}`;
     var l2 = `🕐 **Duración de la partida:** ${Math.floor(obj.game_duration / 60)}:${obj.game_duration % 60 < 10 ? '0' + obj.game_duration % 60 : obj.game_duration % 60}`;
     var l3 = `📅 **Fecha:** ${new Date(obj.timestamp).toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })}`;
     l3 += ` - 🔗 **Enlace:** [League of Graphs](${obj.url})`;
