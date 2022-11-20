@@ -37,8 +37,8 @@ class Match {
         this.url = null;
     }
 
-    async get_match(match_id, puuid) {
-        var endpoint = `https://europe.api.riotgames.com/lol/match/v5/matches/${match_id}`;
+    async get_match(region, match_id, puuid) {
+        var endpoint = `https://${region.route}.api.riotgames.com/lol/match/v5/matches/${match_id}`;
         var response = await fetch(endpoint, {
             method: 'GET',
             headers: {
@@ -79,7 +79,7 @@ class Match {
             await item.get_item(participant[`item${this.inventory.items.indexOf(item)}`]);
         }
         await this.inventory.trinket.get_item(participant.item6);
-        this.url = `https://www.leagueofgraphs.com/es/match/euw/${match_id.replace('EUW1_', '')}`;
+        this.url = `https://www.leagueofgraphs.com/es/match/${region.name.toLowerCase()}/${match_id.split('_')[1]}`;
         this.text = gen_text(this);
         return this;
     }

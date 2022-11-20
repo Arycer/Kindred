@@ -25,8 +25,8 @@ class LiveGame {
         }
     }
 
-    async get_livegame(summoner_id) {
-        var endpoint = `https://euw1.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${summoner_id}`;
+    async get_livegame(region, summoner_id) {
+        var endpoint = `https://${region.id}.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${summoner_id}`;
         var response = await fetch(endpoint, {
             method: 'GET',
             headers: {
@@ -52,16 +52,16 @@ class LiveGame {
         this.gamedata.spells.spell1 = participant.spell1Id;
         this.gamedata.spells.spell2 = participant.spell2Id;
         this.gamedata.champion = await this.gamedata.champion.get_champion(participant.championId);
-        this.text = gen_text(this, participant);
+        this.text = gen_text(this, participant, region);
         return this;
     }
 }
 
-function gen_text (obj, participant) {
+function gen_text (obj, participant, region) {
     var gamedata = obj.gamedata;
     if (!obj.ingame) return obj.text;
     else {
-        var url = `https://porofessor.gg/es/live/euw/${participant.summonerName.split(' ').join('%20')}`;
+        var url = `https://porofessor.gg/es/live/${region.name.toLowerCase()}/${participant.summonerName.split(' ').join('%20')}`;
         var l1 = `🟢 **Jugando:** ${gamedata.champion.emote} ${gamedata.champion.name} - ${gamedata.game_map_name} - ${gamedata.game_queue_name}`;
         var l2 = `🕐 **Tiempo transcurrido:** ${Math.floor(gamedata.game_duration / 60)}:${gamedata.game_duration % 60 < 10 ? '0' + gamedata.game_duration % 60 : gamedata.game_duration % 60}`;
         var start_timestamp = gamedata.game_start_time;

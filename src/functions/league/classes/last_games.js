@@ -9,8 +9,8 @@ class LastGames {
         this.winrate = null;
     }
 
-    async get_last_games(puuid) {
-        var endpoint = `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${this.matches.length}`;
+    async get_last_games(region, puuid) {
+        var endpoint = `https://${region.route}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${this.matches.length}`;
         var response = await fetch(endpoint, {
             method: 'GET',
             headers: {
@@ -20,7 +20,7 @@ class LastGames {
         var json = await response.json();
 
         for (const match_id of json) {
-            await this.matches[json.indexOf(match_id)].get_match(match_id, puuid);
+            await this.matches[json.indexOf(match_id)].get_match(region, match_id, puuid);
         }
 
         this.wins = this.matches.filter(m => m.win === true).length;

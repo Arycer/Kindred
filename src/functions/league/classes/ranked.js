@@ -27,8 +27,8 @@ class Ranked {
         };
     }
 
-    async get_ranked(id) {
-        var endpoint = `https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/${id}`;
+    async get_ranked(region, id) {
+        var endpoint = `https://${region.id}.api.riotgames.com/lol/league/v4/entries/by-summoner/${id}`;
         var response = await fetch(endpoint, {
             method: 'GET',
             headers: {

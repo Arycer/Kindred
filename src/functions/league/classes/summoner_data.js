@@ -11,8 +11,8 @@ class Summoner {
         this.url = null;
     }
 
-    async get_summoner(username) {
-        var endpoint = `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${username}`;
+    async get_summoner(region, username) {
+        var endpoint = `https://${region.id}.api.riotgames.com/lol/summoner/v4/summoners/by-name/${username}`;
         var response = await fetch(endpoint, {
             method: 'GET',
             headers: {
@@ -21,18 +21,15 @@ class Summoner {
         });
         var json = await response.json();
 
-        var ver_endpoint = `https://ddragon.leagueoflegends.com/api/versions.json`;
-        var ver_response = await fetch(ver_endpoint);
-        var ver_json = await ver_response.json();
-        var version = ver_json[0];
+        if (!json.id) return this;
 
+        this.name = json.name;
+        this.puuid = json.puuid;
         this.summoner_id = json.id;
         this.account_id = json.accountId;
-        this.puuid = json.puuid;
-        this.name = json.name;
-        this.profile_icon = `http://ddragon.leagueoflegends.com/cdn/${version}/img/profileicon/${json.profileIconId}.png`;
         this.summoner_level = json.summonerLevel;
-        this.url = `https://www.leagueofgraphs.com/es/summoner/euw/${json.name.split(' ').join('%20')}`;
+        this.url = `https://www.leagueofgraphs.com/es/summoner/${region.name.toLowerCase()}/${json.name.split(' ').join('%20')}`;
+        this.profile_icon = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${json.profileIconId}.jpg`;
         return this;
     }
 }

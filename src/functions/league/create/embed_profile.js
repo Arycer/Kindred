@@ -1,9 +1,6 @@
 const { EmbedBuilder } = require('discord.js');
-const Profile = require('../classes/profile');
 
-async function embed_profile(username, interaction) {
-    const profile = new Profile();
-    await profile.init(username, interaction);
+async function embed_profile(profile, interaction) {
     var m_text = ``;
     for (var i = 0; i < 3; i++) {
         if (profile.masteries.champions[i]) {
@@ -36,7 +33,7 @@ async function embed_profile(username, interaction) {
     var lastg = profile.lastgames.matches[0];
 
     const embed = new EmbedBuilder()
-        .setAuthor({ name: profile.summoner_data.name, iconURL: profile.summoner_data.profile_icon, url: profile.summoner_data.url })
+        .setAuthor({ name: `${profile.region.name} - ${profile.summoner_data.name}`, iconURL: profile.summoner_data.profile_icon, url: profile.summoner_data.url })
         .setDescription(`**Esto es lo que he encontrado:**`)
         .addFields({ name: 'Nivel', value: `${profile.summoner_data.summoner_level}`, inline: true },
                    { name: 'Puntuación de maestría', value: `${profile.masteries.score} puntos en total`, inline: true },
