@@ -86,13 +86,10 @@ class Match {
 }
 
 function gen_text (obj) {
-    if (this.win == 'remake') {
-        var wintext = `⚙️ **Remake**`;
-    } else if (this.win) {
-        var wintext = `🟢 **Victoria**`;
-    } else {
-        var wintext = `🔴 **Derrota**`;
-    }
+    if (typeof obj.win === 'boolean') {
+        if (obj.win) var wintext = `🟢 **Victoria**`;
+        else var wintext = `🔴 **Derrota**`;
+    } else var wintext = `⚙️ **Remake**`;
     var e_cs = get_emote('minioncount'); var c = obj.champ; var s = obj.stats;
     var l1 = `${wintext} con ${c.emote} ${c.name} - ${s.kills}/${s.deaths}/${s.assists} - ${s.cs} ${e_cs} (${s.cs_per_min.toFixed(1)} ${e_cs}/min)`;
     var l2 = `🕐 **Duración de la partida:** ${Math.floor(obj.game_duration / 60)}:${obj.game_duration % 60 < 10 ? '0' + obj.game_duration % 60 : obj.game_duration % 60}`;
