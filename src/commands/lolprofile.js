@@ -52,8 +52,8 @@ module.exports = {
                 } else {
                     var acc = get_from_db(interaction, interaction.user);
                     if (acc) {
-                        username = acc.username;
-                        region = acc.region;
+                        username = acc.summoner.name;
+                        region = acc.region.id;
                     } else {
                         var embed = new EmbedBuilder()
                             .setAuthor({ name: '¡Algo ha salido mal!', iconURL: 'https://media.discordapp.net/attachments/1040519867578728481/1044021176177012798/939.jpg' })
