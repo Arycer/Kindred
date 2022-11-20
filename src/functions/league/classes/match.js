@@ -1,10 +1,11 @@
-const Champion = require('./champion');
-const fetch = require('node-fetch');
-const Item = require('./item');
-
 const get_queue_name = require('../fetch/get_queue_name');
 const get_map_name = require('../fetch/get_map_name');
 const get_emote = require('../fetch/get_emote');
+
+const Champion = require('./champion');
+const Item = require('./item');
+
+const fetch = require('node-fetch');
 
 class Match {
     constructor () {
