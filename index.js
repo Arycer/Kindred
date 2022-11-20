@@ -1,6 +1,7 @@
-const { Client, Collection, GatewayIntentBits } = require('discord.js');
+const { Client, Collection, GatewayIntentBits, ActivityType } = require('discord.js');
 const { readdirSync } = require('node:fs');
 const { join }= require('node:path');
+const MeowdB = require('meowdb');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -8,9 +9,17 @@ const client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
 		GatewayIntentBits.GuildMessages,
-		GatewayIntentBits.GuildVoiceStates
-	] 
+		GatewayIntentBits.GuildVoiceStates,
+		GatewayIntentBits.GuildMessageReactions	
+	]
 });
+
+const database = new MeowdB({
+	dir: `${__dirname}/src/database`,
+	name: 'database',
+});
+
+client.database = database;
 
 client.commands = new Collection();
 

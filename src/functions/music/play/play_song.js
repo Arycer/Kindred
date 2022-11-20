@@ -2,12 +2,11 @@ const create_connection = require('../create/create_connection');
 const { get_title, get_url } = require('../fetch/get_info.js');
 const { getVoiceConnection } = require('@discordjs/voice');
 const create_embed = require('../create/create_embed');
-const play_playlist = require('./play_playlist');
 const play = require('./play');
 const wait = require('./wait');
 
 async function play_song (interaction, query) {
-    if (query.includes('list=')) return await play_playlist(interaction, query);
+    if (query.includes('list=')) return interaction.followUp({ content: 'El soporte para listas de reproducción está desactivado.', ephemeral: true });
 
     var voice_channel = interaction.member.voice.channelId;
     if (!voice_channel) return interaction.reply({ content: '¡Debes estar en un canal de voz para usar este comando!', ephemeral: true });

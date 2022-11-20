@@ -6,6 +6,7 @@ async function create_resource (url) {
         highWaterMark: 52428800,
         filter: 'audioonly'
     });
+    if (audio.statusCode === 410) return null;
     const resource = createAudioResource(audio, {
         inputType: StreamType.Arbitrary,
         inlineVolume: true

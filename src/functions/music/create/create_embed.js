@@ -28,7 +28,7 @@ function create_embed(type, options) {
 			embed.addFields({ name: 'No hay más canciones en la cola.', value: 'Añade canciones con /play (canción)' });
 		} else {
 			for (let i = 0; i < queue.songs.length; i++) {
-				if (i > 10) break;
+				if (i > 14) break;
 				var song = queue.songs[i];
 				embed.addFields({ name: `${i + 1}. ${song.title}`, value: `Solicitada por: ${song.requester}` });
 			}

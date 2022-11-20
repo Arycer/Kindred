@@ -1,4 +1,4 @@
-const { REST, Routes, Events } = require('discord.js');
+const { REST, Routes, Events, ActivityType } = require('discord.js');
 const { readdirSync } = require('node:fs');
 const { join } = require('node:path');
 
@@ -7,6 +7,7 @@ module.exports = {
     once: true,
     async execute(client) {
         console.log(`Bot iniciado como ${client.user.tag}!`);
+
         const commandFiles = readdirSync(join(__dirname, '..', 'commands')).filter(file => file.endsWith('.js'));
 
         const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
@@ -32,5 +33,7 @@ module.exports = {
                 console.error(error);
             }
         })();
+
+        client.user.setActivity(`a Lobo | /help`, { type: ActivityType.Listening });
     },
 };
