@@ -1,3 +1,4 @@
+const get_emote = require('../fetch/get_emote');
 const fetch = require('node-fetch');
 
 class Ranked {
@@ -46,8 +47,18 @@ class Ranked {
                 this.solo.losses = entry.losses;
                 this.solo.winrate = Math.round((entry.wins / (entry.wins + entry.losses)) * 100);
                 this.solo.hot_streak = entry.hotStreak;
-                this.solo.emote = emote_tier(entry.tier);
-                this.solo.text = `${this.solo.emote} ${this.solo.tier} ${entry.rank}\n${entry.leaguePoints} Puntos de Liga\n${entry.wins} Victorias /${entry.losses} Derrotas (${this.solo.winrate}% WR)`;
+                this.solo.emote = get_emote(entry.tier);
+                if (this.solo.tier === 'Maestro' || this.solo.tier === 'Gran Maestro' || this.solo.tier === 'Challenger') {
+                    var l1 = `${this.solo.emote} ${this.solo.tier}`;
+                    var l2 = `${this.solo.league_points} Puntos de Liga`;
+                    var l3 = `${this.solo.wins} Victorias - ${this.solo.losses} Derrotas (${this.solo.winrate}% WR)`;
+                    this.solo.text = `${l1}\n${l2}\n${l3}`;
+                } else {
+                    var l1 = `${this.solo.emote} ${this.solo.tier} ${this.solo.rank}`;
+                    var l2 = `${this.solo.league_points} Puntos de Liga`;
+                    var l3 = `${this.solo.wins} Victorias - ${this.solo.losses} Derrotas (${this.solo.winrate}% WR)`;
+                    this.solo.text = `${l1}\n${l2}\n${l3}`;
+                }
             }
             if (entry.queueType === 'RANKED_FLEX_SR') {
                 this.flex.tier = translate_tier(entry.tier);
@@ -57,7 +68,8 @@ class Ranked {
                 this.flex.losses = entry.losses;
                 this.flex.winrate = Math.round((entry.wins / (entry.wins + entry.losses)) * 100);
                 this.flex.hot_streak = entry.hotStreak;
-                this.flex.emote = emote_tier(entry.tier);
+                this.flex.emote = get_emote(entry.tier);
+                var l1 
                 this.flex.text = `${this.flex.emote} ${this.flex.tier} ${entry.rank}\n${entry.leaguePoints} Puntos de Liga\n${entry.wins} Victorias /${entry.losses} Derrotas (${this.flex.winrate}% WR)`;
             }
         }
@@ -93,29 +105,6 @@ function translate_tier (tier) {
             return 'Gran Maestro';
         case 'challenger':
             return 'Challenger';
-    }
-}
-
-function emote_tier (tier) {
-    switch (tier.toLowerCase()) {
-        case 'iron':
-            return '<:iron:1043560441181380728>';
-        case 'bronze':
-            return '<:bronze:1043560435166756894>';
-        case 'silver':
-            return '<:silver:1043560445027569724>';
-        case 'gold':
-            return '<:gold:1043560439977607218>';
-        case 'platinum':
-            return '<:platinum:1043560443681181726>';
-        case 'diamond':
-            return '<:diamond:1043560438463471676>';
-        case 'master':
-            return '<:master:1043560442003464265>';
-        case 'grandmaster':
-            return '<:grandmaster:1043565415399428126>';
-        case 'challenger':
-            return '<:challenger:1043560436819296266>';
     }
 }
 

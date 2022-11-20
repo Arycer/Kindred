@@ -15,7 +15,7 @@ class Champion {
         var json = await response.json();
         var champs = Object.values(json);
         if (typeof query === 'number') {
-            var champ = champs.find(champ => champ.key == query);
+            var champ = champs.find(champ => champ.id == query);
         } else {
             var champ = champs.find(champ => champ.name.toLowerCase() == query.toLowerCase());
         }

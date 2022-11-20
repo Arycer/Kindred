@@ -1,5 +1,6 @@
-const Champion = require('./champion');
 const fetch = require('node-fetch');
+
+const Champion = require('./champion');
 
 class Mastery {
     constructor () {
@@ -39,4 +40,53 @@ class Mastery {
     }
 }
 
-module.exports = Mastery;
+class Masteries {
+    constructor() {
+        this.champions = gen_array_masteries(3);
+        this.score = null;
+    }
+
+    async get_masteries(summoner_id) {
+        var endpoint = `https://euw1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/${summoner_id}`;
+        var response = await fetch(endpoint, {
+            method: 'GET',
+            headers: {
+                'X-Riot-Token': process.env.RIOT_API_KEY
+            }
+        });
+        var json = await response.json();
+        var champ_ids = [];
+
+        for (let i = 0; i < this.champions.length; i++) {
+            if (json[i]) {
+                champ_ids.push(json[i].championId);
+            } else {
+                break;
+            }
+        }
+
+        for (const champ_id of champ_ids) {
+            await this.champions[champ_ids.indexOf(champ_id)].get_mastery(summoner_id, champ_id);
+        }
+
+        var s_endpoint = `https://euw1.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/${summoner_id}`;
+        var s_response = await fetch(s_endpoint, {
+            method: 'GET',
+            headers: {
+                'X-Riot-Token': process.env.RIOT_API_KEY
+            }
+        });
+        this.score = await s_response.json();
+    }
+    
+}
+
+module.exports = Masteries;
+
+function gen_array_masteries(length) {
+    var arr = [];
+    for (let i = 0; i < length; i++) {
+        arr.push(new Mastery());
+    }
+    return arr;
+}

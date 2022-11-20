@@ -14,9 +14,10 @@ client.once('ready', async () => {
 
 function get_emote(name) {
     var emojis = client.emojis.cache;
-    var emoji = emojis.find(emoji => emoji.name === name);
-    var e_str = `<:${emoji.name}:${emoji.id}>`;
-    return e_str;
+    var emoji = emojis.find(
+        emoji => emoji.name.toLowerCase() === name.toLowerCase()
+    );
+    return `<:${emoji.name}:${emoji.id}>`;
 }
 
 client.login(process.env.DISCORD_ALT);

@@ -4,6 +4,7 @@ const Item = require('./item');
 
 const get_queue_name = require('../fetch/get_queue_name');
 const get_map_name = require('../fetch/get_map_name');
+const get_emote = require('../fetch/get_emote');
 
 class Match {
     constructor () {
@@ -91,10 +92,10 @@ function gen_text (obj) {
     } else {
         var wintext = `🔴 **Derrota**`;
     }
-    var l1 = `${wintext} con ${obj.champ.emote} ${obj.champ.name} - ${obj.stats.kills}/${obj.stats.deaths}/${obj.stats.assists} - ${obj.stats.cs}cs (${obj.stats.cs_per_min.toFixed(1)}cs/min) - ${obj.game_queue_name}`;
+    var e_cs = get_emote('minioncount'); var c = obj.champ; var s = obj.stats;
+    var l1 = `${wintext} con ${c.emote} ${c.name} - ${s.kills}/${s.deaths}/${s.assists} - ${s.cs} ${e_cs} (${s.cs_per_min.toFixed(1)} ${e_cs}/min)`;
     var l2 = `🕐 **Duración de la partida:** ${Math.floor(obj.game_duration / 60)}:${obj.game_duration % 60 < 10 ? '0' + obj.game_duration % 60 : obj.game_duration % 60}`;
-    var l3 = `📅 **Fecha:** ${new Date(obj.timestamp).toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })}`;
-    l3 += ` - 🔗 **Enlace:** [League of Graphs](${obj.url})`;
+    var l3 = `📅 **Fecha:** ${new Date(obj.timestamp).toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })} - 🔗 **Enlace:** [League of Graphs](${obj.url})`;
     return `${l1}\n${l2}\n${l3}`;
 }
 
