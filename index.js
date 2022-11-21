@@ -14,12 +14,10 @@ const client = new Client({
 	]
 });
 
-const database = new MeowdB({
+client.database = new MeowdB({
 	dir: `${__dirname}/src/database`,
 	name: 'database',
 });
-
-client.database = database;
 
 client.commands = new Collection();
 

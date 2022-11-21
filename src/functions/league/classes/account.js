@@ -15,7 +15,7 @@ class Account {
         var summoner = await this.summoner.get_summoner(this.region, name);
 
         if (!summoner.summoner_id) {
-            return interaction.reply({ content: 'No se ha encontrado el invocador.', ephemeral: true });
+            return interaction.followUp({ content: 'No se ha encontrado el invocador.', ephemeral: true });
         }
 
         do {
