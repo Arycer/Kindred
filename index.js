@@ -1,4 +1,4 @@
-const { Client, Collection, GatewayIntentBits, ActivityType } = require('discord.js');
+const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { readdirSync } = require('node:fs');
 const { join }= require('node:path');
 const MeowdB = require('meowdb');
