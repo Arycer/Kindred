@@ -1,4 +1,4 @@
-const create_embed = require('../functions/music/create/create_embed');
+const create_embed = require('../functions/create_embed');
 const { getVoiceConnection } = require('@discordjs/voice');
 const { SlashCommandBuilder } = require('discord.js');
 

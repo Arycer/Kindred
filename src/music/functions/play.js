@@ -1,5 +1,5 @@
-const create_resource = require('../create/create_resource');
-const create_embed = require('../create/create_embed');
+const create_resource = require('./create_resource');
+const create_embed = require('./create_embed');
 async function play (channel, player, queue, nosend) {
     try {
 		var current = queue.get_current();

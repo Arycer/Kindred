@@ -1,6 +1,6 @@
-const get_queue_name = require('../fetch/get_queue_name');
-const get_map_name = require('../fetch/get_map_name');
-const get_emote = require('../fetch/get_emote');
+const get_queue_name = require('../functions/get_queue_name');
+const get_map_name = require('../functions/get_map_name');
+const get_emote = require('../functions/get_emote');
 
 const Champion = require('./champion');
 const Item = require('./item');

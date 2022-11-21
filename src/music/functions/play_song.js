@@ -1,7 +1,7 @@
-const create_connection = require('../create/create_connection');
-const { get_title, get_url } = require('../fetch/get_info.js');
+const create_connection = require('./create_connection');
+const { get_title, get_url } = require('./get_song_info.js');
 const { getVoiceConnection } = require('@discordjs/voice');
-const create_embed = require('../create/create_embed');
+const create_embed = require('./create_embed');
 const play = require('./play');
 const wait = require('./wait');
 

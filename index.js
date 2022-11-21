@@ -21,18 +21,22 @@ client.database = new MeowdB({
 
 client.commands = new Collection();
 
-const commands_path = join(__dirname, 'src', 'commands');
-const command_files = readdirSync(commands_path).filter(file => file.endsWith('.js'));
+const league_cmds_dir = join(__dirname, 'src', 'league', 'commands');
+const music_cmds_dir = join(__dirname, 'src', 'music', 'commands');
 
-for (const file of command_files) {
-	const command_file = join(commands_path, file);
-	const command = require(command_file);
+const league_cmds_files = readdirSync(league_cmds_dir).filter(file => file.endsWith('.js'));
+const music_cmds_files = readdirSync(music_cmds_dir).filter(file => file.endsWith('.js'));
 
-	if ('data' in command && 'execute' in command) {
-		client.commands.set(command.data.name, command);
-	} else {
-		console.log(`El comando /${command_file} no es válido.`);
-	}
+for (const file of league_cmds_files) {
+	const cmd_file = join(league_cmds_dir, file);
+	const cmd = require(cmd_file);
+	client.commands.set(cmd.data.name, cmd);
+}
+
+for (const file of music_cmds_files) {
+	const cmd_file = join(music_cmds_dir, file);
+	const cmd = require(cmd_file);
+	client.commands.set(cmd.data.name, cmd);
 }
 
 const events_path = join(__dirname, 'src', 'events');

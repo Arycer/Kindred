@@ -1,5 +1,5 @@
 const { getVoiceConnection, AudioPlayerStatus } = require('@discordjs/voice');
-const create_embed = require('../functions/music/create/create_embed');
+const create_embed = require('../functions/create_embed');
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {

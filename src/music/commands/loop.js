@@ -1,11 +1,14 @@
-const { getVoiceConnection, AudioPlayerStatus } = require('@discordjs/voice');
-const create_embed = require('../functions/music/create/create_embed');
+const create_embed = require('../functions/create_embed');
+const { getVoiceConnection } = require('@discordjs/voice');
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('resume')
-        .setDescription('Reanuda la reproducción'),
+        .setName('loop')
+        .setDescription('Activa o desactiva la canción actual')
+        .addBooleanOption(option =>
+            option.setName('activar')
+                .setDescription('Activar o desactivar el bucle')),
     async execute(interaction) {
         try {
             const voiceChannel = interaction.member.voice.channel;
@@ -17,12 +20,15 @@ module.exports = {
             const player = connection.state.subscription?.player;
             if (!player) return interaction.reply({ content: '¡No estás reproduciendo música!', ephemeral: true });
 
-            if (player.state.status === AudioPlayerStatus.Playing) return interaction.reply({ content: '¡La reproducción no está pausada!', ephemeral: true });
+            const queue = connection.queue;
 
-            player.unpause();
+            const loop = interaction.options.getBoolean('activar');
+            if (!loop) queue.loop = !queue.loop;
+            else queue.loop = loop;
 
-            const embed = create_embed('resume', {
-                requester: interaction.user.tag
+            const embed = create_embed('loop', {
+                requester: interaction.user.tag,
+                queue: queue
             });
 
             await interaction.followUp({ embeds: [embed] });
@@ -32,3 +38,4 @@ module.exports = {
         }
     }
 };
+

@@ -8,15 +8,22 @@ module.exports = {
     async execute(client) {
         console.log(`Bot iniciado como ${client.user.tag}!`);
 
-        const commandFiles = readdirSync(join(__dirname, '..', 'commands')).filter(file => file.endsWith('.js'));
+        const music_cmds_files = readdirSync(join(__dirname, '..', 'music', 'commands')).filter(file => file.endsWith('.js'));
+        const league_cmds_files = readdirSync(join(__dirname, '..', 'league', 'commands')).filter(file => file.endsWith('.js'));
 
         const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
         const commands = [];
 
-        for (const file of commandFiles) {
-            const command_file = join(__dirname, '..', 'commands', file);
-            const command = require(command_file);
-            commands.push(command.data.toJSON());
+        for (const file of music_cmds_files) {
+            const cmd_file = join(__dirname, '..', 'music', 'commands', file);
+            const cmd = require(cmd_file);
+            commands.push(cmd.data.toJSON());
+        }
+
+        for (const file of league_cmds_files) {
+            const cmd_file = join(__dirname, '..', 'league', 'commands', file);
+            const cmd = require(cmd_file);
+            commands.push(cmd.data.toJSON());
         }
 
         (async () => {

@@ -1,4 +1,4 @@
-const get_emote = require('../fetch/get_emote');
+const get_emote = require('../functions/get_emote');
 const fetch = require('node-fetch');
 
 class Ranked {

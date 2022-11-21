@@ -1,8 +1,8 @@
 const Champion = require('./champion');
 const fetch = require('node-fetch');
 
-const get_queue_name = require('../fetch/get_queue_name');
-const get_map_name = require('../fetch/get_map_name');
+const get_queue_name = require('../functions/get_queue_name');
+const get_map_name = require('../functions/get_map_name');
 
 class LiveGame {
     constructor() {
@@ -52,23 +52,24 @@ class LiveGame {
         this.gamedata.spells.spell1 = participant.spell1Id;
         this.gamedata.spells.spell2 = participant.spell2Id;
         this.gamedata.champion = await this.gamedata.champion.get_champion(participant.championId);
+        function gen_text (obj, participant, region) {
+            var gamedata = obj.gamedata;
+            if (!obj.ingame) return obj.text;
+            else {
+                var url = `https://porofessor.gg/es/live/${region.name.toLowerCase()}/${participant.summonerName.split(' ').join('%20')}`;
+                var l1 = `🟢 **Jugando:** ${gamedata.champion.emote} ${gamedata.champion.name} - ${gamedata.game_map_name} - ${gamedata.game_queue_name}`;
+                var l2 = `🕐 **Tiempo transcurrido:** ${Math.floor(gamedata.game_duration / 60)}:${gamedata.game_duration % 60 < 10 ? '0' + gamedata.game_duration % 60 : gamedata.game_duration % 60}`;
+                var start_timestamp = gamedata.game_start_time;
+                if (!start_timestamp) start_timestamp = Date.now();
+                var l3 = `📅 **Fecha:** ${new Date(start_timestamp).toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })} - 🔗 **Enlace:** [Porofessor](${url})`
+                return `${l1}\n${l2}\n${l3}`;
+            }
+        }
         this.text = gen_text(this, participant, region);
         return this;
     }
 }
 
-function gen_text (obj, participant, region) {
-    var gamedata = obj.gamedata;
-    if (!obj.ingame) return obj.text;
-    else {
-        var url = `https://porofessor.gg/es/live/${region.name.toLowerCase()}/${participant.summonerName.split(' ').join('%20')}`;
-        var l1 = `🟢 **Jugando:** ${gamedata.champion.emote} ${gamedata.champion.name} - ${gamedata.game_map_name} - ${gamedata.game_queue_name}`;
-        var l2 = `🕐 **Tiempo transcurrido:** ${Math.floor(gamedata.game_duration / 60)}:${gamedata.game_duration % 60 < 10 ? '0' + gamedata.game_duration % 60 : gamedata.game_duration % 60}`;
-        var start_timestamp = gamedata.game_start_time;
-        if (!start_timestamp) start_timestamp = Date.now();
-        var l3 = `📅 **Fecha:** ${new Date(start_timestamp).toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })} - 🔗 **Enlace:** [Porofessor](${url})`
-        return `${l1}\n${l2}\n${l3}`;
-    }
-}
+
 
 module.exports = LiveGame;

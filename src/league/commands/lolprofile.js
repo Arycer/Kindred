@@ -1,7 +1,7 @@
-const embed_profile = require('../functions/league/create/embed_profile');
+const embed_profile = require('../functions/create_embed_profile');
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const not_found = require('../functions/league/create/not_found');
-const Profile = require('../functions/league/classes/profile');
+const not_found = require('../functions/create_embed_notfound');
+const Profile = require('../classes/profile');
 
 module.exports = {
     data: new SlashCommandBuilder()

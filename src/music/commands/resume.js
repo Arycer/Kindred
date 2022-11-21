@@ -1,30 +1,30 @@
-const create_embed = require('../functions/music/create/create_embed');
-const { getVoiceConnection } = require('@discordjs/voice');
+const { getVoiceConnection, AudioPlayerStatus } = require('@discordjs/voice');
+const create_embed = require('../functions/create_embed');
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('shuffle')
-        .setDescription('Reordena la cola de reproducción aleatoriamente'),
+        .setName('resume')
+        .setDescription('Reanuda la reproducción'),
     async execute(interaction) {
         try {
             const voiceChannel = interaction.member.voice.channel;
             if (!voiceChannel) return interaction.reply({ content: '¡Debes estar en un canal de voz para usar este comando!', ephemeral: true });
-        
+
             const connection = getVoiceConnection(interaction.guildId);
             if (!connection) return interaction.reply({ content: '¡No estás reproduciendo música!', ephemeral: true });
-        
-            const queue = connection.queue;
-            if (queue.length < 2) return interaction.reply({ content: '¡No hay suficientes canciones en la cola para reordenar!', ephemeral: true });
-        
-            const requester = interaction.user.tag;
-            queue.shuffle();
-        
-            const embed = create_embed('shuffle', {
-                requester: requester,
-                queue: queue
+
+            const player = connection.state.subscription?.player;
+            if (!player) return interaction.reply({ content: '¡No estás reproduciendo música!', ephemeral: true });
+
+            if (player.state.status === AudioPlayerStatus.Playing) return interaction.reply({ content: '¡La reproducción no está pausada!', ephemeral: true });
+
+            player.unpause();
+
+            const embed = create_embed('resume', {
+                requester: interaction.user.tag
             });
-        
+
             await interaction.followUp({ embeds: [embed] });
         }
         catch (error) {
