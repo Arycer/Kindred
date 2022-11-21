@@ -1,5 +1,5 @@
-const fetch = require('node-fetch');
 const Match = require('./match');
+const axios = require('axios');
 
 class LastGames {
     constructor() {
@@ -11,21 +11,29 @@ class LastGames {
 
     async get_last_games(region, puuid) {
         var endpoint = `https://${region.route}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${this.matches.length}`;
-        var response = await fetch(endpoint, {
+        var opts = {
             method: 'GET',
             headers: {
                 'X-Riot-Token': process.env.RIOT_API_KEY
             }
-        });
-        var json = await response.json();
+        };
 
-        for (const match_id of json) {
-            await this.matches[json.indexOf(match_id)].get_match(region, match_id, puuid);
-        }
+        return axios.get(endpoint, opts)
+            .then(async response => {
+                var matches = response.data;
 
-        this.wins = this.matches.filter(m => m.win === true).length;
-        this.losses = this.matches.filter(m => m.win === false).length;
-        this.winrate = Math.round((this.wins / (this.wins + this.losses)) * 100);
+                for (let i = 0; i < matches.length; i++) {
+                    await this.matches[i].get_match(region, matches[i], puuid);
+                }
+                this.wins = this.matches.filter(m => m.win).length;
+                this.losses = this.matches.filter(m => !m.win).length;
+                this.winrate = (this.wins / (this.wins + this.losses)) * 100;
+
+                return this;
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 }
 

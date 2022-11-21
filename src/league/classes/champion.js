@@ -1,5 +1,5 @@
 const get_emote = require('../functions/get_emote');
-const fetch = require('node-fetch');
+const axios = require('axios');
 
 class Champion {
     constructor() {
@@ -9,23 +9,26 @@ class Champion {
         this.emote = null;
     }
 
-    async get_champion(query) {
+    get_champion(query) {
         var endpoint = `https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions.json`;
-        var response = await fetch(endpoint);
-        var json = await response.json();
-        var champs = Object.values(json);
-        if (typeof query === 'number') {
-            var champ = champs.find(champ => champ.id == query);
-        } else {
-            var champ = champs.find(champ => champ.name.toLowerCase() == query.toLowerCase());
-        }
-        if (!champ) return;
-        this.name = champ.name;
-        this.key = champ.key;
-        this.id = champ.id;
-        this.emote = get_emote(champ.key);
 
-        return this;
+        return axios.get(endpoint).then(async response => {
+            var champions = Object.values(response.data);
+
+            if (typeof query === 'number') {
+                var champion = champions.find(champion => champion.id == query);
+            } else {
+                var champion = champions.find(champion => champion.key.toLowerCase() == query.toLowerCase());
+            }
+
+            if (champion) {
+                this.name = champion.name;
+                this.key = champion.key;
+                this.id = champion.id;
+                this.emote = get_emote(champion.key);
+                return this;
+            }
+        });
     }
 }
 

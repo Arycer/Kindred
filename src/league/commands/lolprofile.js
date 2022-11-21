@@ -69,15 +69,15 @@ module.exports = {
             }
 
             const profile = new Profile();
-            await profile.init(region, username, interaction);
-
-            if (profile.summoner_data.summoner_id) {
-                const embed = await embed_profile(profile, interaction);
-                await interaction.followUp({ embeds: [embed] });
-            } else {
-                const embed = not_found(username, interaction);
-                await interaction.followUp({ embeds: [embed] });
-            }
+            profile.init(region, username, interaction).then(async () => {
+                if (profile.summoner_data.summoner_id) {
+                    const embed = await embed_profile(profile, interaction);
+                    await interaction.followUp({ embeds: [embed] });
+                } else {
+                    const embed = not_found(username, interaction);
+                    await interaction.followUp({ embeds: [embed] });
+                }
+            });
         }
         catch (error) {
             console.log(error);

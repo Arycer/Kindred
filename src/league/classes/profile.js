@@ -15,24 +15,34 @@ class Profile {
         this.region = new Region();
     }
 
-    async init(region, username, interaction) {
+    async init(region, username) {
         this.region.get_region(region);
-        await this.summoner_data.get_summoner(this.region, username); var msg = await interaction.channel.send(`Obteniendo datos (1/5)`);
+        return this.summoner_data.get_summoner(this.region, username).then(async (summoner) => {
+            this.summoner_data = summoner;
 
-        if (!this.summoner_data.summoner_id) {
-            await msg.delete();
-            return this;
-        }
+            if (!this.summoner_data.summoner_id) {
+                return this;
+            }
 
-        var s_data = this.summoner_data;
+            var s_data = this.summoner_data;
 
-        await this.masteries.get_masteries(this.region, s_data.summoner_id); await msg.edit(`Obteniendo datos (2/5)`);
-        await this.livegame.get_livegame(this.region, s_data.summoner_id); await msg.edit(`Obteniendo datos (3/5)`);
-        await this.lastgames.get_last_games(this.region, s_data.puuid); await msg.edit(`Obteniendo datos (4/5)`);
-        await this.ranked.get_ranked(this.region, s_data.summoner_id); await msg.edit(`Obteniendo datos (5/5)`);
-
-        await msg.delete();
-        return this;
+            await this.masteries.get_masteries(this.region, s_data.summoner_id).then(masteries => {
+                this.masteries = masteries;
+                console.log(`Masteries for ${s_data.name} found!`);
+            });
+            await this.livegame.get_livegame(this.region, s_data.summoner_id).then(livegame => {
+                this.livegame = livegame;
+                console.log(`Livegame for ${s_data.name} found!`);
+            });
+            await this.lastgames.get_last_games(this.region, s_data.puuid).then(lastgames => {
+                this.lastgames = lastgames;
+                console.log(`Last games for ${s_data.name} found!`);
+            });
+            await this.ranked.get_ranked(this.region, s_data.summoner_id).then(ranked => {
+                this.ranked = ranked;
+                console.log(`Ranked for ${s_data.name} found!`);
+            });
+        });
     }
 }
 

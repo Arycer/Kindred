@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const axios = require('axios');
 
 class Item {
     constructor() {
@@ -8,14 +8,17 @@ class Item {
 
     async get_item(id) {
         var endpoint = `https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/items.json`;
-        var response = await fetch(endpoint);
-        var json = await response.json();
-        var items = Object.values(json);
-        var item = items.find(item => item.id == id);
-        if (!item) return;
-        this.name = item.name;
-        this.id = id;
-        return this;
+
+        return axios.get(endpoint).then(response => {
+            var items = Object.values(response.data);
+            var item = items.find(item => item.id == id);
+
+            if (item) {
+                this.name = item.name;
+                this.id = item.id;
+                return this;
+            }
+        });
     }
 }
 

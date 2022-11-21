@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const axios = require('axios');
 
 class Summoner {
     constructor () {
@@ -12,27 +12,34 @@ class Summoner {
         this.url = null;
     }
 
-    async get_summoner(region, username) {
+    get_summoner(region, username) {
         var endpoint = `https://${region.id}.api.riotgames.com/lol/summoner/v4/summoners/by-name/${username}`;
-        var response = await fetch(endpoint, {
+        var opts = {
             method: 'GET',
             headers: {
                 'X-Riot-Token': process.env.RIOT_API_KEY
             }
-        });
-        var json = await response.json();
+        };
 
-        if (!json.id) return this;
-
-        this.name = json.name;
-        this.puuid = json.puuid;
-        this.summoner_id = json.id;
-        this.account_id = json.accountId;
-        this.icon_id = json.profileIconId;
-        this.summoner_level = json.summonerLevel;
-        this.url = `https://www.leagueofgraphs.com/es/summoner/${region.name.toLowerCase()}/${json.name.split(' ').join('%20')}`;
-        this.profile_icon = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${json.profileIconId}.jpg`;
-        return this;
+        return axios.get(endpoint, opts)
+            .then(response => {
+                var data = response.data;
+                this.name = data.name;
+                this.summoner_id = data.id;
+                this.account_id = data.accountId;
+                this.puuid = data.puuid;
+                this.icon_id = data.profileIconId;
+                this.summoner_level = data.summonerLevel;
+                this.url = `https://www.leagueofgraphs.com/es/summoner/${region.name.toLowerCase()}/${data.name.split(' ').join('%20')}`;
+                this.profile_icon = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${data.profileIconId}.jpg`;
+                return this;
+            }).catch(error => {
+                if (error.response.status == 404) {
+                    return 'No se ha encontrado ningún invocador con ese nombre.';
+                } else {
+                    return 'Ha ocurrido un error al intentar obtener los datos del invocador.';
+                }
+            });
     }
 }
 

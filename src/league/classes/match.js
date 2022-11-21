@@ -5,7 +5,7 @@ const get_emote = require('../functions/get_emote');
 const Champion = require('./champion');
 const Item = require('./item');
 
-const fetch = require('node-fetch');
+const axios = require('axios');
 
 class Match {
     constructor () {
@@ -37,51 +37,64 @@ class Match {
         this.url = null;
     }
 
-    async get_match(region, match_id, puuid) {
+    get_match(region, match_id, puuid) {
         var endpoint = `https://${region.route}.api.riotgames.com/lol/match/v5/matches/${match_id}`;
-        var response = await fetch(endpoint, {
+        var opts = {
             method: 'GET',
             headers: {
                 'X-Riot-Token': process.env.RIOT_API_KEY
             }
-        });
-        var json = await response.json();
-        var info = json.info;
-    
-        this.game_duration = info.gameDuration;
-        this.timestamp = info.gameCreation;
-
-        this.game_queue_id = info.queueId;
-        this.game_queue_name = await get_queue_name(info.queueId);
-
-        this.game_map_id = info.mapId;
-        this.game_map_name = await get_map_name(info.mapId);
-
-        var participant = info.participants.find(p => p.puuid === puuid);
-
-        if (this.game_duration < 600) this.win = 'remake';
-        else this.win = participant.win;
-
-        this.champ = await this.champ.get_champion(participant.championId);
-        this.stats = {
-            kills: participant.kills,
-            deaths: participant.deaths,
-            assists: participant.assists,
-            kda: (participant.kills + participant.assists) / participant.deaths,
-            cs: participant.totalMinionsKilled + participant.neutralMinionsKilled,
-            cs_per_min: (participant.totalMinionsKilled + participant.neutralMinionsKilled) / (this.game_duration / 60),
         };
-        this.spells = {
-            spell1: participant.summoner1Id,
-            spell2: participant.summoner2Id,
-        };
-        for (const item of this.inventory.items) {
-            await item.get_item(participant[`item${this.inventory.items.indexOf(item)}`]);
-        }
-        await this.inventory.trinket.get_item(participant.item6);
-        this.url = `https://www.leagueofgraphs.com/es/match/${region.name.toLowerCase()}/${match_id.split('_')[1]}`;
-        this.text = gen_text(this);
-        return this;
+
+        return axios.get(endpoint, opts)
+            .then(async response => {
+                var match = response.data.info;
+                var player = match.participants.find(p => p.puuid === puuid);
+
+                this.game_queue_id = match.queueId;
+                this.game_queue_name = await get_queue_name(this.game_queue_id);
+
+                this.game_map_id = match.mapId;
+                this.game_map_name = await get_map_name(this.game_map_id);
+
+                this.game_duration = match.gameDuration;
+                this.timestamp = match.gameCreation;
+
+                await this.champ.get_champion(player.championName);
+                this.stats = {
+                    kills: player.kills,
+                    deaths: player.deaths,
+                    assists: player.assists,
+                    kda: (player.kills + player.assists) / player.deaths,
+                    cs: player.totalMinionsKilled + player.neutralMinionsKilled,
+                    cs_per_min: (player.totalMinionsKilled + player.neutralMinionsKilled) / (this.game_duration / 60),
+                };
+                this.spells = {
+                    spell1: player.summoner1Id,
+                    spell2: player.summoner2Id,
+                };
+
+                for (let i = 0; i < this.inventory.items.length; i++) {
+                    this.inventory.items[i].get_item(player['item' + i]);
+                }
+
+                this.inventory.trinket.get_item(player.perks.perkStyle);
+
+                if (this.game_duration < 300) this.win = 'remake';
+                else this.win = player.win;
+
+                this.url = `https://www.leagueofgraphs.com/es/match/${region.name.toLowerCase()}/${match_id.split('_')[1]}`;
+                this.text = gen_text(this);
+                return this;
+            }).catch(error => {
+                console.log(error);
+                console.log(endpoint);
+                if (error.response.status == 404) {
+                    return 'No se ha encontrado ninguna partida con ese ID.';
+                } else {
+                    return 'Ha ocurrido un error al obtener la partida.';
+                }
+            });
     }
 }
 
