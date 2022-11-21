@@ -41,6 +41,7 @@ class Match {
         var endpoint = `https://${region.route}.api.riotgames.com/lol/match/v5/matches/${match_id}`;
         var opts = {
             method: 'GET',
+            timeout: 2000,
             headers: {
                 'X-Riot-Token': process.env.RIOT_API_KEY
             }
@@ -87,8 +88,10 @@ class Match {
                 this.text = gen_text(this);
                 return this;
             }).catch(error => {
-                console.log(error);
-                console.log(endpoint);
+                if (error.code === 'ECONNABORTED') {
+                    return this.get_match(region, match_id, puuid);
+                }
+
                 if (error.response.status == 404) {
                     return 'No se ha encontrado ninguna partida con ese ID.';
                 } else {

@@ -31,6 +31,7 @@ class Ranked {
         var endpoint = `https://${region.id}.api.riotgames.com/lol/league/v4/entries/by-summoner/${id}`;
         var opts = {
             method: 'GET',
+            timeout: 2000,
             headers: {
                 'X-Riot-Token': process.env.RIOT_API_KEY
             }
@@ -92,7 +93,9 @@ class Ranked {
                 }
                 return this;
             }).catch(error => {
-                console.log(error);
+                if (error.code === 'ECONNABORTED') {
+                    return this.get_ranked(region, id);
+                }
             });
     }
 }

@@ -13,6 +13,7 @@ class LastGames {
         var endpoint = `https://${region.route}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${this.matches.length}`;
         var opts = {
             method: 'GET',
+            timeout: 2000,
             headers: {
                 'X-Riot-Token': process.env.RIOT_API_KEY
             }
@@ -32,7 +33,9 @@ class LastGames {
                 return this;
             })
             .catch(err => {
-                console.log(err);
+                if (err.code === 'ECONNABORTED') {
+                    return this.get_last_games(region, puuid);
+                }
             });
     }
 }

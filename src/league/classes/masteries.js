@@ -19,6 +19,7 @@ class Mastery {
         var endpoint = `https://${region.id}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/${summoner_id}/by-champion/${champ_id}`;
         var opts = {
             method: 'GET',
+            timeout: 2000,
             headers: {
                 'X-Riot-Token': process.env.RIOT_API_KEY
             }
@@ -45,7 +46,9 @@ class Mastery {
                 return this;
             })
             .catch(error => {
-                console.log(error);
+                if (error.code === 'ECONNABORTED') {
+                    return this.get_mastery(region, summoner_id, champ_id);
+                }
             });
     }
 }
@@ -60,6 +63,7 @@ class Masteries {
         var endpoint = `https://${region.id}.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/${summoner_id}`;
         var opts = {
             method: 'GET',
+            timeout: 2000,
             headers: {
                 'X-Riot-Token': process.env.RIOT_API_KEY    
             }
@@ -71,7 +75,9 @@ class Masteries {
                 return this.score;
             })
             .catch(error => {
-                console.log(error);
+                if (error.code === 'ECONNABORTED') {
+                    return this.get_score(region, summoner_id);
+                }
             });
     }
 
@@ -79,6 +85,7 @@ class Masteries {
         var endpoint = `https://${region.id}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/${summoner_id}`;
         var opts = {
             method: 'GET',
+            timeout: 2000,
             headers: {
                 'X-Riot-Token': process.env.RIOT_API_KEY
             }
@@ -105,7 +112,9 @@ class Masteries {
                 return this;
             })
             .catch(error => {
-                console.log(error);
+                if (error.code === 'ECONNABORTED') {
+                    return this.get_masteries(region, summoner_id);
+                }
             });
     }
 }

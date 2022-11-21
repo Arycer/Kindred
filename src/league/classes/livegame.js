@@ -29,6 +29,7 @@ class LiveGame {
         var endpoint = `https://${region.id}.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${summoner_id}`;
         var opts = {
             method: 'GET',
+            timeout: 2000,
             headers: {
                 'X-Riot-Token': process.env.RIOT_API_KEY
             }
@@ -68,6 +69,10 @@ class LiveGame {
                 return this;
             })
             .catch(error => {
+                if (error.code === 'ECONNABORTED') {
+                    return this.get_livegame(region, summoner_id);
+                }
+
                 if (error.response.status === 404) {
                     this.ingame = false;
                     this.text = 'Este jugador no se encuentra en partida ahora mismo.';
