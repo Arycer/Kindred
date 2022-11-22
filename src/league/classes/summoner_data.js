@@ -15,8 +15,8 @@ class Summoner {
         this.level = null;
     }
 
-    get_summoner(region, username) {
-        var endpoint = `https://${region.id}.api.riotgames.com/lol/summoner/v4/summoners/by-name/${username}`;
+    get_summoner(region, identifier) {
+        var endpoint = `https://${region.id}.api.riotgames.com/lol/summoner/v4/summoners/${identifier.length === 78 ? 'by-puuid' : 'by-name'}/${identifier}`;
         var opts = {
             method: 'GET',
             timeout: 2000,

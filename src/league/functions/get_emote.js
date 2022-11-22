@@ -3,13 +3,8 @@ const { Client, GatewayIntentBits } = require('discord.js');
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildEmojisAndStickers,
     ]
-});
-
-client.once('ready', async () => {
-    console.log(`Asistente iniciado como ${client.user.tag}!`);
 });
 
 function get_emote(name) {

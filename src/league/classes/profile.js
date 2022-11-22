@@ -15,9 +15,9 @@ class Profile {
         this.ranked = new Ranked();
     }
 
-    async init(region, username) {
+    async init(region, identifier) {
         this.region.get_region(region);
-        this.summoner_data = await this.summoner_data.get_summoner(this.region, username);
+        this.summoner_data = await this.summoner_data.get_summoner(this.region, identifier);
 
         if (!this.summoner_data.identifiers.s_id) {
             return this;

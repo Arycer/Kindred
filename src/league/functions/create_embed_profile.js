@@ -4,26 +4,27 @@ const get_emote = require('./get_emote');
 async function embed_profile(profile, interaction) {
     var m_text = '';
     for (var i = 0; i < 3; i++) {
-        if (profile.masteries.champions[i]) {
+        if (profile.masteries.champions[i].champion.name) {
             var entry = profile.masteries.champions[i];
             m_text += `${entry.champion.emote} **[${entry.champion_level}]** ${entry.champion.name} - ${entry.champion_points.toLocaleString('es-ES')} puntos\n`;
         } else {
             m_text += `No hay datos para mostrar.\n`;
+            break;
         }
     }
     var r_text = ''; var r_name = '';
-    if (profile.ranked.solo) {
+    if (profile.ranked.solo.tier) {
         var solo = profile.ranked.solo;
         r_name += `Estadísticas de Solo/Dúo`;
         r_text += `${solo.emote} ${solo.tier} ${solo.rank}\n`;
         r_text += `${solo.lps} Puntos de Liga\n`;
-        r_text += `${solo.wins} Victorias - ${solo.losses} Derrotas (${solo.winrate}WR)\n`;
-    } else if (profile.ranked.flex) {
+        r_text += `${solo.wins} Victorias - ${solo.losses} Derrotas (${solo.winrate}%WR)\n`;
+    } else if (profile.ranked.flex.tier) {
         var flex = profile.ranked.flex;
         r_name += `Estadísticas de Flex 5v5`;
         r_text += `${flex.emote} ${flex.tier} ${flex.rank}\n`;
         r_text += `${flex.lps} Puntos de Liga\n`;
-        r_text += `${flex.wins} Victorias - ${flex.losses} Derrotas (${flex.winrate}WR)\n`;
+        r_text += `${flex.wins} Victorias - ${flex.losses} Derrotas (${flex.winrate}%WR)\n`;
     } else {
         r_name += `Estadísticas de Ranked`;
         r_text += `No hay datos para mostrar.\n`;

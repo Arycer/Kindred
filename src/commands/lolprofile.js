@@ -36,7 +36,8 @@ module.exports = {
                 if (mención) {
                     var acc = get_from_db(interaction, mención);
                     if (acc) {
-                        username = acc.summoner.name;
+                        console.log(acc);
+                        var puuid = acc.summoner.identifiers.puuid;
                         region = acc.region.id;
                     } else {
                         var embed = new EmbedBuilder()
@@ -52,7 +53,7 @@ module.exports = {
                 } else {
                     var acc = get_from_db(interaction, interaction.user);
                     if (acc) {
-                        username = acc.summoner.name;
+                        var puuid = acc.summoner.identifiers.puuid;
                         region = acc.region.id;
                     } else {
                         var embed = new EmbedBuilder()
@@ -69,7 +70,7 @@ module.exports = {
             }
 
             const profile = new Profile();
-            await profile.init(region, username, interaction);
+            await profile.init(region, puuid ? puuid : username, interaction);
 
             if (profile.summoner_data.identifiers.s_id) {
                 const embed = await embed_profile(profile, interaction);
