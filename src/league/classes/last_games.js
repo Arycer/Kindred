@@ -26,14 +26,15 @@ class LastGames {
                 for (let i = 0; i < matches.length; i++) {
                     await this.matches[i].get_match(region, matches[i], puuid);
                 }
-                this.wins = this.matches.filter(m => m.win).length;
-                this.losses = this.matches.filter(m => !m.win).length;
+                this.wins = this.matches.filter(m => m.stats.win).length;
+                this.losses = this.matches.filter(m => !m.stats.win).length;
                 this.winrate = (this.wins / (this.wins + this.losses)) * 100;
 
                 return this;
             })
             .catch(err => {
                 if (err.code === 'ECONNABORTED') {
+                    console.log(`Timeout: ${endpoint}`);
                     return this.get_last_games(region, puuid);
                 }
             });

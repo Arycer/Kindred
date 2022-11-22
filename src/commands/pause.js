@@ -1,11 +1,11 @@
 const { getVoiceConnection, AudioPlayerStatus } = require('@discordjs/voice');
-const create_embed = require('../functions/create_embed');
+const create_embed = require('../music/functions/create_embed');
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('resume')
-        .setDescription('Reanuda la reproducción'),
+        .setName('pause')
+        .setDescription('Pausa la reproducción'),
     async execute(interaction) {
         try {
             const voiceChannel = interaction.member.voice.channel;
@@ -17,11 +17,11 @@ module.exports = {
             const player = connection.state.subscription?.player;
             if (!player) return interaction.reply({ content: '¡No estás reproduciendo música!', ephemeral: true });
 
-            if (player.state.status === AudioPlayerStatus.Playing) return interaction.reply({ content: '¡La reproducción no está pausada!', ephemeral: true });
+            if (player.state.status === AudioPlayerStatus.Paused) return interaction.reply({ content: '¡La reproducción ya está pausada!', ephemeral: true });
 
-            player.unpause();
+            player.pause();
 
-            const embed = create_embed('resume', {
+            const embed = create_embed('pause', {
                 requester: interaction.user.tag
             });
 

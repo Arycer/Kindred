@@ -7,22 +7,24 @@ const get_map_name = require('../functions/get_map_name');
 class LiveGame {
     constructor() {
         this.ingame = false;
-        this.text = null;
-        this.gamedata = {
-            game_id: null,
-            game_start_time: null,
-            game_map_id: null,
-            game_map_name: null,
-            game_duration: null,
-            game_queue_id: null,
-            game_queue_name: null,
-            team_side: null,
-            spells: {
-                spell1: null,
-                spell2: null,
-            },
-            champion: new Champion()
+        this.spells = {
+            spell1: null,
+            spell2: null,
         }
+        this.queue = {
+            name: null,
+            id: null,
+        }
+        this.map = {
+            name: null,
+            id: null,
+        }
+        this.time = {
+            duration: null,
+            start: null,
+        }
+        this.teamside = null;
+        this.champion = new Champion();
     }
 
     get_livegame(region, summoner_id) {
@@ -42,29 +44,24 @@ class LiveGame {
 
                 this.ingame = true;
                 this.gamedata.game_id = json.gameId;
-                this.gamedata.game_start_time = json.gameStartTime;
-                this.gamedata.game_map_id = json.mapId;
-                get_map_name(this.gamedata.game_map_id).then(name => {
-                    this.gamedata.game_map_name = name;
-                });
-                this.gamedata.game_duration = json.gameLength;
-                this.gamedata.game_queue_id = json.gameQueueConfigId;
-                get_queue_name(json.gameQueueConfigId).then(name => {
-                    this.gamedata.game_queue_name = name;
-                });
-
-                this.gamedata.team_side = player.teamId === 100 ? 'blue' : 'red';
-                
-                this.gamedata.spells = {
+                this.time = {
+                    duration: game.gameLength,
+                    start: game.gameStartTime,
+                }
+                this.queue = {
+                    name: await get_queue_name(game.gameQueueConfigId),
+                    id: game.gameQueueConfigId,
+                }
+                this.map = {
+                    name: await get_map_name(game.mapId),
+                    id: game.mapId,
+                }
+                this.spells = {
                     spell1: player.spell1Id,
                     spell2: player.spell2Id,
                 }
-
-                this.gamedata.champion.get_champion(player.championId).then(champ => {
-                    this.gamedata.champion = champ;
-                });
-
-                this.text = gen_text(this.gamedata);
+                this.team_side = player.teamId === 100 ? 'blue' : 'red';
+                this.gamedata.champion = await this.gamedata.champion.get_champion(player.championId);
 
                 return this;
             })
@@ -74,8 +71,6 @@ class LiveGame {
                 }
 
                 if (error.response.status === 404) {
-                    this.ingame = false;
-                    this.text = 'Este jugador no se encuentra en partida ahora mismo.';
                     return this;
                 } else {
                     console.log(error);

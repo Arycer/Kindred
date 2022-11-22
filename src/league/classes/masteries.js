@@ -12,7 +12,6 @@ class Mastery {
         this.chest_granted = null;
         this.tokens_earned = null;
         this.summoner_id = null;
-        this.text = null;
     }
 
     get_mastery(region, summoner_id, champ_id) {
@@ -29,10 +28,7 @@ class Mastery {
             .then(async response => {
                 var mastery = response.data;
 
-                await this.champion.get_champion(mastery.championId).then(champ => {
-                    this.champion = champ;
-                });
-
+                this.champion = await this.champion.get_champion(region, champ_id);
                 this.champion_level = mastery.championLevel;
                 this.champion_points = mastery.championPoints;
                 this.champion_points_until_next_level = mastery.championPointsUntilNextLevel;
@@ -41,21 +37,39 @@ class Mastery {
                 this.chest_granted = mastery.chestGranted;
                 this.tokens_earned = mastery.tokensEarned;
                 this.summoner_id = mastery.summonerId;
-                this.text = `${this.champion.emote} **[${this.champion_level}]** ${this.champion.name} - ${this.champion_points.toLocaleString('es-ES')} puntos`;
 
                 return this;
             })
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
+                    console.log(`Timeout: ${endpoint}`);
                     return this.get_mastery(region, summoner_id, champ_id);
                 }
             });
+    }
+
+    async set_mastery(data) {
+        this.champion_level = data.championLevel;
+        this.champion_points = data.championPoints;
+        this.champion_points_until_next_level = data.championPointsUntilNextLevel;
+        this.champion_points_since_last_level = data.championPointsSinceLastLevel;
+        this.last_play_time = data.lastPlayTime;
+        this.chest_granted = data.chestGranted;
+        this.tokens_earned = data.tokensEarned;
+        this.summoner_id = data.summonerId;
+        this.champion = await this.champion.get_champion(data.championId);
+
+        return this;
     }
 }
 
 class Masteries {
     constructor() {
-        this.champions = gen_array_masteries(3);
+        this.champions = [
+            new Mastery(),
+            new Mastery(),
+            new Mastery()
+        ]
         this.score = null;
     }
 
@@ -76,6 +90,7 @@ class Masteries {
             })
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
+                    console.log(`Timeout: ${endpoint}`);
                     return this.get_score(region, summoner_id);
                 }
             });
@@ -93,21 +108,13 @@ class Masteries {
 
         return axios.get(endpoint, opts)
             .then(async response => {
+                this.score = await this.get_score(region, summoner_id);
+                
                 var masteries = response.data;
-                var ids = [];
 
-                for (var i = 0; i < this.champions.length; i++) {
-                    if (masteries[i]) {
-                        ids.push(masteries[i].championId);
-                        await this.champions[i].get_mastery(region, summoner_id, masteries[i].championId).then(mastery => {
-                            this.champions[i] = mastery;
-                        });
-                    }
+                for (var i = 0; i < 3; i++) {
+                    this.champions[i] = await this.champions[i].set_mastery(masteries[i]);
                 }
-
-                await this.get_score(region, summoner_id).then(score => {
-                    this.score = score;
-                });
 
                 return this;
             })
@@ -120,11 +127,3 @@ class Masteries {
 }
 
 module.exports = Masteries;
-
-function gen_array_masteries(length) {
-    var arr = [];
-    for (let i = 0; i < length; i++) {
-        arr.push(new Mastery());
-    }
-    return arr;
-}

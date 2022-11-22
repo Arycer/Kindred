@@ -1,4 +1,4 @@
-const play_song = require('../functions/play_song');
+const play_song = require('../music/functions/play_song');
 
 const { SlashCommandBuilder } = require('discord.js');
 

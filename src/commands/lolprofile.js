@@ -1,7 +1,7 @@
-const embed_profile = require('../functions/create_embed_profile');
+const embed_profile = require('../league/functions/create_embed_profile');
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const not_found = require('../functions/create_embed_notfound');
-const Profile = require('../classes/profile');
+const not_found = require('../league/functions/create_embed_notfound');
+const Profile = require('../league/classes/profile');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -69,15 +69,15 @@ module.exports = {
             }
 
             const profile = new Profile();
-            profile.init(region, username, interaction).then(async () => {
-                if (profile.summoner_data.summoner_id) {
-                    const embed = await embed_profile(profile, interaction);
-                    await interaction.followUp({ embeds: [embed] });
-                } else {
-                    const embed = not_found(username, interaction);
-                    await interaction.followUp({ embeds: [embed] });
-                }
-            });
+            await profile.init(region, username, interaction);
+
+            if (profile.summoner_data.identifiers.s_id) {
+                const embed = await embed_profile(profile, interaction);
+                await interaction.followUp({ embeds: [embed] });
+            } else {
+                const embed = not_found(username, interaction);
+                await interaction.followUp({ embeds: [embed] });
+            }
         }
         catch (error) {
             console.log(error);

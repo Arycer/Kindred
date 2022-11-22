@@ -62,8 +62,6 @@ class Region {
                 this.name = 'KR';
                 this.id = 'kr';
                 break;
-            default:
-                break;
         }
         return this;
     }

@@ -21,13 +21,12 @@ class Champion {
                 var champion = champions.find(champion => champion.key.toLowerCase() == query.toLowerCase());
             }
 
-            if (champion) {
-                this.name = champion.name;
-                this.key = champion.key;
-                this.id = champion.id;
-                this.emote = get_emote(champion.key);
-                return this;
-            }
+            this.name = champion.name;
+            this.key = champion.key;
+            this.id = champion.id;
+            this.emote = get_emote(champion.key);
+
+            return this;
         });
     }
 }

@@ -1,4 +1,4 @@
-const Account = require('../classes/account');
+const Account = require('../league/classes/account');
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
