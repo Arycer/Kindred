@@ -113,16 +113,4 @@ class Match {
     }
 }
 
-function gen_text (obj) {
-    if (typeof obj.win === 'boolean') {
-        if (obj.win) var wintext = `🟢 **Victoria**`;
-        else var wintext = `🔴 **Derrota**`;
-    } else var wintext = `⚙️ **Remake**`;
-    var e_cs = get_emote('minioncount'); var c = obj.champ; var s = obj.stats;
-    var l1 = `${wintext} con ${c.emote} ${c.name} - ${s.kills}/${s.deaths}/${s.assists} - ${s.cs} ${e_cs} (${s.cs_per_min.toFixed(1)} ${e_cs}/min)`;
-    var l2 = `🕐 **Duración de la partida:** ${Math.floor(obj.game_duration / 60)}:${obj.game_duration % 60 < 10 ? '0' + obj.game_duration % 60 : obj.game_duration % 60}`;
-    var l3 = `📅 **Fecha:** ${new Date(obj.timestamp).toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })} - 🔗 **Enlace:** [League of Graphs](${obj.url})`;
-    return `${l1}\n${l2}\n${l3}`;
-}
-
 module.exports = Match;
