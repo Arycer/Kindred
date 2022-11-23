@@ -1,6 +1,5 @@
-const create_embed = require('../music/functions/create_embed');
 const { getVoiceConnection } = require('@discordjs/voice');
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -24,13 +23,22 @@ module.exports = {
             const index = interaction.options.getInteger('posición') - 1;
             if (index < 0 || index >= queue.length) return interaction.reply({ content: '¡La posición no es válida!', ephemeral: true });
 
-            const song = queue.remove(index);
+            const song = queue.remove(index)[0];
 
-            const embed = create_embed('remove', {
-                requester: interaction.user.tag,
-                queue: queue,
-                song: song
-            });
+            const embed = new EmbedBuilder()
+                .setAuthor({ name: '🎵 Se ha eliminado de la cola:' })
+                .setTitle(song.title)
+                .setURL(song.url)
+                .setFooter({ text: `Solicitado por ${song.requester}` })
+                .setColor('#5d779d')
+                .setTimestamp();
+            if (queue.songs.length == 0) {
+                embed.setDescription('No hay más canciones en la cola.');
+            } else if (queue.songs.length == 1) {
+                embed.setDescription('Queda una canción en la cola.');
+            } else {
+                embed.setDescription(`Quedan ${queue.songs.length} canciones en la cola.`);
+            }
 
             await interaction.followUp({ embeds: [embed] });
         }

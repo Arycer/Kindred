@@ -1,5 +1,6 @@
 const create_resource = require('./create_resource');
-const create_embed = require('./create_embed');
+const { EmbedBuilder } = require('discord.js');
+
 async function play (channel, player, queue, nosend) {
     try {
 		var current = queue.get_current();
@@ -18,12 +19,19 @@ async function play (channel, player, queue, nosend) {
 		} while (!resource);
 		player.play(resource);
 		if (!nosend) {
-			const embed = create_embed('play', {
-				requester: requester,
-				title: title,
-				url: url,
-				queue: queue
-			});
+			const embed = new EmbedBuilder();
+			embed.setAuthor({ name: '🎵 Ahora suena:' });
+			embed.setTitle(title);
+			embed.setURL(url);
+			if (queue.songs.length == 0) {
+				embed.setDescription('No hay más canciones en la cola.');
+			} else if (queue.songs.length == 1) {
+				embed.setDescription('Queda una canción en la cola.');
+			} else {
+				embed.setDescription(`Quedan ${queue.songs.length} canciones en la cola.`);
+			}
+			embed.setFooter({ text: `Solicitado por ${options.requester}` });
+			embed.setTimestamp();
 			channel.send({ embeds: [embed] });
 		}
     } catch (error) {

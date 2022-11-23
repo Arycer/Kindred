@@ -1,6 +1,5 @@
-const create_embed = require('../music/functions/create_embed');
 const { getVoiceConnection } = require('@discordjs/voice');
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -20,10 +19,13 @@ module.exports = {
             const requester = interaction.user.tag;
             queue.shuffle();
         
-            const embed = create_embed('shuffle', {
-                requester: requester,
-                queue: queue
-            });
+            const embed = new EmbedBuilder()
+                .setAuthor({ name: '🎵 Se ha reordenado la cola de reproducción.' })
+                .setTitle('¡Utiliza /queue para ver la nueva cola!')
+                .setDescription(`Ahora mismo hay ${queue.songs.length} canciones en la cola.`)
+                .setFooter({ text: `Solicitado por ${requester}` })
+                .setColor('#5d779d')
+                .setTimestamp();
         
             await interaction.followUp({ embeds: [embed] });
         }

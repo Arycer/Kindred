@@ -1,6 +1,5 @@
 const { getVoiceConnection, AudioPlayerStatus } = require('@discordjs/voice');
-const create_embed = require('../music/functions/create_embed');
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -21,9 +20,12 @@ module.exports = {
 
             player.pause();
 
-            const embed = create_embed('pause', {
-                requester: interaction.user.tag
-            });
+            const embed = new EmbedBuilder()
+                .setAuthor({ name: '🎵 Se ha pausado la reproducción.' })
+                .setTitle(`Usa /resume para reanudar la reproducción.`)
+                .setFooter({ text: `Solicitado por ${interaction.user.tag}` })
+                .setColor('#5d779d')
+                .setTimestamp();
 
             await interaction.followUp({ embeds: [embed] });
         }

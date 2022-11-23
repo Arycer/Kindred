@@ -1,6 +1,5 @@
-const create_embed = require('../music/functions/create_embed');
 const { getVoiceConnection } = require('@discordjs/voice');
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -17,10 +16,21 @@ module.exports = {
             const requester = interaction.user.tag;
         
             const queue = connection.queue;
-            const embed = create_embed('queue', {
-                requester: requester,
-                queue: queue
-            });
+            const embed = new EmbedBuilder()
+                .setAuthor({ name: '🎵 Cola de reproducción:' })
+                .setDescription(`**Ahora suena:**\n[${queue.current.title}](${queue.current.url})`)
+                .setFooter({ text: `Solicitado por ${requester}` })
+                .setColor('#5d779d')
+                .setTimestamp();
+            if (queue.songs.length == 0) {
+                embed.addFields({ name: 'No hay más canciones en la cola.', value: 'Añade canciones con /play (canción)' });
+            } else {
+                for (let i = 0; i < queue.songs.length; i++) {
+                    if (i > 14) break;
+                    var song = queue.songs[i];
+                    embed.addFields({ name: `${i + 1}. ${song.title}`, value: `Solicitada por: ${song.requester}` });
+                }
+            }
 
             await interaction.followUp({ embeds: [embed] });
         } catch (error) {

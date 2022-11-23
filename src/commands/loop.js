@@ -1,6 +1,5 @@
-const create_embed = require('../music/functions/create_embed');
 const { getVoiceConnection } = require('@discordjs/voice');
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -26,10 +25,17 @@ module.exports = {
             if (!loop) queue.loop = !queue.loop;
             else queue.loop = loop;
 
-            const embed = create_embed('loop', {
-                requester: interaction.user.tag,
-                queue: queue
-            });
+            const embed = new EmbedBuilder()
+                .setAuthor({ name: '🎵 Se ha cambiado el modo de bucle.' })
+                .setDescription(`Usa /loop para activar o desactivar el modo de bucle.`)
+                .setFooter({ text: `Solicitado por ${interaction.user.tag}` })
+                .setColor('#5d779d')
+                .setTimestamp();
+            if (queue.loop) {
+                embed.setTitle(`El modo de bucle está activado.`);
+            } else {
+                embed.setTitle(`El modo de bucle está desactivado.`);
+            }
 
             await interaction.followUp({ embeds: [embed] });
         }
