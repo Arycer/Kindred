@@ -76,9 +76,16 @@ module.exports = {
                 const embed = await embed_profile(profile, interaction);
                 await interaction.followUp({ embeds: [embed] });
             } else {
-                const embed = not_found(username, interaction);
+                var embed = new EmbedBuilder()
+                    .setColor('#5d779d')
+                    .setTitle(`Esto es lo que ha pasado:`)
+                    .setDescription(`No he podido encontrar a ${username}. Asegúrate de que el nombre de usuario está bien escrito y que la región es correcta.`)
+                    .setThumbnail('https://cdn.discordapp.com/attachments/1040519867578728481/1044022781685276702/unknown.png')
+                    .setAuthor({ name: "¡Algo ha salido mal!", iconURL: "https://media.discordapp.net/attachments/1040519867578728481/1044021176177012798/939.jpg" })
+                    .setFooter({ text: `Solicitado por ${interaction.user.tag}` })
+                    .setTimestamp();
                 await interaction.followUp({ embeds: [embed] });
-            }
+                }
         }
         catch (error) {
             console.log(error);
