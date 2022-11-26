@@ -1,10 +1,13 @@
-const { getVoiceConnection, AudioPlayerStatus } = require('@discordjs/voice');
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { getVoiceConnection } = require('@discordjs/voice');
+const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('resume')
-        .setDescription('Reanuda la reproducción'),
+    data: new SlashCommandSubcommandBuilder()
+        .setName('loop')
+        .setDescription('Activa o desactiva la canción actual')
+        .addBooleanOption(option =>
+            option.setName('activar')
+                .setDescription('Activar o desactivar el bucle')),
     async execute(interaction) {
         try {
             const voiceChannel = interaction.member.voice.channel;
@@ -16,16 +19,23 @@ module.exports = {
             const player = connection.state.subscription?.player;
             if (!player) return interaction.reply({ content: '¡No estás reproduciendo música!', ephemeral: true });
 
-            if (player.state.status === AudioPlayerStatus.Playing) return interaction.reply({ content: '¡La reproducción no está pausada!', ephemeral: true });
+            const queue = connection.queue;
 
-            player.unpause();
+            const loop = interaction.options.getBoolean('activar');
+            if (!loop) queue.loop = !queue.loop;
+            else queue.loop = loop;
 
             const embed = new EmbedBuilder()
-                .setAuthor({ name: '🎵 Se ha reanudado la reproducción.' })
-                .setTitle(`Usa /play (canción) para añadir canciones a la cola.`)
+                .setAuthor({ name: '🎵 Se ha cambiado el modo de bucle.' })
+                .setDescription(`Usa /loop para activar o desactivar el modo de bucle.`)
                 .setFooter({ text: `Solicitado por ${interaction.user.tag}` })
                 .setColor('#5d779d')
                 .setTimestamp();
+            if (queue.loop) {
+                embed.setTitle(`El modo de bucle está activado.`);
+            } else {
+                embed.setTitle(`El modo de bucle está desactivado.`);
+            }
 
             await interaction.followUp({ embeds: [embed] });
         }
@@ -34,3 +44,4 @@ module.exports = {
         }
     }
 };
+

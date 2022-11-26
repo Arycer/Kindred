@@ -1,12 +1,12 @@
-const { get_title, get_url } = require('../music/functions/get_song_info.js');
-const create_connection = require('../music/functions/create_connection');
+const { get_title, get_url } = require('../../music/functions/get_song_info.js');
+const create_connection = require('../../music/functions/create_connection');
 const { getVoiceConnection } = require('@discordjs/voice');
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const play = require('../music/functions/play');
-const wait = require('../music/functions/wait');
+const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
+const play = require('../../music/functions/play');
+const wait = require('../../music/functions/wait');
 
 module.exports = {
-    data: new SlashCommandBuilder()
+    data: new SlashCommandSubcommandBuilder()
         .setName('play')
         .setDescription('Reproduce una canción')
         .addStringOption(option =>
@@ -19,7 +19,7 @@ module.exports = {
         if (query.includes('list=')) return interaction.followUp({ content: 'El soporte para listas de reproducción está desactivado.', ephemeral: true });
 
         var voice_channel = interaction.member.voice.channelId;
-        if (!voice_channel) return interaction.reply({ content: '¡Debes estar en un canal de voz para usar este comando!', ephemeral: true });
+        if (!voice_channel) return interaction.followUp({ content: '¡Debes estar en un canal de voz para usar este comando!', ephemeral: true });
     
         var connection = getVoiceConnection(interaction.guildId) ? getVoiceConnection(interaction.guildId) : await create_connection(interaction);
         var player = connection.state.subscription.player;

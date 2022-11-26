@@ -1,12 +1,17 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
+const MeowDB = require('meowdb');
 
 module.exports = {
-    data: new SlashCommandBuilder()
+    data: new SlashCommandSubcommandBuilder()
         .setName('unlink')
         .setDescription('Desvincula tu cuenta de League of Legends de tu cuenta de Discord'),
     async execute(interaction) {
-        const db = interaction.client.database;
-        const entry = db.get(interaction.user.id);
+        var db = new MeowDB({
+            dir: './src/database',
+            name: 'accounts'
+        });
+        
+        var entry = db.get(interaction.user.id);
 
         if (!entry) {
             var embed = new EmbedBuilder()

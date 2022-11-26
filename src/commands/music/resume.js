@@ -1,10 +1,10 @@
 const { getVoiceConnection, AudioPlayerStatus } = require('@discordjs/voice');
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('stop')
-        .setDescription('Detiene la reproducción y elimina la cola'),
+    data: new SlashCommandSubcommandBuilder()
+        .setName('resume')
+        .setDescription('Reanuda la reproducción'),
     async execute(interaction) {
         try {
             const voiceChannel = interaction.member.voice.channel;
@@ -16,14 +16,13 @@ module.exports = {
             const player = connection.state.subscription?.player;
             if (!player) return interaction.reply({ content: '¡No estás reproduciendo música!', ephemeral: true });
 
-            if (player.state.status === AudioPlayerStatus.Idle) return interaction.reply({ content: '¡No hay nada en reproducción!', ephemeral: true });
+            if (player.state.status === AudioPlayerStatus.Playing) return interaction.reply({ content: '¡La reproducción no está pausada!', ephemeral: true });
 
-            connection.queue.clear();
-            player.stop();
+            player.unpause();
 
             const embed = new EmbedBuilder()
-                .setAuthor({ name: '🎵 Se ha detenido la reproducción.' })
-                .setTitle(`Reproduce música con /play (canción)`)
+                .setAuthor({ name: '🎵 Se ha reanudado la reproducción.' })
+                .setTitle(`Usa /play (canción) para añadir canciones a la cola.`)
                 .setFooter({ text: `Solicitado por ${interaction.user.tag}` })
                 .setColor('#5d779d')
                 .setTimestamp();

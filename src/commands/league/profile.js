@@ -1,10 +1,11 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const get_emote = require('../league/functions/get_emote');
-const Profile = require('../league/classes/profile');
+const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
+const get_emote = require('../../league/functions/get_emote');
+const Profile = require('../../league/classes/profile');
+const MeowDB = require('meowdb');
 
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('lolprofile')
+    data: new SlashCommandSubcommandBuilder()
+        .setName('profile')
         .setDescription('Muestra el perfil de un usuario de League of Legends')
         .addStringOption(option => 
             option.setName('region')
@@ -30,11 +31,15 @@ module.exports = {
         var region = interaction.options.getString('region');
         var mención = interaction.options.getUser('mención');
 
+        var db = new MeowDB({
+            dir: './src/database',
+            name: 'accounts'
+        });
+
         if (!username || !region) {
             if (mención) {
-                var acc = get_from_db(interaction, mención);
+                var acc = db.get(mención.id);
                 if (acc) {
-                    console.log(acc);
                     var puuid = acc.summoner.identifiers.puuid;
                     region = acc.region.id;
                 } else {
@@ -49,7 +54,7 @@ module.exports = {
                     return await interaction.followUp({ embeds: [embed] });
                 }
             } else {
-                var acc = get_from_db(interaction, interaction.user);
+                var acc = db.get(interaction.user.id);
                 if (acc) {
                     var puuid = acc.summoner.identifiers.puuid;
                     region = acc.region.id;
@@ -116,7 +121,7 @@ module.exports = {
             live_url = `https://porofessor.gg/es/live/${profile.region.name.toLowerCase()}/${profile.summoner_data.name.split(' ').join('%20')}`;
             live_text += `🟢 **Jugando:** ${live.champion.emote} ${live.champion.name} - ${live.map.name} - ${live.queue.name}\n`;
             live_text += `🕐 **Tiempo transcurrido:** ${Math.floor(live.time.duration / 60)}:${live.time.duration % 60 < 10 ? '0' + live.time.duration % 60 : live.time.duration % 60}\n`;
-            live_text += `📅 **Fecha:** ${new Date(live.time.start).toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })} - 🔗 **Enlace:** [Porofessor](${url})`;
+            live_text += `📅 **Fecha:** ${new Date(live.time.start).toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })} - 🔗 **Enlace:** [Porofessor](${live_url})`;
         } else {
             live_text += `Este jugador no está en partida en este momento.`;
         }
@@ -156,14 +161,3 @@ module.exports = {
         interaction.followUp({ embeds: [embed] });
     }
 };
-
-function get_from_db (interaction, user) {
-    var database = interaction.client.database;
-    var acc = database.get(user.id);
-
-    if (acc) {
-        return acc;
-    } else {
-        return false;
-    }
-}

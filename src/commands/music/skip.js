@@ -1,8 +1,8 @@
 const { AudioPlayerStatus, getVoiceConnection } = require('@discordjs/voice');
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-    data: new SlashCommandBuilder()
+    data: new SlashCommandSubcommandBuilder()
         .setName('skip')
         .setDescription('Salta a la siguiente canción'),
     async execute(interaction) {

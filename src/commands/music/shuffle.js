@@ -1,8 +1,8 @@
 const { getVoiceConnection } = require('@discordjs/voice');
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-    data: new SlashCommandBuilder()
+    data: new SlashCommandSubcommandBuilder()
         .setName('shuffle')
         .setDescription('Reordena la cola de reproducción aleatoriamente'),
     async execute(interaction) {

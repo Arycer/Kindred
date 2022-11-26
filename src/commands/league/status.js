@@ -1,10 +1,10 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const Region = require('../league/classes/region');
+const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
+const Region = require('../../league/classes/region');
 const axios = require('axios');
 
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('lolstatus')
+    data: new SlashCommandSubcommandBuilder()
+        .setName('status')
         .setDescription('Muestra el estado actual del servidor especficado de league of legends')
         .addStringOption(option => 
             option.setName('region')

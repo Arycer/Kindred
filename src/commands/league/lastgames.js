@@ -1,11 +1,12 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const Summoner = require('../league/classes/summoner_data');
-const get_emote = require('../league/functions/get_emote');
-const LastGames = require('../league/classes/last_games');
-const Region = require('../league/classes/region');
+const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
+const Summoner = require('../../league/classes/summoner_data');
+const get_emote = require('../../league/functions/get_emote');
+const LastGames = require('../../league/classes/last_games');
+const Region = require('../../league/classes/region');
+const MeowDB = require('meowdb');
 
 module.exports = {
-    data: new SlashCommandBuilder()
+    data: new SlashCommandSubcommandBuilder()
         .setName('lastgames')
         .setDescription('Muestra las últimas 10 partidas de un jugador')
         .addStringOption(option => 
@@ -32,11 +33,15 @@ module.exports = {
         var region = interaction.options.getString('region');
         var mención = interaction.options.getUser('mención');
 
+        var db = new MeowDB({
+            dir: './src/database',
+            name: 'accounts'
+        });
+
         if (!username || !region) {
             if (mención) {
-                var acc = get_from_db(interaction, mención);
+                var acc = db.get(mención.id);
                 if (acc) {
-                    console.log(acc);
                     var puuid = acc.summoner.identifiers.puuid;
                     region = acc.region.id;
                 } else {
@@ -51,7 +56,7 @@ module.exports = {
                     return await interaction.followUp({ embeds: [embed] });
                 }
             } else {
-                var acc = get_from_db(interaction, interaction.user);
+                var acc = db.get(interaction.user.id);
                 if (acc) {
                     var puuid = acc.summoner.identifiers.puuid;
                     region = acc.region.id;
@@ -116,16 +121,5 @@ module.exports = {
             })
         }
         await interaction.followUp({ embeds: [embed] });
-    }
-}
-
-function get_from_db (interaction, user) {
-    var database = interaction.client.database;
-    var acc = database.get(user.id);
-
-    if (acc) {
-        return acc;
-    } else {
-        return false;
     }
 }

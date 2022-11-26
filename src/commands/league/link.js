@@ -1,8 +1,9 @@
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionCollector } = require('discord.js');
-const Account = require('../league/classes/account');
+const { SlashCommandSubcommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionCollector } = require('discord.js');
+const Account = require('../../league/classes/account');
+const MeowDB = require('meowdb');
 
 module.exports = {
-    data: new SlashCommandBuilder()
+    data: new SlashCommandSubcommandBuilder()
         .setName('link')
         .setDescription('Enlaza tu cuenta de League of Legends con tu cuenta de Discord')
         .addStringOption(option =>
@@ -76,7 +77,11 @@ module.exports = {
                 account.discord_id = interaction.user.id;
                 account.summoner = summoner;
 
-                var db = interaction.client.database;
+                var db = new MeowDB({
+                    dir: './src/database',
+                    name: 'accounts'
+                });
+
                 if (db.get(interaction.user.id)) db.delete(interaction.user.id);
                 db.create(interaction.user.id, account);
 

@@ -1,8 +1,8 @@
 const { getVoiceConnection } = require('@discordjs/voice');
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-    data: new SlashCommandBuilder()
+    data: new SlashCommandSubcommandBuilder()
         .setName('queue')
         .setDescription('Muestra las próximas 10 canciones'),
     async execute(interaction) {

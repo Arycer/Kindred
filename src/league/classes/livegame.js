@@ -43,7 +43,6 @@ class LiveGame {
                 var player = game.participants.find(p => p.summonerId === summoner_id);
 
                 this.ingame = true;
-                this.gamedata.game_id = json.gameId;
                 this.time = {
                     duration: game.gameLength,
                     start: game.gameStartTime,
@@ -61,37 +60,22 @@ class LiveGame {
                     spell2: player.spell2Id,
                 }
                 this.team_side = player.teamId === 100 ? 'blue' : 'red';
-                this.gamedata.champion = await this.gamedata.champion.get_champion(player.championId);
+                this.champion = await this.champion.get_champion(player.championId);
 
                 return this;
             })
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
                     return this.get_livegame(region, summoner_id);
-                }
-
-                if (error.response.status === 404) {
-                    return this;
-                } else {
-                    console.log(error);
+                } else if (error) {
+                    if (error.response.status === 404) {
+                        return this;
+                    } else {
+                        console.log(error);
+                    }
                 }
             });
     }
 }
-
-function gen_text (obj, participant, region) {
-    var gamedata = obj.gamedata;
-    if (!obj.ingame) return obj.text;
-    else {
-        var url = `https://porofessor.gg/es/live/${region.name.toLowerCase()}/${participant.summonerName.split(' ').join('%20')}`;
-        var l1 = `🟢 **Jugando:** ${gamedata.champion.emote} ${gamedata.champion.name} - ${gamedata.game_map_name} - ${gamedata.game_queue_name}`;
-        var l2 = `🕐 **Tiempo transcurrido:** ${Math.floor(gamedata.game_duration / 60)}:${gamedata.game_duration % 60 < 10 ? '0' + gamedata.game_duration % 60 : gamedata.game_duration % 60}`;
-        var start_timestamp = gamedata.game_start_time;
-        if (!start_timestamp) start_timestamp = Date.now();
-        var l3 = `📅 **Fecha:** ${new Date(start_timestamp).toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })} - 🔗 **Enlace:** [Porofessor](${url})`
-        return `${l1}\n${l2}\n${l3}`;
-    }
-}
-
 
 module.exports = LiveGame;
