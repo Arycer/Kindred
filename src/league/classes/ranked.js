@@ -40,7 +40,7 @@ class Ranked {
                 for (const entry of data) {
                     if (entry.queueType === 'RANKED_SOLO_5x5') {
                         this.solo.tier = translate_tier(entry.tier);
-                        this.solo.emote = get_emote(entry.tier);
+                        this.solo.emote = get_emote(entry.tier.toLowerCase());
                         this.solo.rank = entry.rank;
                         this.solo.lps = entry.leaguePoints;
                         this.solo.wins = entry.wins;
@@ -48,7 +48,7 @@ class Ranked {
                         this.solo.winrate = Math.round((entry.wins / (entry.wins + entry.losses)) * 100);
                     } else if (entry.queueType === 'RANKED_FLEX_SR') {
                         this.flex.tier = translate_tier(entry.tier);
-                        this.flex.emote = get_emote(entry.tier);
+                        this.flex.emote = get_emote(entry.tier.toLowerCase());
                         this.flex.rank = entry.rank;
                         this.flex.lps = entry.leaguePoints;
                         this.flex.wins = entry.wins;

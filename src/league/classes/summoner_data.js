@@ -15,7 +15,7 @@ class Summoner {
         this.level = null;
     }
 
-    get_summoner(region, identifier) {
+    async get_summoner(region, identifier) {
         var endpoint = `https://${region.id}.api.riotgames.com/lol/summoner/v4/summoners/${identifier.length === 78 ? 'by-puuid' : 'by-name'}/${identifier}`;
         var opts = {
             method: 'GET',
@@ -43,7 +43,8 @@ class Summoner {
             })
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
-                    return this.get_summoner(region, username);
+                    console.log(`Timeout: ${endpoint}`);
+                    return this.get_summoner(region, identifier);
                 }
             });
     }

@@ -26,7 +26,6 @@ module.exports = {
     async execute(interaction) {
         const server = interaction.options.getString('region');
         const region = new Region().get_region(server);
-        console.log(region);
 
         const endpoint = `https://${region.id}.api.riotgames.com/lol/status/v4/platform-data`;
         const opts = {
@@ -36,7 +35,6 @@ module.exports = {
                 'X-Riot-Token': process.env.RIOT_API_KEY
             }
         };
-        console.log(endpoint);
 
         axios.get(endpoint, opts).then((response) => {
             var data = response.data;
@@ -44,14 +42,15 @@ module.exports = {
             var maintenances = data.maintenances;
             var incidents = data.incidents;
 
-            var maintenances_text = maintenances.length > 0 ? maintenances.length > 1 ? `Hay **${maintenances.length}** mantenimientos en curso` : `Hay **${maintenances.length}** mantenimiento en curso` : 'No hay mantenimientos en curso';
-            var incidents_text = incidents.length > 0 ? incidents.length > 1 ? `Hay **${incidents.length}** incidencias en curso` : `Hay **${incidents.length}** incidencia en curso` : 'No hay incidencias en curso';
+            var text = '';
+            text += maintenances.length > 0 ? maintenances.length > 1 ? `Hay **${maintenances.length}** mantenimientos ` : `Hay **${maintenances.length}** mantenimiento` : 'No hay mantenimientos';
+            text += incidents.length > 0 ? incidents.length > 1 ? ` y **${incidents.length}** incidencias en curso` : ` y **${incidents.length}** incidencia en curso` : 'y no hay incidencias en curso';
 
             var embed = new EmbedBuilder()
                 .setAuthor({ name: `Estado del servidor ${region.name}`, iconURL: `https://media.discordapp.net/attachments/1040519867578728481/1046022952547786842/939.jpg` })
                 .setThumbnail('https://cdn.discordapp.com/attachments/1040519867578728481/1046026076964532244/unknown.png')
                 .setTitle(`Incidencias actuales:`)
-                .setDescription(`${maintenances_text}\n${incidents_text}`)
+                .setDescription(text)
                 .setColor("#5d779d")
                 .setFooter({ text: `Solicitado por ${interaction.user.username}`})
                 .setTimestamp();

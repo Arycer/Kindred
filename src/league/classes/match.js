@@ -1,8 +1,8 @@
 const get_queue_name = require('../functions/get_queue_name');
 const get_map_name = require('../functions/get_map_name');
-const get_emote = require('../functions/get_emote');
 
 const Champion = require('./champion');
+const Spell = require('./spell');
 const Item = require('./item');
 
 const axios = require('axios');
@@ -19,8 +19,8 @@ class Match {
             cs_per_min: null,
         }
         this.spells = {
-            spell1: null,
-            spell2: null,
+            spell1: new Spell(),
+            spell2: new Spell(),
         }
         this.queue = {
             name: null,
@@ -49,7 +49,7 @@ class Match {
         this.champion = new Champion();
     }
 
-    get_match(region, match_id, puuid) {
+    async get_match(region, match_id, puuid) {
         var endpoint = `https://${region.route}.api.riotgames.com/lol/match/v5/matches/${match_id}`;
         var opts = {
             method: 'GET',
@@ -68,15 +68,15 @@ class Match {
                     kills: player.kills,
                     deaths: player.deaths,
                     assists: player.assists,
-                    kda: (player.kills + player.assists) / player.deaths,
+                    kda: ((player.kills + player.assists) / player.deaths).toFixed(2),
                     cs: player.totalMinionsKilled + player.neutralMinionsKilled,
-                    cs_per_min: (player.totalMinionsKilled + player.neutralMinionsKilled) / (match.gameDuration / 60),
+                    cs_per_min: ((player.totalMinionsKilled + player.neutralMinionsKilled) / (match.gameDuration / 60)).toFixed(1),
                     win: match.gameDuration < 300 ? 'remake' : player.win,
                 }
 
                 this.spells = {
-                    spell1: player.summoner1Id,
-                    spell2: player.summoner2Id,
+                    spell1: await this.spells.spell1.get_spell(player.summoner1Id),
+                    spell2: await this.spells.spell2.get_spell(player.summoner2Id)
                 }
 
                 this.queue = {

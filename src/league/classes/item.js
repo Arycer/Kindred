@@ -1,9 +1,11 @@
+const get_emote = require('../functions/get_emote');
 const axios = require('axios');
 
 class Item {
     constructor() {
         this.name = null;
         this.id = null;
+        this.emote = null;
     }
 
     async get_item(id) {
@@ -16,6 +18,7 @@ class Item {
             if (item) {
                 this.name = item.name;
                 this.id = item.id;
+                this.emote = get_emote(item.id); 
                 return this;
             }
         });

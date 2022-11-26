@@ -1,0 +1,131 @@
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const Summoner = require('../league/classes/summoner_data');
+const get_emote = require('../league/functions/get_emote');
+const LastGames = require('../league/classes/last_games');
+const Region = require('../league/classes/region');
+
+module.exports = {
+    data: new SlashCommandBuilder()
+        .setName('lastgames')
+        .setDescription('Muestra las últimas 10 partidas de un jugador')
+        .addStringOption(option => 
+            option.setName('region')
+                .setDescription('Región del usuario')
+                .setRequired(false)
+                .addChoices(
+                    { name: 'EUW', value: 'euw1' },
+                    { name: 'EUNE', value: 'eun1' },
+                    { name: 'NA', value: 'na1' },
+                    { name: 'BR', value: 'br1' },
+                    { name: 'LAN', value: 'la1' },
+                    { name: 'LAS', value: 'la2' },
+                    { name: 'OCE', value: 'oc1' },
+                    { name: 'TR', value: 'tr1' },
+                    { name: 'RU', value: 'ru' },
+                    { name: 'JP', value: 'jp1' },
+                    { name: 'KR', value: 'kr' },
+                ))
+            .addStringOption(option => option.setName('usuario').setDescription('Nombre de usuario de League of Legends').setRequired(false))
+            .addUserOption(option => option.setName('mención').setDescription('Usuario de Discord').setRequired(false)),
+    async execute(interaction) {
+        var username = interaction.options.getString('usuario');
+        var region = interaction.options.getString('region');
+        var mención = interaction.options.getUser('mención');
+
+        if (!username || !region) {
+            if (mención) {
+                var acc = get_from_db(interaction, mención);
+                if (acc) {
+                    console.log(acc);
+                    var puuid = acc.summoner.identifiers.puuid;
+                    region = acc.region.id;
+                } else {
+                    var embed = new EmbedBuilder()
+                        .setAuthor({ name: '¡Algo ha salido mal!', iconURL: 'https://media.discordapp.net/attachments/1040519867578728481/1044021176177012798/939.jpg' })
+                        .setTitle('Esto es lo que ha pasado:')
+                        .setDescription('El usuario no tiene ninguna cuenta enlazada')
+                        .setThumbnail('https://cdn.discordapp.com/attachments/1040519867578728481/1044017562775719967/unknown.png')
+                        .setColor('#5d779d')
+                        .setFooter({ text: `Solicitado por ${interaction.user.username}`})
+                        .setTimestamp();
+                    return await interaction.followUp({ embeds: [embed] });
+                }
+            } else {
+                var acc = get_from_db(interaction, interaction.user);
+                if (acc) {
+                    var puuid = acc.summoner.identifiers.puuid;
+                    region = acc.region.id;
+                } else {
+                    var embed = new EmbedBuilder()
+                        .setAuthor({ name: '¡Algo ha salido mal!', iconURL: 'https://media.discordapp.net/attachments/1040519867578728481/1044021176177012798/939.jpg' })
+                        .setTitle('Esto es lo que ha pasado:')
+                        .setDescription('No has especificado ningún usuario y no tienes ninguna cuenta enlazada')
+                        .setThumbnail('https://cdn.discordapp.com/attachments/1040519867578728481/1044017562775719967/unknown.png')
+                        .setColor('#5d779d')
+                        .setFooter({ text: `Solicitado por ${interaction.user.username}`})
+                        .setTimestamp();
+                    return await interaction.followUp({ embeds: [embed] });
+                }
+            }
+        }
+
+        const summoner = new Summoner();
+        const server = new Region().get_region(region);
+        await summoner.get_summoner(server, puuid ? puuid : username);
+        
+        if (!summoner.identifiers.s_id) {
+            var embed = new EmbedBuilder()
+                .setAuthor({ name: '¡Algo ha salido mal!', iconURL: 'https://media.discordapp.net/attachments/1040519867578728481/1044021176177012798/939.jpg' })
+                .setTitle('Esto es lo que ha pasado:')
+                .setDescription('No he podido encontrar al usuario especificado. Asegúrate de que la región es correcta y que el nombre de usuario es correcto')
+                .setThumbnail('https://cdn.discordapp.com/attachments/1040519867578728481/1044017562775719967/unknown.png')
+                .setColor('#5d779d')
+                .setFooter({ text: `Solicitado por ${interaction.user.username}`})
+                .setTimestamp();
+            return await interaction.followUp({ embeds: [embed] });
+        }
+                
+        const last_games = new LastGames();
+        await last_games.get_last_games(server, summoner.identifiers.puuid);
+
+        var embed = new EmbedBuilder()
+            .setAuthor({ name: `Últimas 10 partidas de ${summoner.name} - ${last_games.winrate}% WR`, iconURL: summoner.icon.url })
+            .setColor('#5d779d')
+            .setFooter({ text: `Solicitado por ${interaction.user.username}`})
+            .setTimestamp();
+
+        for (var i = 0; i < last_games.matches.length; i++) {
+            var game = last_games.matches[i];
+            var champ = `${game.champion.emote} ${game.champion.name}`;
+            var win = game.stats.win;
+            var kills = game.stats.kills;
+            var deaths = game.stats.deaths;
+            var assists = game.stats.assists;
+            var kda = game.stats.kda;
+            var cs = game.stats.cs;
+            var cs_per_min = game.stats.cs_per_min;
+            var cs_e = get_emote('minioncount');
+
+            var duration = `${Math.floor(game.time.duration / 60)}:${game.time.duration % 60 < 10 ? '0' + game.time.duration % 60 : game.time.duration % 60}`;
+            var wintext = typeof win === 'boolean' ? win ? `🟢 **Victoria**` : `🔴 **Derrota**` : `⚙️ **Remake**`;
+            var url = `https://www.leagueofgraphs.com/es/match/${server.name.toLowerCase()}/${game.game_id.split('_')[1]}`;
+
+            embed.addFields({
+                name: `${wintext} - ${champ} - ${game.map.name} - ${game.queue.name}`,
+                value: `🕐 Duración: ${duration} | KDA: ${kills}/${deaths}/${assists} | CS: ${cs} ${cs_e} (${cs_per_min}/min) | [🔗 Más](${url})`,
+            })
+        }
+        await interaction.followUp({ embeds: [embed] });
+    }
+}
+
+function get_from_db (interaction, user) {
+    var database = interaction.client.database;
+    var acc = database.get(user.id);
+
+    if (acc) {
+        return acc;
+    } else {
+        return false;
+    }
+}
