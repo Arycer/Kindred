@@ -42,7 +42,7 @@ module.exports = {
         const activities = [
             { name: `a Lobo | /help`, type: ActivityType.Listening },
             { name: `parche ${version} | /help`, type: ActivityType.Watching },
-            { name: `a ${client.guilds.cache.size} servidores y ${client.users.cache.size} usuarios | /help`, type: ActivityType.Watching },
+            { name: `a ${client.guilds.cache.size} servidores | /help`, type: ActivityType.Watching },
         ];
 
         var i = 0;
