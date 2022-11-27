@@ -44,6 +44,7 @@ Para contribuir al proyecto sigue los siguientes pasos:
 
 
 También puedes sugerir cambios o reportar errores desde [🔗 aquí](https://github.com/Arycer/Kindred/issues).
+
 Puedes ver la lista de contribyentes que participaron en el proyecto [🔗 aquí](https://github.com/Arycer/Kindred/contributors).
 
 --- 
