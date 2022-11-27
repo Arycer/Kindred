@@ -10,7 +10,7 @@
 
 <div align="center">
 
-[![Status](https://img.shields.io/badge/status-active-success.svg)]() [![GitHub Issues](https://img.shields.io/github/issues/Arycer/Kindred)](https://github.com/kylelobo/The-Documentation-Compendium/issues) [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/Arycer/Kindred)](https://github.com/kylelobo/The-Documentation-Compendium/pulls)
+[![Status](https://img.shields.io/badge/status-active-success.svg)]() [![GitHub Issues](https://img.shields.io/github/issues/Arycer/Kindred)](https://github.com/Arycer/Kindred/issues) [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/Arycer/Kindred)](https://github.com/Arycer/Kindred/pulls)
 
 </div>
 
