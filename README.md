@@ -34,7 +34,16 @@ Para añadirme a tu servidor visita este enlace: [🔗 Link](https://bit.ly/3F4v
 
 - [@Arycer](https://github.com/Arycer) - Desarrollador principal
 
-Para contribuir al proyecto, puedes hacerlo desde [aquí](https://github.com/Arycer/Kindred/issues) reportando errores o desde [aquí](https://github.com/Arycer/Kindred/pulls) aportando con tu código.
+Para contribuir al proyecto sigue los siguientes pasos:
+
+- Crea un fork del repositorio.
+- Crea tu versión: `git checkout -b mi-nueva-función`.
+- Haz tus cambios y confírmalos: `git commit -am 'Mi nueva función'`.
+- Incorpora tus cambios: `git push origin mi-nueva-función`.
+- Solicita la incorporación [🔗 aquí](https://github.com/Arycer/Kindred/pulls).
+
+
+También puedes sugerir cambios o reportar errores desde [🔗 aquí](https://github.com/Arycer/Kindred/issues).
 
 Puedes ver la lista de [contribuyentes](https://github.com/Arycer/Kindred/contributors) que participaron en el proyecto.
 
