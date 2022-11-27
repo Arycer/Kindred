@@ -22,15 +22,15 @@
 - [Añadir a tu servidor](#añadir)
 - [Desarrollo](#desarrollo)
 
-## 🧐 Introducción <a name = "introducción"></a>
+## 👋 Introducción <a name = "introducción"></a>
 
 ¡Hola! Soy Kindred, un bot de Discord orientado a League of Legends. Conmigo podrás obtener información de tus rivales en tus partidas, ver tu historial de partidas, información de maestrías, campeones y mucho más.
 
-## 🏁 ¡Añádeme a tu servidor! <a name = "añadir"></a>
+## ✨ ¡Añádeme a tu servidor! <a name = "añadir"></a>
 
 Para añadirme a tu servidor visita este enlace: [🔗 Link](https://bit.ly/3F4vQ9v)
 
-## ✍️ Desarrollo <a name = "desarrollo"></a>
+## ⚙ Desarrollo <a name = "desarrollo"></a>
 
 - [@Arycer](https://github.com/Arycer) - Desarrollador principal
 
