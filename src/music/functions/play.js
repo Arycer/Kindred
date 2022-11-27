@@ -30,7 +30,7 @@ async function play (channel, player, queue, nosend) {
 			} else {
 				embed.setDescription(`Quedan ${queue.songs.length} canciones en la cola.`);
 			}
-			embed.setFooter({ text: `Solicitado por ${options.requester}` });
+			embed.setFooter({ text: `Solicitado por ${requester}` });
 			embed.setTimestamp();
 			channel.send({ embeds: [embed] });
 		}
