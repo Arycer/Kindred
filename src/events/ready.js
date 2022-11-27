@@ -1,6 +1,7 @@
 const { REST, Routes, Events, ActivityType } = require('discord.js');
 const { readdirSync } = require('node:fs');
 const { join } = require('node:path');
+var axios = require('axios');
 
 module.exports = {
     name: Events.ClientReady,
@@ -34,6 +35,17 @@ module.exports = {
             console.error(error);
         }
 
-        client.user.setActivity(`a Lobo | /help`, { type: ActivityType.Listening });
-    },
+        var endpoint = `https://ddragon.leagueoflegends.com/api/versions.json`;
+        var version = await axios.get(endpoint);
+        var version = version.data[0];
+
+        const activities = [
+            { name: `a Lobo | /help`, type: ActivityType.Listening },
+            { name: `parche ${version} | /help`, type: ActivityType.Watching },
+            { name: `a ${client.guilds.cache.size} servidores y ${client.users.cache.size} usuarios | /help`, type: ActivityType.Watching },
+        ];
+
+        var i = 0;
+        setInterval(() => client.user.setActivity(activities[i++ % activities.length]), 15000);
+    }
 };

@@ -9,8 +9,8 @@ class Item {
     }
 
     async get_item(id) {
-        var endpoint = `https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/items.json`;
-
+        var endpoint = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/es_es/v1/items.json`;
+        
         return axios.get(endpoint).then(response => {
             var items = Object.values(response.data);
             var item = items.find(item => item.id == id);

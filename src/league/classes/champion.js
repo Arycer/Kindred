@@ -10,7 +10,7 @@ class Champion {
     }
 
     get_champion(query) {
-        var endpoint = `https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions.json`;
+        var endpoint = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/es_es/v1/champion-summary.json`;
 
         return axios.get(endpoint).then(async response => {
             var champions = Object.values(response.data);
@@ -18,13 +18,13 @@ class Champion {
             if (typeof query === 'number') {
                 var champion = champions.find(champion => champion.id == query);
             } else {
-                var champion = champions.find(champion => champion.key.toLowerCase() == query.toLowerCase());
+                var champion = champions.find(champion => champion.alias.toLowerCase() == query.toLowerCase());
             }
 
             this.name = champion.name;
-            this.key = champion.key;
+            this.key = champion.alias;
             this.id = champion.id;
-            this.emote = get_emote(champion.key);
+            this.emote = get_emote(this.key);
 
             return this;
         });

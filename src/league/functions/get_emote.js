@@ -9,8 +9,12 @@ const client = new Client({
 
 function get_emote(name) {
     var emojis = client.emojis.cache;
-    var emoji = emojis.find(emoji => emoji.name == name);
-    if (emoji) return emoji.toString();
+    if (typeof name === 'string') {
+        var emote = emojis.find(emoji => emoji.name.toLowerCase() == name.toLowerCase());
+    } else {
+        var emote = emojis.find(emoji => emoji.name == name);
+    }
+    if (emote) return emote.toString();
 }
 
 client.login(process.env.DISCORD_ALT);

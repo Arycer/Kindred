@@ -133,7 +133,7 @@ module.exports = {
             typeof last.stats.win === 'boolean' ? wintext = last.stats.win ? `🟢 **Victoria**` : `🔴 **Derrota**` : wintext = `⚙️ **Remake**`;
             last_url = `https://www.leagueofgraphs.com/es/match/${profile.region.name.toLowerCase()}/${last.game_id.split('_')[1]}`;
             last_name = `Última partida: ${last.map.name} - ${last.queue.name}`;
-            last_text += `${wintext} con ${last.champion.emote} ${last.champion.name} - ${last.stats.kills}/${last.stats.deaths}/${last.stats.assists} `;
+            last_text += `${wintext} con ${last.champion.emote} ${last.champion.name} - ${last.stats.kills}/${last.stats.deaths}/${last.stats.assists} - `;
             last_text += `${last.stats.cs} ${cs_e} (${last.stats.cs_per_min} ${cs_e}/min)\n`;
             last_text += `🕐 **Duración de la partida:** ${Math.floor(last.time.duration / 60)}:${last.time.duration % 60 < 10 ? '0' + last.time.duration % 60 : last.time.duration % 60}\n`;
             last_text += `📅 **Fecha:** ${new Date(last.time.start).toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })} - 🔗 **Enlace:** [League of Graphs](${last_url})`;

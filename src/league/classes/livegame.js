@@ -1,9 +1,28 @@
+const Summoner = require('./summoner_data');
 const Champion = require('./champion');
+const Ranked = require('./ranked');
+const Spell = require('./spell');
+const Rune = require('./rune');
 const axios = require('axios');
 
 const get_queue_name = require('../functions/get_queue_name');
 const get_map_name = require('../functions/get_map_name');
 
+class Participant {
+    constructor() {
+        this.champion = new Champion();
+        this.spells = {
+            spell1: new Spell(),
+            spell2: new Spell()
+        };
+        this.runes = {
+            primary: new Rune(),
+            secondary: new Rune()
+        };
+        this.summoner_data = new Summoner();
+        this.ranked = new Ranked();
+    }
+}
 class LiveGame {
     constructor() {
         this.ingame = false;
@@ -22,6 +41,22 @@ class LiveGame {
         this.time = {
             duration: null,
             start: null,
+        }
+        this.participants = {
+            blue: [
+                new Participant(),
+                new Participant(),
+                new Participant(),
+                new Participant(),
+                new Participant(),
+            ],
+            red: [
+                new Participant(),
+                new Participant(),
+                new Participant(),
+                new Participant(),
+                new Participant(),
+            ],
         }
         this.teamside = null;
         this.champion = new Champion();
@@ -62,12 +97,45 @@ class LiveGame {
                 this.team_side = player.teamId === 100 ? 'blue' : 'red';
                 this.champion = await this.champion.get_champion(player.championId);
 
+                for (var i = 0; i < this.participants.blue.length; i++) {
+                    var participant = this.participants.blue[i];
+                    var p = game.participants[i];
+
+                    participant.champion = await participant.champion.get_champion(p.championId);
+                    participant.spells = {
+                        spell1: await participant.spells.spell1.get_spell(p.spell1Id),
+                        spell2: await participant.spells.spell2.get_spell(p.spell2Id),
+                    }
+                    participant.runes = {
+                        primary: await participant.runes.primary.get_rune(p.perks.perkIds[0]),
+                        secondary: await participant.runes.secondary.get_rune(p.perks.perkSubStyle),
+                    }
+                    participant.summoner_data = await participant.summoner_data.get_summoner(region, p.summonerName);
+                    participant.ranked = await participant.ranked.get_ranked(region, participant.summoner_data.identifiers.s_id);
+                }
+
+                for (var i = 0; i < this.participants.red.length; i++) {
+                    var participant = this.participants.red[i];
+                    var p = game.participants[i + 5];
+
+                    participant.champion = await participant.champion.get_champion(p.championId);
+                    participant.spells = {
+                        spell1: await participant.spells.spell1.get_spell(p.spell1Id),
+                        spell2: await participant.spells.spell2.get_spell(p.spell2Id),
+                    }
+                    participant.runes = {
+                        primary: await participant.runes.primary.get_rune(p.perks.perkIds[0]),
+                        secondary: await participant.runes.secondary.get_rune(p.perks.perkSubStyle),
+                    }
+                    participant.summoner_data = await participant.summoner_data.get_summoner(region, p.summonerName);
+                    participant.ranked = await participant.ranked.get_ranked(region, participant.summoner_data.identifiers.s_id);
+                }
                 return this;
             })
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
                     return this.get_livegame(region, summoner_id);
-                } else if (error) {
+                } else if (error.response) {
                     if (error.response.status === 404) {
                         return this;
                     } else {
