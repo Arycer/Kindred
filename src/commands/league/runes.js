@@ -81,6 +81,6 @@ module.exports = {
             });
         }), setTimeout(() => {
             if (!replied) return interaction.followUp({ embeds: [error('No he podido encontrar las runas de este campeón para la línea que me has pedido.', interaction.user.tag)] });
-        }, 10000);
+        }, 15000);
     }
 };
