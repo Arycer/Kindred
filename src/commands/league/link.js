@@ -93,7 +93,7 @@ module.exports = {
                 .setAuthor({ name: `${account.region.name} - ${account.summoner.name}`, iconURL: old_icon })
                 .setTitle('¡Todo listo!')
                 .setDescription(`Tu cuenta ha sido vinculada correctamente.` )
-                .setThumbnail(`https://media.discordapp.net/attachments/1040519867578728481/1044017541594501220/unknown.png`)
+                .setThumbnail(`https://i.imgur.com/K7uO7Eh.png`)
                 .setFooter({ text: `Solicitado por ${interaction.user.tag}` })
                 .setTimestamp();
 
