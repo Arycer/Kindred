@@ -1,5 +1,6 @@
 const { SlashCommandSubcommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionCollector } = require('discord.js');
 const Account = require('../../league/classes/account');
+const error = require('../../league/functions/error');
 const MeowDB = require('meowdb');
 
 module.exports = {
@@ -34,9 +35,7 @@ module.exports = {
 
         var summoner = await account.summoner.get_summoner(account.region, username);
 
-        if (!summoner.identifiers.s_id) {
-            return interaction.followUp({ content: 'No se ha encontrado ningún usuario con ese nombre', ephemeral: true });
-        }
+        if (!summoner.identifiers.s_id) return interaction.followUp({ embeds: [error('No he podido encontrar al usuario especificado. Asegúrate de que la región es correcta y que el nombre de usuario es correcto', interaction.user.tag)] });
 
         do {
             var random = Math.floor(Math.random() * 21);
@@ -73,57 +72,39 @@ module.exports = {
         collector.on('collect', async () => {
             var summoner = await account.summoner.get_summoner(account.region, username);
 
-            if (summoner.icon.id == random) {
-                account.discord_id = interaction.user.id;
-                account.summoner = summoner;
-
-                var db = new MeowDB({
-                    dir: './src/database',
-                    name: 'accounts'
-                });
-
-                if (db.get(interaction.user.id)) db.delete(interaction.user.id);
-                db.create(interaction.user.id, account);
-
-                var embed = new EmbedBuilder()
-                    .setColor('#5d779d')
-                    .setAuthor({ name: `${account.region.name} - ${account.summoner.name}`, iconURL: old_icon })
-                    .setTitle('¡Todo listo!')
-                    .setDescription(`Tu cuenta ha sido vinculada correctamente.` )
-                    .setThumbnail(`https://media.discordapp.net/attachments/1040519867578728481/1044017541594501220/unknown.png`)
-                    .setFooter({ text: `Solicitado por ${interaction.user.tag}` })
-                    .setTimestamp();
-
-                await interaction.followUp({ embeds: [embed] });
+            if (!summoner.icon.id == random) {
                 await msg.delete();
-            } else {
-                var embed = new EmbedBuilder()
+                return interaction.followUp({ embeds: [error('No has cambiado tu icono de perfil. Por favor, vuelve a intentarlo', interaction.user.tag)] });
+            }
+
+            account.discord_id = interaction.user.id;
+            account.summoner = summoner;
+
+            var db = new MeowDB({
+                dir: './src/database',
+                name: 'accounts'
+            });
+
+            if (db.get(interaction.user.id)) db.delete(interaction.user.id);
+            db.create(interaction.user.id, account);
+
+            var embed = new EmbedBuilder()
                 .setColor('#5d779d')
-                .setAuthor({ name: `${account.region.name} - ${account.summoner.name}`, iconURL: summoner.icon.url })
-                .setTitle('¡Algo salió mal!')
-                .setDescription(`No has cambiado tu icono de perfil a la imagen que te pedí.` )
-                .setThumbnail(`https://media.discordapp.net/attachments/1040519867578728481/1044017562775719967/unknown.png`)
+                .setAuthor({ name: `${account.region.name} - ${account.summoner.name}`, iconURL: old_icon })
+                .setTitle('¡Todo listo!')
+                .setDescription(`Tu cuenta ha sido vinculada correctamente.` )
+                .setThumbnail(`https://media.discordapp.net/attachments/1040519867578728481/1044017541594501220/unknown.png`)
                 .setFooter({ text: `Solicitado por ${interaction.user.tag}` })
                 .setTimestamp();
 
             await interaction.followUp({ embeds: [embed] });
             await msg.delete();
-            }
         });
 
         collector.on('end', async collected => {
             if (collected.size == 0) {
-                var embed = new EmbedBuilder()
-                    .setColor('#5d779d')
-                    .setAuthor({ name: `${account.region.name} - ${account.summoner.name}`, iconURL: summoner.icon.url })
-                    .setTitle('¡Algo salió mal!')
-                    .setDescription(`Has excedido el límite de tiempo para completar la verificación`)
-                    .setThumbnail(`https://media.discordapp.net/attachments/1040519867578728481/1044017562775719967/unknown.png`)
-                    .setFooter({ text: `Solicitado por ${interaction.user.tag}` })
-                    .setTimestamp();
-    
-                await interaction.followUp({ embeds: [embed] });
                 await msg.delete();
+                return interaction.followUp({ embeds: [error('No has cambiado tu icono de perfil. Por favor, vuelve a intentarlo', interaction.user.tag)] });
             }
         });
     }

@@ -13,23 +13,13 @@ module.exports = {
         
         var entry = db.get(interaction.user.id);
 
-        if (!entry) {
-            var embed = new EmbedBuilder()
-                .setAuthor({ name: `¡Algo ha salido mal!`, iconURL: `https://media.discordapp.net/attachments/1040519867578728481/1046022952547786842/939.jpg`})
-                .setThumbnail('https://media.discordapp.net/attachments/1040519867578728481/1044017562775719967/unknown.png')
-                .setTitle(`Esto es lo que ha pasado:`)
-                .setDescription(`No tienes ninguna cuenta vinculada. Vincula una cuenta con el comando /link`)
-                .setFooter({ text: `Solicitado por ${interaction.user.tag}` })
-                .setColor('#5d779d')
-                .setTimestamp();
-            return await interaction.followUp({ embeds: [embed] });
-        }
+        if (!entry) return interaction.followUp({ embeds: [error('No tienes ninguna cuenta enlazada.', interaction.user.tag)] });
 
         db.delete(interaction.user.id);
 
         var embed = new EmbedBuilder()
-            .setAuthor({ name: `¡Todo listo!`, iconURL: `https://media.discordapp.net/attachments/1040519867578728481/1046022952547786842/939.jpg`})
-            .setThumbnail('https://media.discordapp.net/attachments/1040519867578728481/1044017541594501220/unknown.png')
+            .setAuthor({ name: `¡Todo listo!`, iconURL: `https://i.imgur.com/hGG9kLU.png`})
+            .setThumbnail('https://i.imgur.com/BQUpB5n.png')
             .setTitle(`Tu cuenta ha sido desvinculada correctamente.`)
             .setDescription(`Puedes volver a vincular tu cuenta con el comando /link`)
             .setFooter({ text: `Solicitado por ${interaction.user.tag}` })

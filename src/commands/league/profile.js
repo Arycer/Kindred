@@ -1,6 +1,7 @@
 const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
 const get_emote = require('../../league/functions/get_emote');
 const Profile = require('../../league/classes/profile');
+const error = require('../../league/functions/error');
 const MeowDB = require('meowdb');
 
 module.exports = {
@@ -39,53 +40,22 @@ module.exports = {
         if (!username || !region) {
             if (mención) {
                 var acc = db.get(mención.id);
-                if (acc) {
-                    var puuid = acc.summoner.identifiers.puuid;
-                    region = acc.region.id;
-                } else {
-                    var embed = new EmbedBuilder()
-                        .setAuthor({ name: '¡Algo ha salido mal!', iconURL: 'https://media.discordapp.net/attachments/1040519867578728481/1044021176177012798/939.jpg' })
-                        .setTitle('Esto es lo que ha pasado:')
-                        .setDescription('El usuario no tiene ninguna cuenta enlazada')
-                        .setThumbnail('https://cdn.discordapp.com/attachments/1040519867578728481/1044017562775719967/unknown.png')
-                        .setColor('#5d779d')
-                        .setFooter({ text: `Solicitado por ${interaction.user.username}`})
-                        .setTimestamp();
-                    return await interaction.followUp({ embeds: [embed] });
-                }
+                if (!acc) return interaction.followUp({ embeds: [error('El usuario no tiene ninguna cuenta enlazada.', interaction.user.tag)] });
+                var puuid = acc.summoner.identifiers.puuid;
+                region = acc.region.id;
+
             } else {
                 var acc = db.get(interaction.user.id);
-                if (acc) {
-                    var puuid = acc.summoner.identifiers.puuid;
-                    region = acc.region.id;
-                } else {
-                    var embed = new EmbedBuilder()
-                        .setAuthor({ name: '¡Algo ha salido mal!', iconURL: 'https://media.discordapp.net/attachments/1040519867578728481/1044021176177012798/939.jpg' })
-                        .setTitle('Esto es lo que ha pasado:')
-                        .setDescription('No has especificado ningún usuario y no tienes ninguna cuenta enlazada')
-                        .setThumbnail('https://cdn.discordapp.com/attachments/1040519867578728481/1044017562775719967/unknown.png')
-                        .setColor('#5d779d')
-                        .setFooter({ text: `Solicitado por ${interaction.user.username}`})
-                        .setTimestamp();
-                    return await interaction.followUp({ embeds: [embed] });
-                }
+                if (!acc) return interaction.followUp({ embeds: [error('No tienes ninguna cuenta enlazada.', interaction.user.tag)] });
+                var puuid = acc.summoner.identifiers.puuid;
+                region = acc.region.id;
             }
         }
 
         const profile = new Profile();
         await profile.init(region, puuid ? puuid : username, interaction);
 
-        if (!profile.summoner_data.identifiers.s_id) {
-            var embed = new EmbedBuilder()
-                .setAuthor({ name: '¡Algo ha salido mal!', iconURL: 'https://media.discordapp.net/attachments/1040519867578728481/1044021176177012798/939.jpg' })
-                .setTitle('Esto es lo que ha pasado:')
-                .setDescription('No he podido encontrar al usuario especificado. Asegúrate de que la región es correcta y que el nombre de usuario es correcto')
-                .setThumbnail('https://cdn.discordapp.com/attachments/1040519867578728481/1044017562775719967/unknown.png')
-                .setColor('#5d779d')
-                .setFooter({ text: `Solicitado por ${interaction.user.username}`})
-                .setTimestamp();
-            return await interaction.followUp({ embeds: [embed] });
-        }
+        if (!profile.summoner_data.name) return interaction.followUp({ embeds: [error('No se ha encontrado ningún usuario con ese nombre.', interaction.user.tag)] });
 
         var m_text = '';
         for (var i = 0; i < 3; i++) {

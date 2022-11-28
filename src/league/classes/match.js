@@ -115,12 +115,10 @@ class Match {
             duration: match.gameDuration,
             start: match.gameCreation,
         }
-
         for (var i = 0; i < this.inventory.items.length; i++) {
             this.inventory.items[i].get_item(player['item' + i]);
         }
         this.inventory.trinket.get_item(player.item6);
-
         this.game_id = match_id;
         this.champion = await this.champion.get_champion(player.championId);
 

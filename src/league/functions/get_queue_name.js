@@ -5,6 +5,7 @@ function get_queue_name(id) {
     
     return axios.get(endpoint).then(response => {
         var queues = Object.values(response.data);
+        if (id == 0) return 'Custom';
         var queue = queues.find(queue => queue.queueId == id);
         if (queue.description.includes('ARAM')) return 'ARAM';
         if (queue.description.includes('URF')) return 'URF';

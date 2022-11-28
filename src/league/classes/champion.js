@@ -18,9 +18,11 @@ class Champion {
             if (typeof query === 'number') {
                 var champion = champions.find(champion => champion.id == query);
             } else {
-                var champion = champions.find(champion => champion.alias.toLowerCase() == query.toLowerCase());
+                var search = query.split(' ').join('').toLowerCase();
+                var champion = champions.find(champion => champion.alias.toLowerCase() == search || champion.name.toLowerCase() == search);
             }
 
+            if (!champion) return this;
             this.name = champion.name;
             this.key = champion.alias;
             this.id = champion.id;

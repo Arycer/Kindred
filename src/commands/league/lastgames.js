@@ -3,6 +3,7 @@ const Summoner = require('../../league/classes/summoner_data');
 const get_emote = require('../../league/functions/get_emote');
 const LastGames = require('../../league/classes/last_games');
 const Region = require('../../league/classes/region');
+const error = require('../../league/functions/error');
 const MeowDB = require('meowdb');
 
 module.exports = {
@@ -41,36 +42,14 @@ module.exports = {
         if (!username || !region) {
             if (mención) {
                 var acc = db.get(mención.id);
-                if (acc) {
-                    var puuid = acc.summoner.identifiers.puuid;
-                    region = acc.region.id;
-                } else {
-                    var embed = new EmbedBuilder()
-                        .setAuthor({ name: '¡Algo ha salido mal!', iconURL: 'https://media.discordapp.net/attachments/1040519867578728481/1044021176177012798/939.jpg' })
-                        .setTitle('Esto es lo que ha pasado:')
-                        .setDescription('El usuario no tiene ninguna cuenta enlazada')
-                        .setThumbnail('https://cdn.discordapp.com/attachments/1040519867578728481/1044017562775719967/unknown.png')
-                        .setColor('#5d779d')
-                        .setFooter({ text: `Solicitado por ${interaction.user.username}`})
-                        .setTimestamp();
-                    return await interaction.followUp({ embeds: [embed] });
-                }
+                if (!acc) return interaction.followUp({ embeds: [error('El usuario no tiene ninguna cuenta enlazada.', interaction.user.tag)] });
+                var puuid = acc.summoner.identifiers.puuid;
+                region = acc.region.id;
             } else {
                 var acc = db.get(interaction.user.id);
-                if (acc) {
-                    var puuid = acc.summoner.identifiers.puuid;
-                    region = acc.region.id;
-                } else {
-                    var embed = new EmbedBuilder()
-                        .setAuthor({ name: '¡Algo ha salido mal!', iconURL: 'https://media.discordapp.net/attachments/1040519867578728481/1044021176177012798/939.jpg' })
-                        .setTitle('Esto es lo que ha pasado:')
-                        .setDescription('No has especificado ningún usuario y no tienes ninguna cuenta enlazada')
-                        .setThumbnail('https://cdn.discordapp.com/attachments/1040519867578728481/1044017562775719967/unknown.png')
-                        .setColor('#5d779d')
-                        .setFooter({ text: `Solicitado por ${interaction.user.username}`})
-                        .setTimestamp();
-                    return await interaction.followUp({ embeds: [embed] });
-                }
+                if (!acc) return interaction.followUp({ embeds: [error('No tienes ninguna cuenta enlazada.', interaction.user.tag)] });
+                var puuid = acc.summoner.identifiers.puuid;
+                region = acc.region.id;
             }
         }
 
@@ -78,18 +57,8 @@ module.exports = {
         const server = new Region().get_region(region);
         await summoner.get_summoner(server, puuid ? puuid : username);
         
-        if (!summoner.identifiers.s_id) {
-            var embed = new EmbedBuilder()
-                .setAuthor({ name: '¡Algo ha salido mal!', iconURL: 'https://media.discordapp.net/attachments/1040519867578728481/1044021176177012798/939.jpg' })
-                .setTitle('Esto es lo que ha pasado:')
-                .setDescription('No he podido encontrar al usuario especificado. Asegúrate de que la región es correcta y que el nombre de usuario es correcto')
-                .setThumbnail('https://cdn.discordapp.com/attachments/1040519867578728481/1044017562775719967/unknown.png')
-                .setColor('#5d779d')
-                .setFooter({ text: `Solicitado por ${interaction.user.username}`})
-                .setTimestamp();
-            return await interaction.followUp({ embeds: [embed] });
-        }
-                
+        if (!summoner.identifiers.s_id) return interaction.followUp({ embeds: [error('No he podido encontrar al usuario especificado. Asegúrate de que la región es correcta y que el nombre de usuario es correcto', interaction.user.tag)] });
+
         const last_games = new LastGames();
         await last_games.get_last_games(server, summoner.identifiers.puuid);
 
@@ -106,7 +75,6 @@ module.exports = {
             var kills = game.stats.kills;
             var deaths = game.stats.deaths;
             var assists = game.stats.assists;
-            var kda = game.stats.kda;
             var cs = game.stats.cs;
             var cs_per_min = game.stats.cs_per_min;
             var cs_e = get_emote('minioncount');
@@ -120,6 +88,6 @@ module.exports = {
                 value: `🕐 Duración: ${duration} | KDA: ${kills}/${deaths}/${assists} | CS: ${cs} ${cs_e} (${cs_per_min}/min) | [🔗 Más](${url})`,
             })
         }
-        await interaction.followUp({ embeds: [embed] });
+        return await interaction.followUp({ embeds: [embed] });
     }
 }
