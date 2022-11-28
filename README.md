@@ -4,7 +4,7 @@
 </p>
 
 <h3 align="center">Kindred</h3>
-<p align="center"> Bot de Discord orientado a League of Legends
+<p align="center"> League of Legends Discord Bot
     <br> 
 </p>
 
