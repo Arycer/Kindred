@@ -1,7 +1,7 @@
 const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
 const get_emote = require('../../league/functions/get_emote');
 const Profile = require('../../league/classes/profile');
-const error = require('../../league/functions/error');
+const error = require('../../util/error');
 const MeowDB = require('meowdb');
 
 module.exports = {

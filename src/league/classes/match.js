@@ -71,7 +71,7 @@ class Match {
             }
         };
 
-        console.log('Fetching match from Riot API: ' + match_id);
+        console.log('Obteniendo datos de partida: %s', match_id);
         var match = await axios.get(endpoint, opts)
             .then(response => {
                 return response.data;

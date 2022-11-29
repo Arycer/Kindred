@@ -2,7 +2,7 @@ const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
 const Summoner = require('../../league/classes/summoner_data');
 const LiveGame = require('../../league/classes/livegame');
 const Region = require('../../league/classes/region');
-const error = require('../../league/functions/error');
+const error = require('../../util/error');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()

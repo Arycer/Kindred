@@ -3,7 +3,7 @@ const Summoner = require('../../league/classes/summoner_data');
 const get_emote = require('../../league/functions/get_emote');
 const LastGames = require('../../league/classes/last_games');
 const Region = require('../../league/classes/region');
-const error = require('../../league/functions/error');
+const error = require('../../util/error');
 const MeowDB = require('meowdb');
 
 module.exports = {

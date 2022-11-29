@@ -1,5 +1,6 @@
-const { getVoiceConnection } = require('@discordjs/voice');
 const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
+const { getVoiceConnection } = require('@discordjs/voice');
+const error = require('../../util/error');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
@@ -8,13 +9,13 @@ module.exports = {
     async execute(interaction) {
         try {
             const voiceChannel = interaction.member.voice.channel;
-            if (!voiceChannel) return interaction.reply({ content: '¡Debes estar en un canal de voz para usar este comando!', ephemeral: true });
+            if (!voiceChannel) return interaction.followUp({ embeds: [error('Debes estar en un canal de voz para usar este comando.', interaction.user.tag)] });
         
             const connection = getVoiceConnection(interaction.guildId);
-            if (!connection) return interaction.reply({ content: '¡No estás reproduciendo música!', ephemeral: true });
+            if (!connection) return interaction.followUp({ embeds: [error('No estoy reproduciendo nada en este servidor.', interaction.user.tag)] });
         
             const queue = connection.queue;
-            if (queue.length < 2) return interaction.reply({ content: '¡No hay suficientes canciones en la cola para reordenar!', ephemeral: true });
+            if (queue.songs.length < 2) return interaction.followUp({ embeds: [error('La cola de reproducción debe tener al menos 2 canciones para poder reordenarla.', interaction.user.tag)] });
         
             const requester = interaction.user.tag;
             queue.shuffle();

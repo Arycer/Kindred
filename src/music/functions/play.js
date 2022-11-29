@@ -31,6 +31,7 @@ async function play (channel, player, queue, nosend) {
 				embed.setDescription(`Quedan ${queue.songs.length} canciones en la cola.`);
 			}
 			embed.setFooter({ text: `Solicitado por ${requester}` });
+			embed.setColor('#5d779d');
 			embed.setTimestamp();
 			channel.send({ embeds: [embed] });
 		}

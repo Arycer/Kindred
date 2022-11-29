@@ -1,6 +1,6 @@
 const { SlashCommandSubcommandBuilder, EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const Champion = require('../../league/classes/champion');
-const error = require('../../league/functions/error');
+const error = require('../../util/error');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()

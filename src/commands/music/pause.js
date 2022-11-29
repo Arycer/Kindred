@@ -1,5 +1,6 @@
 const { getVoiceConnection, AudioPlayerStatus } = require('@discordjs/voice');
 const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
+const error = require('../../util/error');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
@@ -8,15 +9,14 @@ module.exports = {
     async execute(interaction) {
         try {
             const voiceChannel = interaction.member.voice.channel;
-            if (!voiceChannel) return interaction.reply({ content: '¡Debes estar en un canal de voz para usar este comando!', ephemeral: true });
+            if (!voiceChannel) return interaction.followUp({ embeds: [error('Debes estar en un canal de voz para usar este comando.', interaction.user.tag)] });
 
             const connection = getVoiceConnection(interaction.guildId);
-            if (!connection) return interaction.reply({ content: '¡No estás reproduciendo música!', ephemeral: true });
+            if (!connection) return interaction.followUp({ embeds: [error('No estoy reproduciendo nada en este servidor.', interaction.user.tag)] });
 
             const player = connection.state.subscription?.player;
-            if (!player) return interaction.reply({ content: '¡No estás reproduciendo música!', ephemeral: true });
 
-            if (player.state.status === AudioPlayerStatus.Paused) return interaction.reply({ content: '¡La reproducción ya está pausada!', ephemeral: true });
+            if (player.state.status === AudioPlayerStatus.Paused) return interaction.followUp({ embeds: [error('La reproducción ya está pausada.', interaction.user.tag)] });
 
             player.pause();
 

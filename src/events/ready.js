@@ -46,6 +46,28 @@ module.exports = {
         ];
 
         var i = 0;
-        setInterval(() => client.user.setActivity(activities[i++ % activities.length]), 15000);
+        setInterval(() => {
+            activities[2].name = `a ${client.guilds.cache.size} servidores | /help`;
+            client.user.setActivity(activities[i++ % activities.length]);
+        }, 15000);
+
+        const LastGames = require('../league/classes/last_games');
+        const MeowDB = require('meowdb');
+
+        const db = new MeowDB({
+            dir: 'src/database',
+            name: 'accounts',
+            raw: true,
+        });
+
+        setInterval(async () => {
+            var accounts = Object.values(db.all());
+            for (var i = 0; i < accounts.length; i++) {
+                var account = accounts[i];
+                console.log('Actualizando partidas de %s (%d)', account.summoner.name, account.discord_id);
+                var last_games = new LastGames();
+                await last_games.get_last_games(account.region, account.summoner.identifiers.puuid);
+            }
+        }, 60 * 60 * 1000);
     }
 };

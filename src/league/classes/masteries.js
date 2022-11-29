@@ -97,7 +97,7 @@ class Masteries {
     }
 
     get_masteries(region, summoner_id) {
-        var endpoint = `https://${region.id}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/${summoner_id}`;
+        var endpoint = `https://${region.id}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/${summoner_id}/top`;
         var opts = {
             method: 'GET',
             timeout: 2000,

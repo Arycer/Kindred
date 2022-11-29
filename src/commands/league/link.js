@@ -1,6 +1,6 @@
 const { SlashCommandSubcommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionCollector } = require('discord.js');
 const Account = require('../../league/classes/account');
-const error = require('../../league/functions/error');
+const error = require('../../util/error');
 const MeowDB = require('meowdb');
 
 module.exports = {

@@ -1,5 +1,6 @@
-const { getVoiceConnection } = require('@discordjs/voice');
 const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
+const { getVoiceConnection } = require('@discordjs/voice');
+const error = require('../../util/error');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
@@ -12,16 +13,16 @@ module.exports = {
     async execute(interaction) {
         try {
             const voiceChannel = interaction.member.voice.channel;
-            if (!voiceChannel) return interaction.reply({ content: '¡Debes estar en un canal de voz para usar este comando!', ephemeral: true });
+            if (!voiceChannel) return interaction.followUp({ embeds: [error('Debes estar en un canal de voz para usar este comando.', interaction.user.tag)] });
 
             const connection = getVoiceConnection(interaction.guildId);
-            if (!connection) return interaction.reply({ content: '¡No estás reproduciendo música!', ephemeral: true });
+            if (!connection) return interaction.followUp({ embeds: [error('No estoy reproduciendo nada en este servidor.', interaction.user.tag)] });
 
             const queue = connection.queue;
-            if (queue.length < 1) return interaction.reply({ content: '¡No hay canciones en la cola para eliminar!', ephemeral: true });
+            if (queue.songs.length < 1) return interaction.followUp({ embeds: [error('No hay canciones en la cola.', interaction.user.tag)] });
 
             const index = interaction.options.getInteger('posición') - 1;
-            if (index < 0 || index >= queue.length) return interaction.reply({ content: '¡La posición no es válida!', ephemeral: true });
+            if (index < 0 || index >= queue.songs.length) return interaction.followUp({ embeds: [error('La posición debe estar entre 1 y ' + queue.songs.length, interaction.user.tag)] });
 
             const song = queue.remove(index)[0];
 
