@@ -7,13 +7,13 @@ class LastGames {
     #losses;
     #winrate;
 
-    async constructor (region, puuid) {
+    constructor (region, puuid) {
         this.#matches = #arr_matches(10);
         this.#wins = 0;
         this.#losses = 0;
         this.#winrate = null;
         
-        return await this.#matches(region, puuid);
+        return this.#matches(region, puuid);
     }
 
     async get #matches(region, puuid) {
