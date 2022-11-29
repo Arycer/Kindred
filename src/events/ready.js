@@ -39,7 +39,7 @@ module.exports = {
         var version = await axios.get(endpoint);
         var version = version.data[0];
 
-        const activities = [
+		const activities = [
             { name: `a Lobo | /help`, type: ActivityType.Listening },
             { name: `parche ${version} | /help`, type: ActivityType.Watching },
             { name: `a ${client.guilds.cache.size} servidores | /help`, type: ActivityType.Watching },
@@ -62,9 +62,10 @@ module.exports = {
 
         setInterval(async () => {
             var accounts = Object.values(db.all());
+			console.log('Actualizando partidas... [%s]', new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' }));
+            
             for (var i = 0; i < accounts.length; i++) {
                 var account = accounts[i];
-                console.log('Actualizando partidas de %s (%d)', account.summoner.name, account.discord_id);
                 var last_games = new LastGames();
                 await last_games.get_last_games(account.region, account.summoner.identifiers.puuid);
             }
