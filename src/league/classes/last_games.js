@@ -2,14 +2,22 @@ const Match = require('./match');
 const axios = require('axios');
 
 class LastGames {
-    constructor() {
-        this.matches = gen_array_matches(10);
+    async constructor (region, puuid) {
+        this.matches = #arr_matches(10);
         this.wins = 0;
         this.losses = 0;
         this.winrate = null;
+        
+        await get(region, puuid);
+    }
+    
+    #arr_matches (n) {
+        var arr = [];
+        for (var i = 0; i < n; i++) arr.push(new Match());
+        return arr;
     }
 
-    async get_last_games(region, puuid) {
+    async get(region, puuid) {
         var endpoint = `https://${region.route}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${this.matches.length}`;
         var opts = {
             method: 'GET',
@@ -42,11 +50,3 @@ class LastGames {
 }
 
 module.exports = LastGames;
-
-function gen_array_matches(length) {
-    var arr = [];
-    for (let i = 0; i < length; i++) {
-        arr.push(new Match());
-    }
-    return arr;
-}
