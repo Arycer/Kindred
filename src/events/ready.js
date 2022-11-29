@@ -65,8 +65,7 @@ module.exports = {
             for (var i = 0; i < accounts.length; i++) {
                 var account = accounts[i];
                 console.log('Actualizando partidas de %s (%d)', account.summoner.name, account.discord_id);
-                var last_games = new LastGames();
-                await last_games.get_last_games(account.region, account.summoner.identifiers.puuid);
+                var last_games = await new LastGames(account.region, account.summoner.identifiers.puuid);
             }
         }, 60 * 60 * 1000);
     }
