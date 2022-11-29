@@ -5,7 +5,7 @@ module.exports = {
     async execute(interaction, client) {
         if (!interaction.isCommand()) return;
 
-        console.log(`${interaction.user.tag} ejecutó la interacción /${interaction.commandName}`);
+        console.log(`${interaction.user.tag} ejecutó la interacción /${interaction.commandName} ${interaction.options.data.length ? interaction.options.data[0].name : ''}`);
 
         const command = client.commands.get(interaction.commandName);
 
