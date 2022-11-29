@@ -24,7 +24,7 @@ class Profile {
         } else {
             return Promise.all([
             this.ranked.get_ranked(this.region, this.summoner_data.identifiers.s_id),
-            this.lastgames = new LastGames(this.region, this.summoner_data.identifiers.puuid),
+            this.lastgames.get_last_games(this.region, this.summoner_data.identifiers.puuid),
             this.livegame.get_livegame(this.region, this.summoner_data.identifiers.s_id),
             this.masteries.get_masteries(this.region, this.summoner_data.identifiers.s_id)
             ]).then(() => {
