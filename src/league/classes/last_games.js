@@ -13,10 +13,10 @@ class LastGames {
         this.#losses = 0;
         this.#winrate = null;
         
-        return this.#matches(region, puuid);
+        return this.#init(region, puuid);
     }
 
-    get #matches(region, puuid) {
+    async #init(region, puuid) {
         var endpoint = `https://${region.route}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${this.matches.length}`;
         var opts = {
             method: 'GET',
