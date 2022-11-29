@@ -8,7 +8,7 @@ class LastGames {
     #winrate;
 
     constructor (region, puuid) {
-        this.#matches = #arr_matches(10);
+        this.#matches = this.#arr_matches(10);
         this.#wins = 0;
         this.#losses = 0;
         this.#winrate = null;
