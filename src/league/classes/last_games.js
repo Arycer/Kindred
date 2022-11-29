@@ -12,7 +12,7 @@ class LastGames {
         this.#wins = 0;
         this.#losses = 0;
         this.#winrate = null;
-        
+        console.log(region, puuid)
         return this.#init(region, puuid);
     }
 
