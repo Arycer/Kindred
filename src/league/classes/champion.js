@@ -9,27 +9,29 @@ class Champion {
         this.emote = null;
     }
 
-    get_champion(query) {
+    async get_champion(query) {
         var endpoint = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/es_es/v1/champion-summary.json`;
 
-        return axios.get(endpoint).then(async response => {
-            var champions = Object.values(response.data);
+        var response = await axios.get(endpoint);
+        var data = response.data;
 
-            if (typeof query === 'number') {
-                var champion = champions.find(champion => champion.id == query);
-            } else {
-                var search = query.split(' ').join('').toLowerCase();
-                var champion = champions.find(champion => champion.alias.toLowerCase() == search || champion.name.toLowerCase() == search);
-            }
+        var champions = Object.values(data);
 
-            if (!champion) return this;
-            this.name = champion.name;
-            this.key = champion.alias;
-            this.id = champion.id;
-            this.emote = get_emote(this.key);
+        if (isNaN(query)) {
+            var search = query.split(' ').join('').split("'").join('').toLowerCase();
+            var champion = champions.find(c => c.alias == search || c.name.split(' ').join('').split("'").join('') == search);
+        } else {
+            var champion = champions.find(c => c.id == query);
+        }
 
-            return this;
-        });
+        if (!champion) return null;
+
+        this.name = champion.name;
+        this.key = champion.alias;
+        this.id = champion.id;
+        this.emote = get_emote(champion.alias);
+
+        return this;
     }
 }
 

@@ -43,26 +43,14 @@ class LiveGame {
             start: null,
         }
         this.participants = {
-            blue: [
-                new Participant(),
-                new Participant(),
-                new Participant(),
-                new Participant(),
-                new Participant(),
-            ],
-            red: [
-                new Participant(),
-                new Participant(),
-                new Participant(),
-                new Participant(),
-                new Participant(),
-            ],
+            blue: this.#gen_arr(5),
+            red: this.#gen_arr(5),
         }
         this.teamside = null;
         this.champion = new Champion();
     }
 
-    get_livegame(region, summoner_id) {
+    async get_livegame(region, summoner_id) {
         var endpoint = `https://${region.id}.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${summoner_id}`;
         var opts = {
             method: 'GET',
@@ -72,8 +60,8 @@ class LiveGame {
             }
         };
 
-        return axios.get(endpoint, opts)
-            .then(async response => {
+        var response = await axios.get(endpoint, opts)
+            .then(async (response) => {
                 var game = response.data;
                 var player = game.participants.find(p => p.summonerId === summoner_id);
 
@@ -96,11 +84,11 @@ class LiveGame {
                 }
                 this.team_side = player.teamId === 100 ? 'blue' : 'red';
                 this.champion = await this.champion.get_champion(player.championId);
-
+        
                 for (var i = 0; i < this.participants.blue.length; i++) {
                     var participant = this.participants.blue[i];
                     var p = game.participants[i];
-
+        
                     participant.champion = await participant.champion.get_champion(p.championId);
                     participant.spells = {
                         spell1: await participant.spells.spell1.get_spell(p.spell1Id),
@@ -113,11 +101,11 @@ class LiveGame {
                     participant.summoner_data = await participant.summoner_data.get_summoner(region, p.summonerName);
                     participant.ranked = await participant.ranked.get_ranked(region, participant.summoner_data.identifiers.s_id);
                 }
-
+        
                 for (var i = 0; i < this.participants.red.length; i++) {
                     var participant = this.participants.red[i];
                     var p = game.participants[i + 5];
-
+        
                     participant.champion = await participant.champion.get_champion(p.championId);
                     participant.spells = {
                         spell1: await participant.spells.spell1.get_spell(p.spell1Id),
@@ -134,15 +122,22 @@ class LiveGame {
             })
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
+                    console.log(`Timeout: ${endpoint}`);
                     return this.get_livegame(region, summoner_id);
-                } else if (error.response) {
-                    if (error.response.status === 404) {
-                        return this;
-                    } else {
-                        console.log(error);
-                    }
+                } else if (error?.response?.status === 404) {
+                    return this;
                 }
             });
+
+        return response;
+    }
+
+    #gen_arr (length) {
+        var arr = [];
+        for (var i = 0; i < length; i++) {
+            arr.push(new Participant());
+        }
+        return arr;
     }
 }
 

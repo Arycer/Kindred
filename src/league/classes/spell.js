@@ -15,17 +15,18 @@ class Spell {
 
         var endpoint = `http://ddragon.leagueoflegends.com/cdn/${version}/data/es_ES/summoner.json`;
 
-        return axios.get(endpoint).then(response => {
-            var spells = Object.values(response.data.data);
-            var spell = spells.find(spell => spell.key == id);
+        var response = await axios.get(endpoint);
+        var data = response.data;
+        var spells = Object.values(data.data);
+        var spell = spells.find(spell => spell.key == id);
 
-            if (spell) {
-                this.name = spell.name;
-                this.id = spell.id;
-                this.emote = get_emote(this.id);
-                return this;
-            }
-        });
+        if (!spell) return null;
+
+        this.name = spell.name;
+        this.id = spell.id;
+        this.emote = get_emote(spell.id);
+
+        return this;
     }
 }
 

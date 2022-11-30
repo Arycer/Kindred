@@ -3,7 +3,7 @@ const axios = require('axios');
 
 class LastGames {
     constructor() {
-        this.matches = gen_array_matches(10);
+        this.matches = this.#gen_arr(10);
         this.wins = 0;
         this.losses = 0;
         this.winrate = null;
@@ -19,37 +19,37 @@ class LastGames {
             }
         };
 
-        return axios.get(endpoint, opts)
-            .then(async response => {
+        var response = await axios.get(endpoint, opts)
+            .then(async (response) => {
                 var matches = response.data;
 
-                for (let i = 0; i < matches.length; i++) {
-                    await this.matches[i].get_match(region, matches[i], puuid);
-                }
-                
-                do {
-                    this.wins = this.matches.filter(m => m.stats.win).length;
-                this.losses = this.matches.filter(m => !m.stats.win).length;
-                this.winrate = (this.wins / (this.wins + this.losses)) * 100;
-                } while (!this.winrate);
+                await Promise.all(matches.map(async match => {
+                    await this.matches[matches.indexOf(match)].get_match(region, match, puuid);
+                }));
 
+                this.wins = this.matches.filter(match => match.stats.win).length;
+                this.losses = this.matches.filter(match => !match.stats.win).length;
+                this.winrate = (this.wins / this.matches.length) * 100;
+                
                 return this;
             })
-            .catch(err => {
-                if (err.code === 'ECONNABORTED') {
+            .catch(error => {
+                if (error.code === 'ECONNABORTED') {
                     console.log(`Timeout: ${endpoint}`);
                     return this.get_last_games(region, puuid);
                 }
             });
+
+        return response;
+    }
+
+    #gen_arr (length) {
+        var arr = [];
+        for (var i = 0; i < length; i++) {
+            arr.push(new Match());
+        }
+        return arr;
     }
 }
 
 module.exports = LastGames;
-
-function gen_array_matches(length) {
-    var arr = [];
-    for (let i = 0; i < length; i++) {
-        arr.push(new Match());
-    }
-    return arr;
-}

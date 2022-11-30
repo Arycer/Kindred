@@ -19,18 +19,15 @@ class Profile {
         this.region.get_region(region);
         this.summoner_data = await this.summoner_data.get_summoner(this.region, identifier);
 
-        if (!this.summoner_data.identifiers.s_id) {
-            return this;
-        } else {
-            return Promise.all([
+    if (!this.summoner_data.identifiers.s_id) return this;
+        return Promise.all([
             this.ranked.get_ranked(this.region, this.summoner_data.identifiers.s_id),
             this.lastgames.get_last_games(this.region, this.summoner_data.identifiers.puuid),
             this.livegame.get_livegame(this.region, this.summoner_data.identifiers.s_id),
             this.masteries.get_masteries(this.region, this.summoner_data.identifiers.s_id)
-            ]).then(() => {
-                return this;
-            });
-        }
+        ]).then(() => {
+            return this;
+        });
     }
 }
 

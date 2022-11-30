@@ -1,7 +1,15 @@
 const { REST, Routes, Events, ActivityType } = require('discord.js');
+const LastGames = require('../league/classes/last_games');
 const { readdirSync } = require('node:fs');
 const { join } = require('node:path');
+const MeowDB = require('meowdb');
 var axios = require('axios');
+
+const db = new MeowDB({
+    dir: 'src/database',
+    name: 'accounts',
+    raw: true,
+});
 
 module.exports = {
     name: Events.ClientReady,
@@ -47,28 +55,27 @@ module.exports = {
 
         var i = 0;
         setInterval(() => {
-            activities[2].name = `a ${client.guilds.cache.size} servidores | /help`;
+            activities[2].name = `${client.guilds.cache.size} servidores | /help`;
             client.user.setActivity(activities[i++ % activities.length]);
-        }, 15000);
+        }, 15 * 1000);
 
-        const LastGames = require('../league/classes/last_games');
-        const MeowDB = require('meowdb');
-
-        const db = new MeowDB({
-            dir: 'src/database',
-            name: 'accounts',
-            raw: true,
-        });
-
-        setInterval(async () => {
-            var accounts = Object.values(db.all());
-			console.log('Actualizando partidas... [%s]', new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' }));
-            
-            for (var i = 0; i < accounts.length; i++) {
-                var account = accounts[i];
-                var last_games = new LastGames();
-                await last_games.get_last_games(account.region, account.summoner.identifiers.puuid);
-            }
-        }, 60 * 60 * 1000);
+        update_games();
+        setInterval(update_games, 60 * 60 * 1000);
     }
 };
+
+async function update_games () {
+    var accounts = Object.values(db.all());
+    console.log('Actualizando partidas... [%s]', new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' }));
+    for (var i = 0; i < accounts.length; i++) {
+        var account = accounts[i];
+        var last_games = new LastGames();
+        try {
+            await last_games.get_last_games(account.region, account.summoner.identifiers.puuid);
+        } catch (error) {
+            console.log(error);
+            continue;
+        }
+    }
+    console.log('Partidas actualizadas. [%s]', new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' }));
+}

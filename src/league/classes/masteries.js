@@ -14,7 +14,7 @@ class Mastery {
         this.summoner_id = null;
     }
 
-    get_mastery(region, summoner_id, champ_id) {
+    async get_mastery(region, summoner_id, champ_id) {
         var endpoint = `https://${region.id}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/${summoner_id}/by-champion/${champ_id}`;
         var opts = {
             method: 'GET',
@@ -24,21 +24,10 @@ class Mastery {
             }
         };
 
-        return axios.get(endpoint, opts)
-            .then(async response => {
+        var response = await axios.get(endpoint, opts)
+            .then(async (response) => {
                 var mastery = response.data;
-
-                this.champion = await this.champion.get_champion(region, champ_id);
-                this.champion_level = mastery.championLevel;
-                this.champion_points = mastery.championPoints;
-                this.champion_points_until_next_level = mastery.championPointsUntilNextLevel;
-                this.champion_points_since_last_level = mastery.championPointsSinceLastLevel;
-                this.last_play_time = mastery.lastPlayTime;
-                this.chest_granted = mastery.chestGranted;
-                this.tokens_earned = mastery.tokensEarned;
-                this.summoner_id = mastery.summonerId;
-
-                return this;
+                return await this.set_mastery(mastery);
             })
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
@@ -46,6 +35,8 @@ class Mastery {
                     return this.get_mastery(region, summoner_id, champ_id);
                 }
             });
+
+        return response;
     }
 
     async set_mastery(data) {
@@ -65,38 +56,11 @@ class Mastery {
 
 class Masteries {
     constructor() {
-        this.champions = [
-            new Mastery(),
-            new Mastery(),
-            new Mastery()
-        ]
+        this.champions = this.#gen_arr(3);
         this.score = null;
     }
 
-    get_score (region, summoner_id) {
-        var endpoint = `https://${region.id}.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/${summoner_id}`;
-        var opts = {
-            method: 'GET',
-            timeout: 2000,
-            headers: {
-                'X-Riot-Token': process.env.RIOT_API_KEY    
-            }
-        };
-
-        return axios.get(endpoint, opts)
-            .then(async response => {
-                this.score = response.data;
-                return this.score;
-            })
-            .catch(error => {
-                if (error.code === 'ECONNABORTED') {
-                    console.log(`Timeout: ${endpoint}`);
-                    return this.get_score(region, summoner_id);
-                }
-            });
-    }
-
-    get_masteries(region, summoner_id) {
+    async get_masteries(region, summoner_id) {
         var endpoint = `https://${region.id}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/${summoner_id}/top`;
         var opts = {
             method: 'GET',
@@ -106,23 +70,58 @@ class Masteries {
             }
         };
 
-        return axios.get(endpoint, opts)
-            .then(async response => {
-                this.score = await this.get_score(region, summoner_id);
-                
+        var response = await axios.get(endpoint, opts)
+            .then(async (response) => {
                 var masteries = response.data;
 
-                for (var i = 0; i < 3; i++) {
-                    this.champions[i] = await this.champions[i].set_mastery(masteries[i]);
+                for (var i = 0; i < masteries.length; i++) {
+                    await this.champions[i].set_mastery(masteries[i]);
                 }
+
+                this.score = await this.#get_score(region, summoner_id);
 
                 return this;
             })
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
-                    return this.get_masteries(region, summoner_id);
+                    console.log(`Timeout: ${endpoint}`);
                 }
             });
+
+        return response;
+    }
+
+    async #get_score (region, summoner_id) {
+        var endpoint = `https://${region.id}.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/${summoner_id}`;
+        var opts = {
+            method: 'GET',
+            timeout: 2000,
+            headers: {
+                'X-Riot-Token': process.env.RIOT_API_KEY    
+            }
+        };
+
+        var response = await axios.get(endpoint, opts)
+            .then(response => {
+                this.score = response.data;
+                return this.score;
+            })
+            .catch(error => {
+                if (error.code === 'ECONNABORTED') {
+                    console.log(`Timeout: ${endpoint}`);
+                    return this.get_score(region, summoner_id);
+                }
+            });
+
+        return response;
+    }
+
+    #gen_arr (length) {
+        var arr = [];
+        for (var i = 0; i < length; i++) {
+            arr.push(new Mastery());
+        }
+        return arr;
     }
 }
 
