@@ -72,18 +72,15 @@ class Match {
         };
 
         console.log('Obteniendo datos de partida: %s', match_id);
-        var match = await axios.get(endpoint, opts)
-            .then(response => {
-                return response.data;
-            })
+        var response = await axios.get(endpoint, opts)
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
                     console.log(`Timeout: ${endpoint}`);
                     return this.get_match(region, match_id, puuid);
                 }
             });
-
-        var match = match.info;
+        var data = response.data;
+        var match = data.info;
         var player = match.participants.find(p => p.puuid === puuid);
 
         this.stats = {
