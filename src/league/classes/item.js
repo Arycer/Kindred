@@ -10,18 +10,19 @@ class Item {
 
     async get_item(id) {
         var endpoint = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/es_es/v1/items.json`;
-        
-        return axios.get(endpoint).then(response => {
-            var items = Object.values(response.data);
-            var item = items.find(item => item.id == id);
 
-            if (item) {
-                this.name = item.name;
-                this.id = item.id;
-                this.emote = get_emote(item.id); 
-                return this;
-            }
-        });
+        var response = await axios.get(endpoint);
+        var data = response.data;
+        var items = Object.values(data);
+        var item = items.find(item => item.id == id);
+
+        if (!item) return null;
+
+        this.name = item.name;
+        this.id = item.id;
+        this.emote = get_emote(item.id);
+
+        return this;
     }
 }
 
