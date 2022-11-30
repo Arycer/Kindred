@@ -26,9 +26,12 @@ class LastGames {
                 for (let i = 0; i < matches.length; i++) {
                     await this.matches[i].get_match(region, matches[i], puuid);
                 }
-                this.wins = this.matches.filter(m => m.stats.win).length;
+                
+                do {
+                    this.wins = this.matches.filter(m => m.stats.win).length;
                 this.losses = this.matches.filter(m => !m.stats.win).length;
                 this.winrate = (this.wins / (this.wins + this.losses)) * 100;
+                } while (!this.winrate);
 
                 return this;
             })
