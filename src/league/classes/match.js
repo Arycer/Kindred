@@ -112,7 +112,6 @@ class Match {
             })
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
-                    console.log(`Timeout: ${endpoint}`);
                 }
             });
 

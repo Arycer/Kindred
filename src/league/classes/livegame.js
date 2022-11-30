@@ -122,7 +122,6 @@ class LiveGame {
             })
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
-                    console.log(`Timeout: ${endpoint}`);
                     return this.get_livegame(region, summoner_id);
                 } else if (error?.response?.status === 404) {
                     return this;

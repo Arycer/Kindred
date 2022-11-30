@@ -31,7 +31,6 @@ class Mastery {
             })
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
-                    console.log(`Timeout: ${endpoint}`);
                     return this.get_mastery(region, summoner_id, champ_id);
                 }
             });
@@ -84,7 +83,6 @@ class Masteries {
             })
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
-                    console.log(`Timeout: ${endpoint}`);
                 }
             });
 
@@ -108,7 +106,6 @@ class Masteries {
             })
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
-                    console.log(`Timeout: ${endpoint}`);
                     return this.get_score(region, summoner_id);
                 }
             });

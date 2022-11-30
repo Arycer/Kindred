@@ -35,7 +35,6 @@ class LastGames {
             })
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
-                    console.log(`Timeout: ${endpoint}`);
                     return this.get_last_games(region, puuid);
                 }
             });

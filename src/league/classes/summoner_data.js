@@ -25,7 +25,7 @@ class Summoner {
             }
         };
 
-        return axios.get(endpoint, opts)
+        var response = await axios.get(endpoint, opts)
             .then(async res => {
                 var data = res.data;
                 this.name = data.name;
@@ -43,10 +43,11 @@ class Summoner {
             })
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
-                    console.log(`Timeout: ${endpoint}`);
                     return this.get_summoner(region, identifier);
                 }
             });
+
+        return response;
     }
 }
 
