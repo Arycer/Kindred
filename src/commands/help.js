@@ -50,7 +50,6 @@ module.exports = {
 
         embed.addFields(
             { name: '¡Añade a Kindred a tu servidor!', value: '[🔗 Link](https://bit.ly/3F4vQ9v)', inline: true },
-            { name: 'GitHub del proyecto', value: '[🔗 Link](https://github.com/Arycer/Kindred)', inline: true },
             { name: 'Servidor de soporte', value: '[🔗 Link](https://discord.gg/Bhc3PCfjbH)', inline: true }
         );
 
