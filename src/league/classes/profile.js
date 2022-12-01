@@ -19,7 +19,7 @@ class Profile {
         this.region.get_region(region);
         this.summoner_data = await this.summoner_data.get_summoner(this.region, identifier);
 
-    if (!this.summoner_data) return this;
+    if (!this.summoner_data.identifiers.s_id) return this;
         return Promise.all([
             this.ranked.get_ranked(this.region, this.summoner_data.identifiers.s_id),
             this.lastgames.get_last_games(this.region, this.summoner_data.identifiers.puuid),
