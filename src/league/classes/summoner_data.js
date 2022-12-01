@@ -44,6 +44,8 @@ class Summoner {
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
                     return this.get_summoner(region, identifier);
+                } else if (error?.response?.status === 404) {
+                    return this;
                 }
             });
 
