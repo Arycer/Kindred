@@ -1,4 +1,4 @@
-const Summoner = require('./summoner_data');
+const Summoner = require('./summoner');
 const Champion = require('./champion');
 const Ranked = require('./ranked');
 const Spell = require('./spell');

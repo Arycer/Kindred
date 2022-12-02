@@ -38,7 +38,7 @@ module.exports = {
                 { body: commands },
             );
 
-            console.log(`${data.length} interacciones (/) han sido actualizadas.`);
+            console.log(`${data.length} interacciones (/) actualizadas.`);
         } catch (error) {
             console.error(error);
         }
@@ -66,7 +66,7 @@ module.exports = {
 
 async function update_games () {
     var accounts = Object.values(db.all());
-    console.log('Actualizando partidas (%d perfiles) - [%s]', accounts.length, new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' }));
+    console.log('Actualizando partidas - [%s]', new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' }));
     for (var i = 0; i < accounts.length; i++) {
         var account = accounts[i];
         var last_games = new LastGames();
@@ -77,5 +77,5 @@ async function update_games () {
             continue;
         }
     }
-    console.log('Partidas actualizadas (%d perfiles) - [%s]', accounts.length, new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' }));
+    console.log('Partidas actualizadas - [%s]', new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' }));
 }

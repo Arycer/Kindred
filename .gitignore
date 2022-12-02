@@ -2,6 +2,7 @@ package-lock.json
 package.json
 .env
 test.js
+test2.js
 src/database
 #ignore all files in the node_modules folder
 node_modules/

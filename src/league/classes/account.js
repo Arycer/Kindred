@@ -1,4 +1,4 @@
-const Summoner = require('./summoner_data');
+const Summoner = require('./summoner');
 const Region = require('./region');
 
 class Account {

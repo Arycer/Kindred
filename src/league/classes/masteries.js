@@ -53,8 +53,9 @@ class Mastery {
     }
 }
 
-class Masteries {
+class Masteries extends Mastery {
     constructor() {
+        super();
         this.champions = this.#gen_arr(3);
         this.score = null;
     }

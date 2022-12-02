@@ -91,7 +91,7 @@ module.exports = {
             live_url = `https://porofessor.gg/es/live/${profile.region.name.toLowerCase()}/${profile.summoner_data.name.split(' ').join('%20')}`;
             live_text += `🟢 **Jugando:** ${live.champion.emote} ${live.champion.name} - ${live.map.name} - ${live.queue.name}\n`;
             live_text += `🕐 **Tiempo transcurrido:** ${Math.floor(live.time.duration / 60)}:${live.time.duration % 60 < 10 ? '0' + live.time.duration % 60 : live.time.duration % 60}\n`;
-            live_text += `📅 **Fecha:** ${new Date(live.time.start).toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })} - 🔗 **Enlace:** [Porofessor](${live_url})`;
+            live_text += `📅 **Fecha:** ${new Date(live.time.start).toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })} - 🔗 **Más:** [Porofessor](${live_url})`;
         } else {
             live_text += `Este jugador no está en partida en este momento.`;
         }
@@ -106,7 +106,7 @@ module.exports = {
             last_text += `${wintext} con ${last.champion.emote} ${last.champion.name} - ${last.stats.kills}/${last.stats.deaths}/${last.stats.assists} - `;
             last_text += `${last.stats.cs} ${cs_e} (${last.stats.cs_per_min} ${cs_e}/min)\n`;
             last_text += `🕐 **Duración de la partida:** ${Math.floor(last.time.duration / 60)}:${last.time.duration % 60 < 10 ? '0' + last.time.duration % 60 : last.time.duration % 60}\n`;
-            last_text += `📅 **Fecha:** ${new Date(last.time.start).toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })} - 🔗 **Enlace:** [League of Graphs](${last_url})`;
+            last_text += `📅 **Fecha:** ${new Date(last.time.start).toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })} - 🔗 **Más:** [League of Graphs](${last_url})`;
         } else {
             last_name = `Última partida:`;
             last_text += `No hay datos para mostrar.`;

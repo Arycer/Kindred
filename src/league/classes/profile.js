@@ -1,6 +1,6 @@
-const Summoner = require('./summoner_data');
 const LastGames = require('./last_games');
 const Masteries = require('./masteries');
+const Summoner = require('./summoner');
 const LiveGame = require('./livegame');
 const Ranked = require('./ranked');
 const Region = require('./region');

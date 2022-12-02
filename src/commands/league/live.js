@@ -1,12 +1,12 @@
 const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
-const Summoner = require('../../league/classes/summoner_data');
+const Summoner = require('../../league/classes/summoner');
 const LiveGame = require('../../league/classes/livegame');
 const Region = require('../../league/classes/region');
 const error = require('../../util/error');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
-        .setName('livegame')
+        .setName('live')
         .setDescription('Muestra la partida en vivo de un jugador de League of Legends')
         .addStringOption(option => 
             option.setName('region')
