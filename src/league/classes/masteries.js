@@ -92,6 +92,7 @@ class Masteries extends Mastery {
             })
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
+                    return this.get_masteries(region, summoner_id);
                 }
             });
 

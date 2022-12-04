@@ -48,13 +48,7 @@ const model = require('../util/tournament_model.json');
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages ] });
 client.login(process.env.DISCORD_TOKEN);
 
-const ssl = fs.readFileSync(join(__dirname, '..', 'ssl', 'ssl.pem'));
-const options = {
-    key: ssl,
-    cert: ssl
-};
-
-const server = http.createServer(options, async (req, res) => {
+const server = http.createServer(async (req, res) => {
     if (req.url == '/riot.txt') {
         res.writeHead(200, { 'Content-Type': 'text/plain' });
         res.end('a5c2440c-b15d-4d77-8e10-3782da5d137c');

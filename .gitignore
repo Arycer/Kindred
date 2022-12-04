@@ -1,10 +1,5 @@
 package-lock.json
-package.json
 .env
-test.js
-test1.js
-test2.js
+test/
 src/database
-src/ssl
-#ignore all files in the node_modules folder
 node_modules/
