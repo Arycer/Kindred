@@ -16,36 +16,41 @@
 
 ---
 
-## 📝 Tabla de contenidos
+## 📝 Content Table
 
-- [Introducción](#introducción)
-- [Añadir a tu servidor](#añadir)
-- [Desarrollo](#desarrollo)
+- [Introduction](#introduction)
+- [Add Kindred to your Discord](#add)
+- [Development](#development)
 
-## 👋 Introducción <a name = "introducción"></a>
+## 👋 Introduction <a name = "introduction"></a>
 
-¡Hola! Soy Kindred, un bot de Discord orientado a League of Legends. Conmigo podrás obtener información de tus rivales en tus partidas, ver tu historial de partidas, información de maestrías, campeones y mucho más.
+Hey, my name is **Kindred**! I am a League of Legends Bot developed for Discord.  
+I am able to provide Player, League and Champion Information for your Discord.
+Also you are able to create Tournaments via. the official Riot Tournament API.
 
-## ✨ ¡Añádeme a tu servidor! <a name = "añadir"></a>
+_If you want to run this Bot on your own, you need a working Riot Tournament API!_
 
-Para añadirme a tu servidor visita este enlace: [🔗 Link](https://bit.ly/3F4vQ9v)
+## ✨ Add Kindred to your Discord! <a name = "add"></a>
 
-## ⚙ Desarrollo <a name = "desarrollo"></a>
+Visit this link to add Kindred to your Discord Server!: [🔗 Link](https://bit.ly/3F4vQ9v)
 
-- [@Arycer](https://github.com/Arycer) - Desarrollador principal
+## ⚙ Development <a name = "development"></a>
 
-Para contribuir al proyecto sigue los siguientes pasos:
+- [@Arycer](https://github.com/Arycer) - Lead Development
+- [@Cyx-Development](https://github.com/Cyx-Development) - Translations and more
 
-- Crea un fork del repositorio.
-- Crea tu versión: `git checkout -b mi-nueva-función`.
-- Haz tus cambios y confírmalos: `git commit -am 'Mi nueva función'`.
-- Incorpora tus cambios: `git push origin mi-nueva-función`.
-- Solicita la incorporación [🔗 aquí](https://github.com/Arycer/Kindred/pulls).
+Contribute to this project:
+
+- Fork this Repository.
+- Add a new Branch: `git checkout -b sub-module-xyz`.
+- Change/Add Code and Commit your Changes: `git commit -am 'Added/Changed XYZ'`.
+- Add your changes to the Repository: `git push origin sub-module-xyz`.
+- Add a Pull Request [🔗 Pull](https://github.com/Arycer/Kindred/pulls).
 
 
-También puedes sugerir cambios o reportar errores desde [🔗 aquí](https://github.com/Arycer/Kindred/issues).
+Feature Requests and Bug Reports [🔗 here](https://github.com/Arycer/Kindred/issues).
 
-Puedes ver la lista de contribyentes que participaron en el proyecto [🔗 aquí](https://github.com/Arycer/Kindred/contributors).
+List of contributors [🔗 here](https://github.com/Arycer/Kindred/contributors).
 
 --- 
 
