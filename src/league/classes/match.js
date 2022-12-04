@@ -1,6 +1,3 @@
-const get_queue_name = require('../functions/get_queue_name');
-const get_map_name = require('../functions/get_map_name');
-
 const Champion = require('./champion');
 const Spell = require('./spell');
 const Item = require('./item');
@@ -30,14 +27,6 @@ class Match {
             spell1: new Spell(),
             spell2: new Spell(),
         }
-        this.queue = {
-            name: null,
-            id: null,
-        }
-        this.map = {
-            name: null,
-            id: null,
-        }
         this.time = {
             duration: null,
             start: null,
@@ -46,6 +35,8 @@ class Match {
             items: this.#gen_arr(6),
             trinket: new Item(),
         }
+        this.map = null;
+        this.queue = null;
         this.game_id = null;
         this.champion = new Champion();
     }
@@ -84,23 +75,18 @@ class Match {
                     spell2: await this.spells.spell2.get_spell(player.summoner2Id)
                 }
         
-                this.queue = {
-                    name: await get_queue_name(match.queueId),
-                    id: match.queueId,
-                }
-        
-                this.map = {
-                    name: await get_map_name(match.mapId),
-                    id: match.mapId,
-                }
+                this.queue = match.queueId;
+                this.map = match.mapId;
         
                 this.time = {
                     duration: match.gameDuration,
                     start: match.gameCreation,
                 }
+
                 for (var i = 0; i < this.inventory.items.length; i++) {
                     await this.inventory.items[i].get_item(player['item' + i]);
                 }
+            
                 await this.inventory.trinket.get_item(player.item6);
         
                 this.game_id = match_id;
@@ -114,7 +100,6 @@ class Match {
                 if (error.code === 'ECONNABORTED') {
                 }
             });
-
         return response;
     }
 

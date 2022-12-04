@@ -19,7 +19,7 @@ class Champion {
 
         if (isNaN(query)) {
             var search = query.split(' ').join('').split("'").join('').toLowerCase();
-            var champion = champions.find(c => c.alias == search || c.name.split(' ').join('').split("'").join('') == search);
+            var champion = champions.find(c => c.alias.toLowerCase() == search || c.name.split(' ').join('').split("'").join('').toLowerCase() == search);
         } else {
             var champion = champions.find(c => c.id == query);
         }

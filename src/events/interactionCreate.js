@@ -1,4 +1,10 @@
 const { Events } = require('discord.js');
+const MeowDB = require('meowdb');
+
+const lang = new MeowDB({
+    dir: './src/database',
+    name: 'servers',
+});
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -10,9 +16,15 @@ module.exports = {
         const command = client.commands.get(interaction.commandName);
 
         if (!command) return interaction.reply({
-            content: '¡Ha ocurrido un error durante la ejecucción del comando!',
+            content: 'That command does not exist!',
             ephemeral: true,
         });
+
+        if (!lang.get(interaction.guild.id)) {
+            lang.set(interaction.guild.id, {
+                language: 'es-ES',
+            });
+        };
 
         try {
             await interaction.deferReply();
@@ -20,7 +32,7 @@ module.exports = {
         } catch (error) {
             console.log(error);
             await interaction.followUp({
-                content: '¡Ha ocurrido un error durante la ejecucción del comando!',
+                content: 'There was an error while executing this command!',
                 ephemeral: true,
             });
         }

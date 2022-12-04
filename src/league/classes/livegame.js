@@ -5,9 +5,6 @@ const Spell = require('./spell');
 const Rune = require('./rune');
 const axios = require('axios');
 
-const get_queue_name = require('../functions/get_queue_name');
-const get_map_name = require('../functions/get_map_name');
-
 class Participant {
     constructor() {
         this.champion = new Champion();
@@ -30,14 +27,6 @@ class LiveGame {
             spell1: null,
             spell2: null,
         }
-        this.queue = {
-            name: null,
-            id: null,
-        }
-        this.map = {
-            name: null,
-            id: null,
-        }
         this.time = {
             duration: null,
             start: null,
@@ -46,6 +35,8 @@ class LiveGame {
             blue: this.#gen_arr(5),
             red: this.#gen_arr(5),
         }
+        this.map = null
+        this.queue = null
         this.teamside = null;
         this.champion = new Champion();
     }
@@ -70,54 +61,49 @@ class LiveGame {
                     duration: game.gameLength,
                     start: game.gameStartTime,
                 }
-                this.queue = {
-                    name: await get_queue_name(game.gameQueueConfigId),
-                    id: game.gameQueueConfigId,
-                }
-                this.map = {
-                    name: await get_map_name(game.mapId),
-                    id: game.mapId,
-                }
                 this.spells = {
                     spell1: player.spell1Id,
                     spell2: player.spell2Id,
                 }
+                this.map = game.mapId;
+                this.queue = game.gameQueueConfigId;
                 this.team_side = player.teamId === 100 ? 'blue' : 'red';
                 this.champion = await this.champion.get_champion(player.championId);
-        
-                for (var i = 0; i < this.participants.blue.length; i++) {
-                    var participant = this.participants.blue[i];
-                    var p = game.participants[i];
-        
-                    participant.champion = await participant.champion.get_champion(p.championId);
-                    participant.spells = {
-                        spell1: await participant.spells.spell1.get_spell(p.spell1Id),
-                        spell2: await participant.spells.spell2.get_spell(p.spell2Id),
-                    }
-                    participant.runes = {
-                        primary: await participant.runes.primary.get_rune(p.perks.perkIds[0]),
-                        secondary: await participant.runes.secondary.get_rune(p.perks.perkSubStyle),
-                    }
-                    participant.summoner_data = await participant.summoner_data.get_summoner(region, p.summonerName);
-                    participant.ranked = await participant.ranked.get_ranked(region, participant.summoner_data.identifiers.s_id);
-                }
-        
-                for (var i = 0; i < this.participants.red.length; i++) {
-                    var participant = this.participants.red[i];
-                    var p = game.participants[i + 5];
-        
-                    participant.champion = await participant.champion.get_champion(p.championId);
-                    participant.spells = {
-                        spell1: await participant.spells.spell1.get_spell(p.spell1Id),
-                        spell2: await participant.spells.spell2.get_spell(p.spell2Id),
-                    }
-                    participant.runes = {
-                        primary: await participant.runes.primary.get_rune(p.perks.perkIds[0]),
-                        secondary: await participant.runes.secondary.get_rune(p.perks.perkSubStyle),
-                    }
-                    participant.summoner_data = await participant.summoner_data.get_summoner(region, p.summonerName);
-                    participant.ranked = await participant.ranked.get_ranked(region, participant.summoner_data.identifiers.s_id);
-                }
+
+                await Promise.all([
+                    await Promise.all(this.participants.blue.map(async (participant, i) => {
+                        var p = game.participants[i];
+    
+                        participant.champion = await participant.champion.get_champion(p.championId);
+                        participant.spells = {
+                            spell1: await participant.spells.spell1.get_spell(p.spell1Id),
+                            spell2: await participant.spells.spell2.get_spell(p.spell2Id),
+                        }
+                        participant.runes = {
+                            primary: await participant.runes.primary.get_rune(p.perks.perkIds[0]),
+                            secondary: await participant.runes.secondary.get_rune(p.perks.perkSubStyle),
+                        }
+                        participant.summoner_data = await participant.summoner_data.get_summoner(region, p.summonerName);
+                        participant.ranked = await participant.ranked.get_ranked(region, participant.summoner_data.identifiers.s_id);
+                    })),
+    
+                    await Promise.all(this.participants.red.map(async (participant, i) => {
+                        var p = game.participants[i + 5];
+    
+                        participant.champion = await participant.champion.get_champion(p.championId);
+                        participant.spells = {
+                            spell1: await participant.spells.spell1.get_spell(p.spell1Id),
+                            spell2: await participant.spells.spell2.get_spell(p.spell2Id),
+                        }
+                        participant.runes = {
+                            primary: await participant.runes.primary.get_rune(p.perks.perkIds[0]),
+                            secondary: await participant.runes.secondary.get_rune(p.perks.perkSubStyle),
+                        }
+                        participant.summoner_data = await participant.summoner_data.get_summoner(region, p.summonerName);
+                        participant.ranked = await participant.ranked.get_ranked(region, participant.summoner_data.identifiers.s_id);
+                    }))
+                ])
+
                 return this;
             })
             .catch(error => {

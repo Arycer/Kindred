@@ -66,7 +66,7 @@ module.exports = {
 
 async function update_games () {
     var accounts = Object.values(db.all());
-    console.log('Actualizando partidas - [%s]', new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' }));
+    console.log('[%s] Actualizando partidas', new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' }));
     for (var i = 0; i < accounts.length; i++) {
         var account = accounts[i];
         var last_games = new LastGames();
@@ -77,5 +77,5 @@ async function update_games () {
             continue;
         }
     }
-    console.log('Partidas actualizadas - [%s]', new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' }));
+    console.log('[%s] Partidas actualizadas', new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' }));
 }

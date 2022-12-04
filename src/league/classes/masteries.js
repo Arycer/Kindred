@@ -56,12 +56,16 @@ class Mastery {
 class Masteries extends Mastery {
     constructor() {
         super();
-        this.champions = this.#gen_arr(3);
+        this.champions = this.#gen_arr(10);
+        this.champs_played = null;
+        this.chests_earned = null;
+        this.total_lvls = null;
+        this.total_pts = null;
         this.score = null;
     }
 
     async get_masteries(region, summoner_id) {
-        var endpoint = `https://${region.id}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/${summoner_id}/top`;
+        var endpoint = `https://${region.id}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/${summoner_id}`;
         var opts = {
             method: 'GET',
             timeout: 2000,
@@ -74,11 +78,15 @@ class Masteries extends Mastery {
             .then(async (response) => {
                 var masteries = response.data;
 
-                for (var i = 0; i < masteries.length; i++) {
+                for (var i = 0; i < masteries.length && i < 10; i++) {
                     await this.champions[i].set_mastery(masteries[i]);
                 }
 
+                this.chests_earned = masteries.filter(mastery => mastery.chestGranted).length;
+                this.total_lvls = masteries.reduce((a, b) => a + b.championLevel, 0);
+                this.total_pts = masteries.reduce((a, b) => a + b.championPoints, 0);
                 this.score = await this.#get_score(region, summoner_id);
+                this.champs_played = masteries.length;
 
                 return this;
             })

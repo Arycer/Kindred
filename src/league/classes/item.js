@@ -16,7 +16,10 @@ class Item {
         var items = Object.values(data);
         var item = items.find(item => item.id == id);
 
-        if (!item) return null;
+        if (!item) {
+            this.emote = get_emote('NoItem');
+            return this;
+        }
 
         this.name = item.name;
         this.id = item.id;
