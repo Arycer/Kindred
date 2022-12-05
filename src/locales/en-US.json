@@ -1,0 +1,380 @@
+{
+  "error_messages": {
+      "no-perms":"You don't have permission to execute this command.",
+      "profile-not-found":"Requested profile does not exist.",
+      "champ-not-found":"Requested champion not found.",
+      "build-not-found":"Champion's build on requested lane not found.",
+      "runes-not-found":"Champion's runes on requested lane not found.",
+      "no-linked-account":"There are no accounts linked to your Discord profile.",
+      "no-linked-member":"Mentioned user does not have any accounts linked to their Discord profile",
+      "link-timeout":"Account link request timed out.",
+      "link-failed":"Linking failed; you did not change your profile icon to the one required.",
+      "not-in-game":"The player is not currently in game.",
+      "no-masteries":"The player does not have any masteries.",
+      "no-voice-channel":"You must be in a voice channel to use this command!",
+      "no-connection":"I'm not connected to any voice channel!",
+      "shuffle-error":"Not enough songs in queue to shuffle.",
+      "already-paused":"The song is already paused!",
+      "already-resumed":"The song is not currently paused.",
+      "playlist":"Playlists are not currently available.",
+      "invalid-position":"Requested position is not valid.",
+      "not-enough-players":"Not enough players with linked accounts to start the event.",
+      "invalid-id":"Invalid ID.",
+      "unknown":"An unknown error has occurred."
+  },
+  "ranks": {
+      "unranked": "Unranked",
+      "IRON": "Iron",
+      "BRONZE": "Bronze",
+      "SILVER": "Silver",
+      "GOLD": "Gold",
+      "PLATINUM": "Platinum",
+      "DIAMOND": "Diamond",
+      "MASTER": "Master",
+      "GRANDMASTER": "Grandmaster",
+      "CHALLENGER": "Challenger"
+  },
+  "error_embed": {
+      "color":"#5d779d",
+      "author": {
+          "name":"Something went wrong!",
+          "iconURL":"https://i.imgur.com/hGG9kLU.png"
+      },
+      "title":"This is what happened:",
+      "description":"{{error}}",
+      "thumbnail":"https://i.imgur.com/81rFFJy.png",
+      "footer": {
+          "text":"Requested by {{requester}}",
+          "iconURL":"{{requester_icon}}"
+      }
+  },
+  "queues": {
+      "-1": "Ranked",
+      "0": "Custom",
+      "100": "ARAM",
+      "400": "Normal (Draft)",
+      "430": "Normal (Blind)",
+      "420": "Ranked (Solo/Duo)",
+      "440": "Ranked (Flex)",
+      "700": "Clash",
+      "900": "ARURF",
+      "1300": "Nexus Blitz",
+      "1400": "Spellbook",
+      "1900": "URF",
+      "2000": "Tutorial 1",
+      "2010": "Tutorial 2",
+      "2020": "Tutorial 3"
+  },
+  "maps": {
+      "0": "Common",
+      "11": "Summoner's Rift",
+      "12": "Howling Abyss",
+      "21": "Nexus Blitz"
+  },
+  "lanes": {
+    "top":"Top",
+    "jungle":"Jungle",
+    "mid":"Mid",
+    "adc":"ADC",
+    "support":"Support"
+  },
+  "win": {
+    "win":"🟢 **Victory**",
+    "loss":"🔴 **Defeat**",
+    "remake":"⚙️ **Remake**"
+  },
+  "build_command": {
+      "embed": {
+          "color":"#5d779d",
+          "author": {
+              "name":"Recommended items for {{champion}} - {{lane}}",
+              "iconURL":"https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/{{champion}}.png"
+          },
+          "image": {
+              "url":"{{attachment}}"
+          },
+          "footer": {
+              "text":"Requested by {{requester}}",
+              "iconURL":"{{requester_icon}}"
+          }
+      }
+  },
+  "runes_command": {
+      "embed": {
+          "color":"#5d779d",
+          "author": {
+              "name":"Recommended runes for {{champion}} - {{lane}}",
+              "iconURL":"https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/{{champion}}.png"
+          },
+          "image": {
+              "url":"{{attachment}}"
+          },
+          "footer": {
+              "text":"Requested by {{requester}}",
+              "iconURL":"{{requester_icon}}"
+          }
+      }
+  },
+  "history_command": {
+      "champion_error": "Champion not found",
+      "embed": {
+          "color":"#5d779d",
+          "author": {
+              "name":"{{name}}'s last 10 games · {{winrate}}% WR",
+              "iconURL":"{{iconURL}}"
+          },
+          "footer": {
+              "text":"Requested by {{requester}}",
+              "iconURL":"{{requester_icon}}"
+          }
+      },
+      "fields": [
+          {
+          "name":"{{win}} · {{champion}} · {{map}} · {{queue}}",
+          "value":"🕐 Duration: {{duration} · KDA: {{kills}}/{{deaths}}/{{assists}} · CS: {{cs}} {{cs_emote}} ({{cspm}}/min) · [🔗 More]({{link}})",
+          "inline":false
+          }
+      ]
+  },
+  "link_command": {
+      "instructions_embed": {
+          "color":"#5d779d",
+          "author": {
+              "name":"{{region}} · {{name}}",
+              "iconURL":"{{iconURL}}"
+          },
+          "title":"Linking account! This is what you have to do:",
+          "description":"To verify your account, you must change your League of Legends icon to the one shown in this message. Next, press the following button. You must do this within 5 minutes.",
+          "thumbnail": "{{requiered_icon}}",
+          "footer": {
+              "text":"Requested by {{requester}}",
+              "iconURL":"{{requester_icon}}"
+          }
+      },
+      "button": "I changed my icon!",
+      "success_embed": {
+          "color":"#5d779d",
+          "author": {
+              "name":"{{region}} · {{name}}",
+              "iconURL":"{{iconURL}}"
+          },
+          "title":"Account linked!",
+          "description":"Your League of Legends account has been successfully linked.",
+          "thumbnail": "https://i.imgur.com/K7uO7Eh.png",
+          "footer": {
+              "text":"Requested by {{requester}}",
+              "iconURL":"{{requester_icon}}"
+          }
+      }
+  },
+  "live_command":{
+      "embed": {
+          "color":"#5d779d",
+          "author": {
+              "name":"Live [{{region}}] game {{name}}",
+              "iconURL":"{{iconURL}}"
+          },
+          "title":"{{map}} · {{queue}}",
+          "footer": {
+              "text":"Requested by {{requester}}",
+              "iconURL":"{{requester_icon}}"
+          }
+      },
+      "fields": [
+          {
+          "name":"{{team}} {{index}}. {{name}} {{champion}} · {{spell1}} {{spell2}} · {{rune1}} {{rune2}}",
+          "value":"{{ranked_text}}",
+          "inline":false
+          }
+      ],
+      "ranked_text": {
+          "soloq":"Solo/Duo: {{emote}} {{tier}} {{division}} ({{lp}} LP) · {{wins}}W · {{losses}}L · {{winrate}}% WR",
+          "flex":"Flex: {{emote}} {{tier}} {{division}} ({{lp}} LP) · {{wins}}W · {{losses}}L · {{winrate}}% WR",
+          "none":"Unranked."
+      }
+  },
+  "masteries_command": {
+      "rows": {
+          "champions": "{{emote}} **[{{level}}]** {{champion}} - {{points}} puntos",
+          "mastered": "Mastered",
+          "footer": "**Champions:** {{champions}} · **Levels:** {{levels}} · **Mastery points:** {{points}} · **Chests:** {{chests}}/{{champions}}"
+      },
+      "embed": {
+          "color": "#5d779d",
+          "author": {
+              "name": "{{name}}'s masteries",
+              "iconURL": "{{iconURL}}"
+          },
+          "title": "This is what I found:",
+          "fields": [
+              {
+              "name": "Champions",
+              "value": "{{champion_data}}",
+              "inline": true
+              },
+              {
+                  "name": "Last played",
+                  "value": "{{last_played}}",
+                  "inline": true
+              },
+              {
+                  "name": "Mastery",
+                  "value": "{{chests_tokens}}",
+                  "inline": true
+              },
+              {
+                  "name": "\u200B",
+                  "value": "{{footer}}",
+                  "inline": false
+              }
+          ],
+          "footer": {
+              "text": "Requested by {{requester}}",
+              "iconURL": "{{requester_icon}}"
+          }
+      }
+  },
+  "patch_command": {
+      "color": "#5d779d",
+      "author": {
+          "name": "Version {{version}}",
+          "iconURL": "https://i.imgur.com/hGG9kLU.png"
+      },
+      "thumbnail": "https://i.imgur.com/VhYn8km.png",
+      "title": "These are the current patch notes:",
+      "description": "[🔗 Patch notes]({{patch_notes}})",
+      "footer": {
+          "text": "Requested by {{requester}}",
+          "iconURL": "{{requester_icon}}"
+      }
+  },
+  "profile_command": {
+      "masteries_row": "{{emote}} **[{{level}}]** {{champion}} - {{points}} puntos\n",
+      "playing": {
+          "playing":"🟢 **Playing:** {{emote}} {{champion}} · {{map}} · {{queue}}\n🕐 **Elapsed time:** {{time}}\n📅 **Date:** {{date}} ·  🔗 More: [Porofessor](https://porofessor.gg/es/live/{{region}}/{{name}})",
+          "not_playing":"This player is not currently in game."
+      },
+      "ranked":{
+          "clasified": "{{emote}} {{tier}} {{division}}\n{{lp}} League Points\n{{wins}}W · {{losses}}L ({{winrate}}% WR)",
+          "unclasified": "Unranked."
+      },
+      "embed": {
+          "color": "#5d779d",
+          "author": {
+              "name": "[{{region}}] {{name}} {{discord}}",
+              "iconURL": "{{iconURL}}"
+          },
+          "title": "This is what I found:",
+          "fields": [
+              {
+                  "name": "Level",
+                  "value": "{{level}}",
+                  "inline": true
+              },
+              {
+                  "name": "Mastery points",
+                  "value": "{{score}}",
+                  "inline": true
+              },
+              {
+                  "name": "Last games",
+                  "value": "{{winrate}}% WR",
+                  "inline": true
+              },
+              {
+                  "name": "Best champions",
+                  "value": "{{mastery_data}}",
+                  "inline": true
+              },
+              {
+                  "name": "{{queue}} statistics",
+                  "value": "{{ranked_text}}",
+                  "inline": true
+              },
+              {
+                  "name": "Now playing",
+                  "value": "{{playing}}",
+                  "inline": false
+              },
+              {
+                  "name": "Last game {{map}} · {{queue}}",
+                  "value": "{{win}} with {{emote}} {{champion}} · {{kills}}/{{deaths}}/{{assists}} · {{cs_emote}} {{cs}} ({{cspm}} CS/min)\n🕐 **Match duration:** {{duration}}\n📅 **Date:** {{date}} ·  🔗 **More:** [League of graphs](https://www.leagueofgraphs.com/es/match/{{region}}/{{match_id}})",
+                  "inline": false
+              }
+          ],
+          "footer": {
+              "text": "Requested by {{requester}}",
+              "iconURL": "{{requester_icon}}"
+          }
+      }
+  },
+  "rotation_command": {
+      "embed": {
+          "color": "#5d779d",
+          "author": {
+              "name": "Weekly rotation as of {{date}}",
+              "description": "These are the free champions of this week:",
+              "iconURL": "https://i.imgur.com/hGG9kLU.png"
+          },
+          "thumbnail": "https://i.imgur.com/wYXRu2i.png",
+          "footer": {
+              "text": "Requested by {{requester}}",
+              "iconURL": "{{requester_icon}}"
+          },
+          "fields": [
+              {
+                  "name": "\u200B",
+                  "value": "{{champions}}",
+                  "inline": true
+              },
+              {
+                  "name": "\u200B",
+                  "value": "{{champions2}}",
+                  "inline": true
+              }
+          ]
+      }
+  },
+  "status_command": {
+      "embed": {
+          "color": "#5d779d",
+          "author": {
+              "name": "{{region}} server status",
+              "iconURL": "https://i.imgur.com/hGG9kLU.png"
+          },
+          "thumbnail": "https://i.imgur.com/BQUpB5n.png",
+          "title": "Current incidents:",
+          "description": "There are {{count}} maintenances and {{count2}} incidents en este momento.",
+          "footer": {
+              "text": "Requested by {{requester}}",
+              "iconURL": "{{requester_icon}}"
+          }
+      },
+      "maintenance": {
+          "name": "Maintenance: {{name}}",
+          "value": "{{content}}",
+          "inline": false
+      },
+      "incident": {
+          "name": "Incident: {{name}}",
+          "value": "{{content}}",
+          "inline": false
+      }
+  },
+  "unlink_command": {
+      "embed": {
+          "color": "#5d779d",
+          "author": {
+              "name": "All done!",
+              "iconURL": "https://i.imgur.com/hGG9kLU.png"
+          },
+          "thumbnail": "https://i.imgur.com/BQUpB5n.png",
+          "title": "Your account has been successfully unlinked.",
+          "description": "You can relink your account by using the /lol link command.",
+          "footer": {
+              "text": "Requested by {{requester}}",
+              "iconURL": "{{requester_icon}}"
+          }
+      }
+  }
+}

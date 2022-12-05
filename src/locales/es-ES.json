@@ -23,7 +23,7 @@
         "unknown":"Ha ocurrido un error desconocido."
     },
     "ranks": {
-        "unranked": "Unranked",
+        "unranked": "Sin clasificar",
         "IRON": "Hierro",
         "BRONZE": "Bronce",
         "SILVER": "Plata",
@@ -45,7 +45,7 @@
         "thumbnail":"https://i.imgur.com/81rFFJy.png",
         "footer": {
             "text":"Solicitado por {{requester}}",
-            "icon_url":"{{requester_icon}}"
+            "iconURL":"{{requester_icon}}"
         }
     },
     "queues": {
@@ -96,7 +96,7 @@
             },
             "footer": {
                 "text":"Solicitado por {{requester}}",
-                "icon_url":"{{requester_icon}}"
+                "iconURL":"{{requester_icon}}"
             }
         }
     },
@@ -113,7 +113,7 @@
             },
             "footer": {
                 "text":"Solicitado por {{requester}}",
-                "icon_url":"{{requester_icon}}"
+                "iconURL":"{{requester_icon}}"
             }
         }
     },
@@ -123,11 +123,11 @@
             "color":"#5d779d",
             "author": {
                 "name":"Últimas 10 partidas de {{name}} · {{winrate}}% WR",
-                "icon_url":"{{icon_url}}"
+                "iconURL":"{{iconURL}}"
             },
             "footer": {
                 "text":"Solicitado por {{requester}}",
-                "icon_url":"{{requester_icon}}"
+                "iconURL":"{{requester_icon}}"
             }
         },
         "fields": [
@@ -143,14 +143,14 @@
             "color":"#5d779d",
             "author": {
                 "name":"{{region}} · {{name}}",
-                "icon_url":"{{icon_url}}"
+                "iconURL":"{{iconURL}}"
             },
             "title":"¡Enlazando cuenta! Esto es lo que debes hacer:",
             "description":"Para verificar tu cuenta, debes cambiar tu icono de League of Legends al que aparece en este mensaje. Después, pulsa el botón a continiación. Debes hacer esto en un plazo de 5 minutos.",
             "thumbnail": "{{requiered_icon}}",
             "footer": {
                 "text":"Solicitado por {{requester}}",
-                "icon_url":"{{requester_icon}}"
+                "iconURL":"{{requester_icon}}"
             }
         },
         "button": "¡He cambiado mi icono!",
@@ -158,14 +158,14 @@
             "color":"#5d779d",
             "author": {
                 "name":"{{region}} · {{name}}",
-                "icon_url":"{{icon_url}}"
+                "iconURL":"{{iconURL}}"
             },
             "title":"¡Cuenta enlazada!",
             "description":"Tu cuenta de League of Legends ha sido enlazada correctamente.",
             "thumbnail": "https://i.imgur.com/K7uO7Eh.png",
             "footer": {
                 "text":"Solicitado por {{requester}}",
-                "icon_url":"{{requester_icon}}"
+                "iconURL":"{{requester_icon}}"
             }
         }
     },
@@ -174,12 +174,12 @@
             "color":"#5d779d",
             "author": {
                 "name":"Partida en vivo de [{{region}}] {{name}}",
-                "icon_url":"{{icon_url}}"
+                "iconURL":"{{iconURL}}"
             },
             "title":"{{map}} · {{queue}}",
             "footer": {
                 "text":"Solicitado por {{requester}}",
-                "icon_url":"{{requester_icon}}"
+                "iconURL":"{{requester_icon}}"
             }
         },
         "fields": [
@@ -193,10 +193,6 @@
             "soloq":"Solo/Dúo: {{emote}} {{tier}} {{division}} ({{lp}} LP) · {{wins}}W · {{losses}}L · {{winrate}}% WR",
             "flex":"Flex: {{emote}} {{tier}} {{division}} ({{lp}} LP) · {{wins}}W · {{losses}}L · {{winrate}}% WR",
             "none":"Sin clasificar."
-        },
-        "team": {
-            "blue":"🔵",
-            "red":"🔴"
         }
     },
     "masteries_command": {
@@ -209,7 +205,7 @@
             "color": "#5d779d",
             "author": {
                 "name": "Maestrías de {{name}}",
-                "icon_url": "{{icon_url}}"
+                "iconURL": "{{iconURL}}"
             },
             "title": "Esto es lo que he encontrado:",
             "fields": [
@@ -236,7 +232,7 @@
             ],
             "footer": {
                 "text": "Solicitado por {{requester}}",
-                "icon_url": "{{requester_icon}}"
+                "iconURL": "{{requester_icon}}"
             }
         }
     },
@@ -251,16 +247,11 @@
         "description": "[🔗 Notas del parche]({{patch_notes}})",
         "footer": {
             "text": "Solicitado por {{requester}}",
-            "icon_url": "{{requester_icon}}"
+            "iconURL": "{{requester_icon}}"
         }
     },
     "profile_command": {
         "masteries_row": "{{emote}} **[{{level}}]** {{champion}} - {{points}} puntos\n",
-        "win": {
-            "win":"🟢 **Victoria**",
-            "loss":"🔴 **Derrota**",
-            "remake":"⚙️ **Remake**"
-        },
         "playing": {
             "playing":"🟢 **Jugando:** {{emote}} {{champion}} · {{map}} · {{queue}}\n🕐 **Tiempo transcurrido:** {{time}}\n📅 **Fecha:** {{date}} ·  🔗 Más: [Porofessor](https://porofessor.gg/es/live/{{region}}/{{name}})",
             "not_playing":"Este jugador no está en partida en este momento."
@@ -273,7 +264,7 @@
             "color": "#5d779d",
             "author": {
                 "name": "[{{region}}] {{name}} {{discord}}",
-                "icon_url": "{{icon_url}}"
+                "iconURL": "{{iconURL}}"
             },
             "title": "Esto es lo que he encontrado:",
             "fields": [
@@ -315,7 +306,7 @@
             ],
             "footer": {
                 "text": "Solicitado por {{requester}}",
-                "icon_url": "{{requester_icon}}"
+                "iconURL": "{{requester_icon}}"
             }
         }
     },
@@ -324,13 +315,13 @@
             "color": "#5d779d",
             "author": {
                 "name": "Rotación semanal a día {{date}}",
-                "icon_url": "https://i.imgur.com/hGG9kLU.png"
+                "iconURL": "https://i.imgur.com/hGG9kLU.png"
             },
             "description": "Estos son los campeones gratuitos de esta semana:",
             "thumbnail": "https://i.imgur.com/wYXRu2i.png",
             "footer": {
                 "text": "Solicitado por {{requester}}",
-                "icon_url": "{{requester_icon}}"
+                "iconURL": "{{requester_icon}}"
             },
             "fields": [
                 {
@@ -358,7 +349,7 @@
             "description": "Hay {{count}} mantenimientos y {{count}} incidencias en este momento.",
             "footer": {
                 "text": "Solicitado por {{requester}}",
-                "icon_url": "{{requester_icon}}"
+                "iconURL": "{{requester_icon}}"
             }
         },
         "maintenance": {
@@ -386,7 +377,7 @@
             "description": "Puedes volver a vincular tu cuenta con el comando /lol vincular.",
             "footer": {
                 "text": "Solicitado por {{requester}}",
-                "icon_url": "{{requester_icon}}"
+                "iconURL": "{{requester_icon}}"
             }
         }
     }
