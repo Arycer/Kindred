@@ -101,6 +101,7 @@ module.exports = {
                     .replace('{{points}}', mastery.champion_points.toLocaleString(lang));
             } else {
                 m_text += 'N/A\n';
+                break;
             }
         }
 
@@ -160,7 +161,7 @@ module.exports = {
         }
 
         var user = interaction.options.getUser('mención') || interaction.options.getUser('mention')
-        if (!user && !interaction.options.getString('nombre') && !interaction.options.getString('name')) {
+        if (!user && !interaction.options.getString('jugador') && !interaction.options.getString('player')) {
             user = interaction.user;
         }
 
