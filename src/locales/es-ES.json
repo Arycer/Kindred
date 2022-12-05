@@ -70,20 +70,26 @@
         "12": "Abismo de los Lamentos",
         "21": "Bombardeo al nexo"
     },
+    "lanes": {
+        "top":"Top",
+        "jungle":"Jungla",
+        "mid":"Medio",
+        "adc":"ADC",
+        "support":"Soporte"
+    },
+    "win": {
+        "win":"🟢 **Victoria**",
+        "loss":"🔴 **Derrota**",
+        "remake":"⚙️ **Remake**"
+    },
     "build_command": {
-        "lane": {
-            "top":"Top",
-            "jungle":"Jungla",
-            "mid":"Medio",
-            "adc":"ADC",
-            "support":"Soporte"
-        },
         "embed": {
             "color":"#5d779d",
             "author": {
                 "name":"Objetos recomendados para {{champion}} - {{lane}}",
-                "icon_url":"{{icon_url}}"
+                "iconURL":"https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/{{champion}}.png"
             },
+            "title":"Esto es lo que he encontrado:",
             "image": {
                 "url":"{{attachment}}"
             },
@@ -94,19 +100,13 @@
         }
     },
     "runes_command": {
-        "lane": {
-            "top":"Top",
-            "jungle":"Jungla",
-            "mid":"Medio",
-            "adc":"ADC",
-            "support":"Soporte"
-        },
         "embed": {
             "color":"#5d779d",
             "author": {
                 "name":"Runas recomendadas para {{champion}} - {{lane}}",
                 "icon_url":"{{icon_url}}"
             },
+            "title":"Esto es lo que he encontrado:",
             "image": {
                 "url":"{{attachment}}"
             },
@@ -131,16 +131,11 @@
         },
         "fields": [
             {
-            "name":"{{win}} · {{champion}} · {{map}} · {{queue}}",
-            "value":"🕐 Duración: {{duration} · KDA: {{kills}}/{{deaths}}/{{assists}} · CS: {{cs}} {{cs_emote}} ({{cspm}}/min) · [🔗 Más]({{link}})",
+            "name":"{{win}} · {{emote}} {{champion}} · {{map}} · {{queue}}",
+            "value":"🕐 Duración: {{duration}} · KDA: {{kills}}/{{deaths}}/{{assists}} · CS: {{cs}} {{cs_emote}} ({{cspm}}/min) · [🔗 Más](https://www.leagueofgraphs.com/es/match/{{region}}/{{match_id}})",
             "inline":false
             }
-        ],
-        "win": {
-            "win":"🟢 **Victoria**",
-            "loss":"🔴 **Derrota**",
-            "remake":"⚙️ **Remake**"
-        }
+        ]
     },
     "link_command": {
         "instructions_embed": {
@@ -151,14 +146,13 @@
             },
             "title":"¡Enlazando cuenta! Esto es lo que debes hacer:",
             "description":"Para verificar tu cuenta, debes cambiar tu icono de League of Legends al que aparece en este mensaje. Después, pulsa el botón a continiación. Debes hacer esto en un plazo de 5 minutos.",
-            "thumbnail": {
-                "url":"{{requiered_icon}}"
-            },
+            "thumbnail": "{{requiered_icon}}",
             "footer": {
                 "text":"Solicitado por {{requester}}",
                 "icon_url":"{{requester_icon}}"
             }
         },
+        "button": "¡He cambiado mi icono!",
         "success_embed": {
             "color":"#5d779d",
             "author": {
@@ -166,10 +160,8 @@
                 "icon_url":"{{icon_url}}"
             },
             "title":"¡Cuenta enlazada!",
-            "description":"Tu cuenta de League of Legends ha sido enlazada correctamente. Ahora puedes usar los comandos de {{prefix}}.",
-            "thumbnail": {
-                "url":"https://i.imgur.com/K7uO7Eh.png"
-            },
+            "description":"Tu cuenta de League of Legends ha sido enlazada correctamente.",
+            "thumbnail": "https://i.imgur.com/K7uO7Eh.png",
             "footer": {
                 "text":"Solicitado por {{requester}}",
                 "icon_url":"{{requester_icon}}"

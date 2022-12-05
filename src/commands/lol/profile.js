@@ -137,10 +137,10 @@ module.exports = {
             live_text = localized_data.playing.not_playing;
         }
 
-        var lastgame = ''; var wintext = '';
+        var lastgame = '';
         if (profile.lastgames.matches[0].game_id) {
             var last = profile.lastgames.matches[0];
-            typeof last.stats.win === 'boolean' ? wintext = last.stats.win ? localized_data.win.win : localized_data.win.loss : wintext = localized_data.win.remake;
+            var wintext = typeof last.stats.win === 'boolean' ? last.stats.win ? locale.win.win : locale.win.loss : locale.win.remake;
             lastgame = localized_data.embed.fields[6].value
                 .replace('{{win}}', wintext)
                 .replace('{{emote}}', last.champion.emote)
