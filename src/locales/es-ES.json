@@ -23,6 +23,7 @@
         "unknown":"Ha ocurrido un error desconocido."
     },
     "ranks": {
+        "unranked": "Unranked",
         "IRON": "Hierro",
         "BRONZE": "Bronce",
         "SILVER": "Plata",
@@ -104,7 +105,7 @@
             "color":"#5d779d",
             "author": {
                 "name":"Runas recomendadas para {{champion}} - {{lane}}",
-                "icon_url":"{{icon_url}}"
+                "iconURL":"https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/{{champion}}.png"
             },
             "title":"Esto es lo que he encontrado:",
             "image": {
@@ -183,7 +184,7 @@
         },
         "fields": [
             {
-            "name":"{{team}} {{index}}. {{name}} {{champion}} · {{spell1}} {{spell2}} · {{rune1}} {{rune2}}",
+            "name":"{{team}} {{index}}. {{name}} {{emote}} {{champion}} · {{spell1}} {{spell2}} · {{rune1}} {{rune2}}",
             "value":"{{ranked_text}}",
             "inline":false
             }
@@ -243,8 +244,9 @@
         "color": "#5d779d",
         "author": {
             "name": "Actualización {{version}}",
-            "icon_url": "https://i.imgur.com/hGG9kLU.png"
+            "iconURL": "https://i.imgur.com/hGG9kLU.png"
         },
+        "thumbnail": "https://i.imgur.com/VhYn8km.png",
         "title": "Estas son las notas del parche actual:",
         "description": "[🔗 Notas del parche]({{patch_notes}})",
         "footer": {
@@ -322,12 +324,10 @@
             "color": "#5d779d",
             "author": {
                 "name": "Rotación semanal a día {{date}}",
-                "description": "Estos son los campeones gratuitos de esta semana:",
                 "icon_url": "https://i.imgur.com/hGG9kLU.png"
             },
-            "thumbnail": {
-                "url": "https://i.imgur.com/wYXRu2i.png"
-            },
+            "description": "Estos son los campeones gratuitos de esta semana:",
+            "thumbnail": "https://i.imgur.com/wYXRu2i.png",
             "footer": {
                 "text": "Solicitado por {{requester}}",
                 "icon_url": "{{requester_icon}}"
@@ -351,10 +351,11 @@
             "color": "#5d779d",
             "author": {
                 "name": "Estado del servidor {{region}}",
-                "icon_url": "https://i.imgur.com/hGG9kLU.png"
+                "iconURL": "https://i.imgur.com/hGG9kLU.png"
             },
+            "thumbnail": "https://i.imgur.com/BQUpB5n.png",
             "title": "Incidencias actuales:",
-            "description": "Hay {{count}} mantenimientos y {{count2}} incidencias en este momento.",
+            "description": "Hay {{count}} mantenimientos y {{count}} incidencias en este momento.",
             "footer": {
                 "text": "Solicitado por {{requester}}",
                 "icon_url": "{{requester_icon}}"
@@ -376,7 +377,7 @@
             "color": "#5d779d",
             "author": {
                 "name": "¡Todo listo!",
-                "icon_url": "https://i.imgur.com/hGG9kLU.png"
+                "iconURL": "https://i.imgur.com/hGG9kLU.png"
             },
             "thumbnail": {
                 "url": "https://i.imgur.com/BQUpB5n.png"
