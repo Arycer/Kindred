@@ -1,5 +1,5 @@
 const { REST, Routes, Events, ActivityType } = require('discord.js');
-const LastGames = require('../league/classes/last_games');
+const LastGames = require('../util/league/classes/last_games');
 const { readdirSync } = require('node:fs');
 const { join } = require('node:path');
 const MeowDB = require('meowdb');

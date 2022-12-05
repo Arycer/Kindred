@@ -1,6 +1,6 @@
-const get_map_name = require('../../../league/functions/get_map_name');
+const get_map_name = require('../../../util/league/functions/get_map_name');
 const { EmbedBuilder, time, TimestampStyles } = require('discord.js');
-const get_emote = require('../../../league/functions/get_emote');
+const get_emote = require('../../../util/league/functions/get_emote');
 
 async function make_embed (callback) {
     console.log(callback);

@@ -1,5 +1,5 @@
 const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
-const Champion = require('../../../league/classes/champion');
+const Champion = require('../../../util/league/classes/champion');
 const error = require('../../../util/error');
 
 async function execute(interaction) {

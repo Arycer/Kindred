@@ -39,7 +39,7 @@ module.exports = {
     }
 };
 
-const TournamentGame = require('../league/classes/tournament');
+const TournamentGame = require('../util/league/classes/tournament');
 const { Client, GatewayIntentBits } = require('discord.js');
 const http = require('http');
 

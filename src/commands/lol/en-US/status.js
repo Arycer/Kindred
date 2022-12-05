@@ -1,4 +1,4 @@
-const Region = require('../../../league/classes/region');
+const Region = require('../../../util/league/classes/region');
 const { EmbedBuilder } = require('discord.js');
 const axios = require('axios');
 

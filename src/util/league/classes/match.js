@@ -21,7 +21,7 @@ class Match {
             kda: null,
             win: null,
             cs: null,
-            cs_per_min: null,
+            cspm: null,
         }
         this.spells = {
             spell1: new Spell(),
@@ -66,7 +66,7 @@ class Match {
                     assists: player.assists,
                     kda: ((player.kills + player.assists) / player.deaths).toFixed(2),
                     cs: player.totalMinionsKilled + player.neutralMinionsKilled,
-                    cs_per_min: ((player.totalMinionsKilled + player.neutralMinionsKilled) / (match.gameDuration / 60)).toFixed(1),
+                    cspm: ((player.totalMinionsKilled + player.neutralMinionsKilled) / (match.gameDuration / 60)).toFixed(1),
                     win: match.gameDuration < 300 ? 'remake' : player.win,
                 }
         

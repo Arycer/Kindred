@@ -39,7 +39,7 @@ class Ranked {
 
                 for (const entry of data) {
                     if (entry.queueType === 'RANKED_SOLO_5x5') {
-                        this.solo.tier = translate_tier(entry.tier);
+                        this.solo.tier = entry.tier;
                         this.solo.emote = get_emote(entry.tier.toLowerCase());
                         this.solo.rank = entry.rank;
                         this.solo.lps = entry.leaguePoints;
@@ -47,7 +47,7 @@ class Ranked {
                         this.solo.losses = entry.losses;
                         this.solo.winrate = Math.round((entry.wins / (entry.wins + entry.losses)) * 100);
                     } else if (entry.queueType === 'RANKED_FLEX_SR') {
-                        this.flex.tier = translate_tier(entry.tier);
+                        this.flex.tier = entry.tier;
                         this.flex.emote = get_emote(entry.tier.toLowerCase());
                         this.flex.rank = entry.rank;
                         this.flex.lps = entry.leaguePoints;
@@ -62,29 +62,6 @@ class Ranked {
                     return this.get_ranked(region, id);
                 }
             });
-    }
-}
-
-function translate_tier (tier) {
-    switch (tier.toLowerCase()) {
-        case 'iron':
-            return 'Hierro';
-        case 'bronze':
-            return 'Bronce';
-        case 'silver':
-            return 'Plata';
-        case 'gold':
-            return 'Oro';
-        case 'platinum':
-            return 'Platino';
-        case 'diamond':
-            return 'Diamante';
-        case 'master':
-            return 'Maestro';
-        case 'grandmaster':
-            return 'Gran Maestro';
-        case 'challenger':
-            return 'Challenger';
     }
 }
 

@@ -1,8 +1,8 @@
-const { get_title, get_url } = require('../../../music/functions/get_song_info.js');
-const create_connection = require('../../../music/functions/create_connection');
+const { get_title, get_url } = require('../../../util/music/functions/get_song_info.js.js');
+const create_connection = require('../../../util/music/functions/create_connection');
 const { getVoiceConnection } = require('@discordjs/voice');
-const play = require('../../../music/functions/play');
-const wait = require('../../../music/functions/wait');
+const play = require('../../../util/music/functions/play');
+const wait = require('../../../util/music/functions/wait');
 const { EmbedBuilder } = require('discord.js');
 const error = require('../../../util/error');
 

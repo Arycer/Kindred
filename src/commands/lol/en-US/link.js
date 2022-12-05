@@ -1,5 +1,5 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionCollector } = require('discord.js');
-const Account = require('../../../league/classes/account');
+const Account = require('../../../util/league/classes/account');
 const error = require('../../../util/error');
 const MeowDB = require('meowdb');
 

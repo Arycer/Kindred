@@ -1,4 +1,4 @@
-const Champion = require('../../../league/classes/champion');
+const Champion = require('../../../util/league/classes/champion');
 const { EmbedBuilder } = require('discord.js');
 const axios = require('axios');
 

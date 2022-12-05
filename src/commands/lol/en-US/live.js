@@ -1,8 +1,6 @@
-const get_queue_name = require('../../../league/functions/get_queue_name');
-const get_map_name = require('../../../league/functions/get_map_name');
-const Summoner = require('../../../league/classes/summoner');
-const LiveGame = require('../../../league/classes/livegame');
-const Region = require('../../../league/classes/region');
+const Summoner = require('../../../util/league/classes/summoner');
+const LiveGame = require('../../../util/league/classes/livegame');
+const Region = require('../../../util/league/classes/region');
 const { EmbedBuilder } = require('discord.js');
 const error = require('../../../util/error');
 const MeowDB = require('meowdb');
