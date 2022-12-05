@@ -78,7 +78,6 @@
             "adc":"ADC",
             "support":"Soporte"
         },
-        "champion_error": "No se ha encontrado el campeón",
         "embed": {
             "color":"#5d779d",
             "author": {
@@ -102,7 +101,6 @@
             "adc":"ADC",
             "support":"Soporte"
         },
-        "champion_error": "No se ha encontrado el campeón",
         "embed": {
             "color":"#5d779d",
             "author": {
