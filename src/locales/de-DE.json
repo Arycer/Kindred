@@ -1,0 +1,400 @@
+{
+    "error_messages": {
+        "no-perms":"Du bist nicht berechtigt, diesen Befehl auszuführen.",
+        "profile-not-found":"Das angegebene Profil wurde nicht gefunden.",
+        "champ-not-found":"Der Champion konnte nicht gefunden werden.",
+        "build-not-found":"Für diesen Champion wurde kein Build gefunden.",
+        "runes-not-found":"Für diesen Champion wurden keine passenden Runen gefunden.",
+        "no-linked-account":"Du hast kein League of Legends Account mit deinem Discord verknüpft (/lol link).",
+        "no-linked-member":"Der Nutzer ist mit keinem League of Legends Account verknüpft.",
+        "link-timeout":"Die Verlinkung wurde abgebrochen, da es zu lange gedauert hat.",
+        "link-failed":"Die Verlinkung ist gescheitert. Das Profilbild wurde nicht geändert.",
+        "not-in-game":"Der gesuchte Spieler ist aktuell nicht im Spiel.",
+        "no-masteries":"Der gesuchte Spieler hat keine Meisterschaftsseiten.",
+        "no-voice-channel":"Du musst dafür in einem Voicechannel sein.",
+        "no-connection":"Mit keinem Sprachkanal verbunden.",
+        "shuffle-error":"In der Warteschlange befinden sich nicht genug Songs für die Shuffle Funktion.",
+        "already-paused":"Die Musik ist bereits pausiert.",
+        "already-resumed":"Die Musik läuft bereits.",
+        "playlist":"Aktuell sind keine Playlists verfügbar.",
+        "invalid-position":"Die angegebene Position ist ungültig.",
+        "not-enough-players":"Nicht genügend Spieler um das Event zu starten.",
+        "invalid-id":"Die angegebene ID ist ungültig.",
+        "unknown":"Ein unbekannter Fehler ist aufgetreten."
+    },
+    "ranks": {
+        "IRON": "Eisen",
+        "BRONZE": "Bronze",
+        "SILVER": "Silber",
+        "GOLD": "Gold",
+        "PLATINUM": "Platin",
+        "DIAMOND": "Diamant",
+        "MASTER": "Meister",
+        "GRANDMASTER": "Großmeister",
+        "CHALLENGER": "Herausforderer"
+    },
+    "error_embed": {
+        "color":"#5d779d",
+        "author": {
+            "name":"Etwas ist schief gelaufen...",
+            "iconURL":"https://i.imgur.com/hGG9kLU.png"
+        },
+        "title":"Folgender Fehler ist aufgetreten:",
+        "description":"{{error}}",
+        "thumbnail":"https://i.imgur.com/81rFFJy.png",
+        "footer": {
+            "text":"Ausgeführt von {{requester}}",
+            "icon_url":"{{requester_icon}}"
+        }
+    },
+    "queues": {
+        "-1": "Rangliste",
+        "0": "Freies Spiel",
+        "100": "ARAM",
+        "400": "Normal (Freie Wahl)",
+        "430": "Normal (Abwechselnde Wahl)",
+        "420": "Rangliste (Solo/Duo)",
+        "440": "Rangliste (Flex)",
+        "700": "Clash",
+        "900": "ARURF",
+        "1300": "Nexus Blitz",
+        "1400": "Spellbook",
+        "1900": "URF",
+        "2000": "Übung 1",
+        "2010": "Übung 2",
+        "2020": "Übung 3"
+    },
+    "maps": {
+        "0": "Custom",
+        "11": "Kluft der Beschwörer",
+        "12": "Heulende Schlucht",
+        "21": "Nexus Blitz"
+    },
+    "build_command": {
+        "lane": {
+            "top":"Top",
+            "jungle":"Jungle",
+            "mid":"MID",
+            "adc":"ADC",
+            "support":"Support"
+        },
+        "embed": {
+            "color":"#5d779d",
+            "author": {
+                "name":"Empfohlene Gegenstände für {{champion}} - {{lane}}",
+                "icon_url":"{{icon_url}}"
+            },
+            "image": {
+                "url":"{{attachment}}"
+            },
+            "footer": {
+                "text":"Ausgeführt von {{requester}}",
+                "icon_url":"{{requester_icon}}"
+            }
+        }
+    },
+    "runes_command": {
+        "lane": {
+            "top":"Top",
+            "jungle":"Jungle",
+            "mid":"MID",
+            "adc":"ADC",
+            "support":"Support"
+        },
+        "embed": {
+            "color":"#5d779d",
+            "author": {
+                "name":"Empfohlene Items für {{champion}} - {{lane}}",
+                "icon_url":"{{icon_url}}"
+            },
+            "image": {
+                "url":"{{attachment}}"
+            },
+            "footer": {
+                "text":"Ausgeführt von {{requester}}",
+                "icon_url":"{{requester_icon}}"
+            }
+        }
+    },
+    "history_command": {
+        "champion_error": "Champion wurde nicht gefunden.",
+        "embed": {
+            "color":"#5d779d",
+            "author": {
+                "name":"Die letzten 10 Spiele von {{name}} · {{winrate}}% WR",
+                "icon_url":"{{icon_url}}"
+            },
+            "footer": {
+                "text":"Ausgeführt von {{requester}}",
+                "icon_url":"{{requester_icon}}"
+            }
+        },
+        "fields": [
+            {
+            "name":"{{win}} · {{champion}} · {{map}} · {{queue}}",
+            "value":"🕐 Dauer: {{duration} · KDA: {{kills}}/{{deaths}}/{{assists}} · CS: {{cs}} {{cs_emote}} ({{cspm}}/min) · [🔗 Informationen]({{link}})",
+            "inline":false
+            }
+        ],
+        "win": {
+            "win":"🟢 **Gewonnen**",
+            "loss":"🔴 **Verloren**",
+            "remake":"⚙️ **Unterbrochen**"
+        }
+    },
+    "link_command": {
+        "instructions_embed": {
+            "color":"#5d779d",
+            "author": {
+                "name":"{{region}} · {{name}}",
+                "icon_url":"{{icon_url}}"
+            },
+            "title":"Kontoverknüpfung - Folgende Schritte durchführen:",
+            "description":"Um dein League of Legends Account zu verknüpfen, musst du dein Profilbild im Spiel ändern. Dafür hast du 5 Minuten Zeit.",
+            "thumbnail": {
+                "url":"{{requiered_icon}}"
+            },
+            "footer": {
+                "text":"Ausgeführt von {{requester}}",
+                "icon_url":"{{requester_icon}}"
+            }
+        },
+        "success_embed": {
+            "color":"#5d779d",
+            "author": {
+                "name":"{{region}} · {{name}}",
+                "icon_url":"{{icon_url}}"
+            },
+            "title":"Kontoverkenüpfung",
+            "description":"Du hast dein League of Legends Konto erfolgreich verknüpft. Du kannst nun die Befehle verwenden. {{prefix}}.",
+            "thumbnail": {
+                "url":"https://i.imgur.com/K7uO7Eh.png"
+            },
+            "footer": {
+                "text":"Ausgeführt von {{requester}}",
+                "icon_url":"{{requester_icon}}"
+            }
+        }
+    },
+    "live_command":{
+        "embed": {
+            "color":"#5d779d",
+            "author": {
+                "name":"Live Spiel von [{{region}}] {{name}}",
+                "icon_url":"{{icon_url}}"
+            },
+            "title":"{{map}} · {{queue}}",
+            "footer": {
+                "text":"Ausgeführt von {{requester}}",
+                "icon_url":"{{requester_icon}}"
+            }
+        },
+        "fields": [
+            {
+            "name":"{{team}} {{index}}. {{name}} {{champion}} · {{spell1}} {{spell2}} · {{rune1}} {{rune2}}",
+            "value":"{{ranked_text}}",
+            "inline":false
+            }
+        ],
+        "ranked_text": {
+            "soloq":"Solo/Duo: {{emote}} {{tier}} {{division}} ({{lp}} LP) · {{wins}}W · {{losses}}L · {{winrate}}% WR",
+            "flex":"Flex: {{emote}} {{tier}} {{division}} ({{lp}} LP) · {{wins}}W · {{losses}}L · {{winrate}}% WR",
+            "none":"N/A"
+        },
+        "team": {
+            "blue":"🔵",
+            "red":"🔴"
+        }
+    },
+    "masteries_command": {
+        "rows": {
+            "champions": "{{emote}} **[{{level}}]** {{champion}} - {{points}} puntos",
+            "mastered": "Masteries",
+            "footer": "**Champions:** {{champions}} · **Level:** {{levels}} · **Meisterschaftspunkte:** {{points}} · **Kisten:** {{chests}}/{{champions}}"
+        },
+        "embed": {
+            "color": "#5d779d",
+            "author": {
+                "name": "Meisterschaften von {{name}}",
+                "icon_url": "{{icon_url}}"
+            },
+            "title": "Gefundene Informationen:",
+            "fields": [
+                {
+                "name": "Champion",
+                "value": "{{champion_data}}",
+                "inline": true
+                },
+                {
+                    "name": "Letztes Spiel",
+                    "value": "{{last_played}}",
+                    "inline": true
+                },
+                {
+                    "name": "Meisterschaftspunkte",
+                    "value": "{{chests_tokens}}",
+                    "inline": true
+                },
+                {
+                    "name": "\u200B",
+                    "value": "{{footer}}",
+                    "inline": false
+                }
+            ],
+            "footer": {
+                "text": "Ausgeführt von {{requester}}",
+                "icon_url": "{{requester_icon}}"
+            }
+        }
+    },
+    "patch_command": {
+        "color": "#5d779d",
+        "author": {
+            "name": "Patch Informationen {{version}}",
+            "icon_url": "https://i.imgur.com/hGG9kLU.png"
+        },
+        "title": "Aktuelle Patchnotes:",
+        "description": "[🔗 Patchnotes]({{patch_notes}})",
+        "footer": {
+            "text": "Ausgeführt von {{requester}}",
+            "icon_url": "{{requester_icon}}"
+        }
+    },
+    "profile_command": {
+        "masteries_row": "{{emote}} **[{{level}}]** {{champion}} - {{points}} Punkte\n",
+        "win": {
+            "win":"🟢 **Gewonnen**",
+            "loss":"🔴 **Verloren**",
+            "remake":"⚙️ **Unterbrochen**"
+        },
+        "playing": {
+            "playing":"🟢 **Spielt:** {{emote}} {{champion}} · {{map}} · {{queue}}\n🕐 **Verstrichene Zeit:** {{time}}\n📅 **Datum:** {{date}} ·  🔗 Informationen: [Porofessor](https://porofessor.gg/de/live/{{region}}/{{name}})",
+            "not_playing":"Dieser Spieler ist grade nicht im Spiel."
+        },
+        "ranked":{
+            "clasified": "{{emote}} {{tier}} {{division}}\n{{lp}} Liga-Punkte\n{{wins}}W · {{losses}}L ({{winrate}}% WR)",
+            "unclasified": "N/A"
+        },
+        "embed": {
+            "color": "#5d779d",
+            "author": {
+                "name": "[{{region}}] {{name}} {{discord}}",
+                "icon_url": "{{icon_url}}"
+            },
+            "title": "Folgende Spielerinformationen wurden gefunden:",
+            "fields": [
+                {
+                    "name": "Level",
+                    "value": "{{level}}",
+                    "inline": true
+                },
+                {
+                    "name": "Meisterschaftspunkte",
+                    "value": "{{score}}",
+                    "inline": true
+                },
+                {
+                    "name": "Letzte Spiele",
+                    "value": "{{winrate}}% WR",
+                    "inline": true
+                },
+                {
+                    "name": "Beste Champions",
+                    "value": "{{mastery_data}}",
+                    "inline": true
+                },
+                {
+                    "name": "Statistiken von {{queue}}",
+                    "value": "{{ranked_text}}",
+                    "inline": true
+                },
+                {
+                    "name": "Spielt aktuell",
+                    "value": "{{playing}}",
+                    "inline": false
+                },
+                {
+                    "name": "Letztes Spiel: {{map}} · {{queue}}",
+                    "value": "{{win}} mit {{emote}} {{champion}} · {{kills}}/{{deaths}}/{{assists}} · {{cs_emote}} {{cs}} ({{cspm}} CS/min)\n🕐 **Spieldauer:** {{duration}}\n📅 **Datum:** {{date}} ·  🔗 **Informationen:** [League of graphs](https://www.leagueofgraphs.com/de/match/{{region}}/{{match_id}})",
+                    "inline": false
+                }
+            ],
+            "footer": {
+                "text": "Ausgeführt von {{requester}}",
+                "icon_url": "{{requester_icon}}"
+            }
+        }
+    },
+    "rotation_command": {
+        "embed": {
+            "color": "#5d779d",
+            "author": {
+                "name": "Wöchentliche Rotation {{date}}",
+                "description": "Hier sind die kostenlosen Champions für diese Woche:",
+                "icon_url": "https://i.imgur.com/hGG9kLU.png"
+            },
+            "thumbnail": {
+                "url": "https://i.imgur.com/wYXRu2i.png"
+            },
+            "footer": {
+                "text": "Ausgeführt von {{requester}}",
+                "icon_url": "{{requester_icon}}"
+            },
+            "fields": [
+                {
+                    "name": "\u200B",
+                    "value": "{{champions}}",
+                    "inline": true
+                },
+                {
+                    "name": "\u200B",
+                    "value": "{{champions2}}",
+                    "inline": true
+                }
+            ]
+        }
+    },
+    "status_command": {
+        "embed": {
+            "color": "#5d779d",
+            "author": {
+                "name": "Server Status {{region}}",
+                "icon_url": "https://i.imgur.com/hGG9kLU.png"
+            },
+            "title": "Aktuelle Probleme:",
+            "description": "Aktuell gibt es {{count}} Wartungen und {{count2}} bekannte Probleme.",
+            "footer": {
+                "text": "Ausgeführt von {{requester}}",
+                "icon_url": "{{requester_icon}}"
+            }
+        },
+        "maintenance": {
+            "name": "Wartung: {{name}}",
+            "value": "{{content}}",
+            "inline": false
+        },
+        "incident": {
+            "name": "Probleme: {{name}}",
+            "value": "{{content}}",
+            "inline": false
+        }
+    },
+    "unlink_command": {
+        "embed": {
+            "color": "#5d779d",
+            "author": {
+                "name": "Alles bereit!",
+                "icon_url": "https://i.imgur.com/hGG9kLU.png"
+            },
+            "thumbnail": {
+                "url": "https://i.imgur.com/BQUpB5n.png"
+            },
+            "title": "Kontoverknüpfung wurde aufgehoben",
+            "description": "Du kannst deinen Account nun neu verknüpfen.",
+            "footer": {
+                "text": "Ausgeführt von {{requester}}",
+                "icon_url": "{{requester_icon}}"
+            }
+        }
+    }
+}
