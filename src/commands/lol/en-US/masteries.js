@@ -1,11 +1,10 @@
 const { EmbedBuilder, TimestampStyles, time } = require('discord.js');
-const get_emote = require('../../../league/functions/get_emote');
-const Masteries = require('../../../league/classes/masteries');
-const Summoner = require('../../../league/classes/summoner');
-const Region = require('../../../league/classes/region');
+const get_emote = require('../../../util/league/functions/get_emote');
+const Masteries = require('../../../util/league/classes/masteries');
+const Summoner = require('../../../util/league/classes/summoner');
+const Region = require('../../../util/league/classes/region');
 const error = require('../../../util/error');
 const MeowDB = require('meowdb');
-
 
 async function execute(interaction) {
     var username = interaction.options.getString('jugador') || interaction.options.getString('player');
