@@ -85,38 +85,14 @@ class Masteries extends Mastery {
                 this.chests_earned = masteries.filter(mastery => mastery.chestGranted).length;
                 this.total_lvls = masteries.reduce((a, b) => a + b.championLevel, 0);
                 this.total_pts = masteries.reduce((a, b) => a + b.championPoints, 0);
-                this.score = await this.#get_score(region, summoner_id);
                 this.champs_played = masteries.length;
+                this.score = this.total_lvls;
 
                 return this;
             })
             .catch(error => {
                 if (error.code === 'ECONNABORTED') {
                     return this.get_masteries(region, summoner_id);
-                }
-            });
-
-        return response;
-    }
-
-    async #get_score (region, summoner_id) {
-        var endpoint = `https://${region.id}.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/${summoner_id}`;
-        var opts = {
-            method: 'GET',
-            timeout: 2000,
-            headers: {
-                'X-Riot-Token': process.env.RIOT_API_KEY    
-            }
-        };
-
-        var response = await axios.get(endpoint, opts)
-            .then(response => {
-                this.score = response.data;
-                return this.score;
-            })
-            .catch(error => {
-                if (error.code === 'ECONNABORTED') {
-                    return this.get_score(region, summoner_id);
                 }
             });
 

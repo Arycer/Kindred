@@ -195,7 +195,7 @@
   },
   "masteries_command": {
       "rows": {
-          "champions": "{{emote}} **[{{level}}]** {{champion}} - {{points}} puntos",
+          "champions": "{{emote}} **[{{level}}]** {{champion}} - {{points}} points",
           "mastered": "Mastered",
           "footer": "**Champions:** {{champions}} · **Levels:** {{levels}} · **Mastery points:** {{points}} · **Chests:** {{chests}}/{{champions}}"
       },
@@ -249,7 +249,7 @@
       }
   },
   "profile_command": {
-      "masteries_row": "{{emote}} **[{{level}}]** {{champion}} - {{points}} puntos\n",
+      "masteries_row": "{{emote}} **[{{level}}]** {{champion}} - {{points}} points\n",
       "playing": {
           "playing":"🟢 **Playing:** {{emote}} {{champion}} · {{map}} · {{queue}}\n🕐 **Elapsed time:** {{time}}\n📅 **Date:** {{date}} ·  🔗 More: [Porofessor](https://porofessor.gg/es/live/{{region}}/{{name}})",
           "not_playing":"This player is not currently in game."

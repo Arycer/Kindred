@@ -1,4 +1,4 @@
-const { get_title, get_url } = require('../../../util/music/functions/get_song_info.js.js');
+const { get_title, get_url } = require('../../../util/music/functions/get_song_info.js');
 const create_connection = require('../../../util/music/functions/create_connection');
 const { getVoiceConnection } = require('@discordjs/voice');
 const play = require('../../../util/music/functions/play');

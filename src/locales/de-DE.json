@@ -23,6 +23,7 @@
         "unknown":"Ein unbekannter Fehler ist aufgetreten."
     },
     "ranks": {
+        "unranked":"Unrangliste",
         "IRON": "Eisen",
         "BRONZE": "Bronze",
         "SILVER": "Silber",
@@ -44,7 +45,7 @@
         "thumbnail":"https://i.imgur.com/81rFFJy.png",
         "footer": {
             "text":"Ausgeführt von {{requester}}",
-            "icon_url":"{{requester_icon}}"
+            "iconURL":"{{requester_icon}}"
         }
     },
     "queues": {
@@ -70,49 +71,49 @@
         "12": "Heulende Schlucht",
         "21": "Nexus Blitz"
     },
+    "lanes": {
+        "top":"Top",
+        "jungle":"Jungle",
+        "mid":"Mid",
+        "adc":"ADC",
+        "support":"Support"
+    },
+    "win": {
+        "win":"🟢 **Gewonnen**",
+        "loss":"🔴 **Verloren**",
+        "remake":"⚙️ **Unterbrochen**"
+    },
     "build_command": {
-        "lane": {
-            "top":"Top",
-            "jungle":"Jungle",
-            "mid":"MID",
-            "adc":"ADC",
-            "support":"Support"
-        },
         "embed": {
             "color":"#5d779d",
             "author": {
                 "name":"Empfohlene Gegenstände für {{champion}} - {{lane}}",
-                "icon_url":"{{icon_url}}"
+                "iconURL":"{{iconURL}}"
             },
+            "title": "Das habe ich gefunden:",
             "image": {
                 "url":"{{attachment}}"
             },
             "footer": {
                 "text":"Ausgeführt von {{requester}}",
-                "icon_url":"{{requester_icon}}"
+                "iconURL":"{{requester_icon}}"
             }
         }
     },
     "runes_command": {
-        "lane": {
-            "top":"Top",
-            "jungle":"Jungle",
-            "mid":"MID",
-            "adc":"ADC",
-            "support":"Support"
-        },
         "embed": {
             "color":"#5d779d",
             "author": {
                 "name":"Empfohlene Items für {{champion}} - {{lane}}",
-                "icon_url":"{{icon_url}}"
+                "iconURL":"https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/{{champion}}.png"
             },
+            "title": "Das habe ich gefunden:",
             "image": {
                 "url":"{{attachment}}"
             },
             "footer": {
                 "text":"Ausgeführt von {{requester}}",
-                "icon_url":"{{requester_icon}}"
+                "iconURL":"{{requester_icon}}"
             }
         }
     },
@@ -122,11 +123,11 @@
             "color":"#5d779d",
             "author": {
                 "name":"Die letzten 10 Spiele von {{name}} · {{winrate}}% WR",
-                "icon_url":"{{icon_url}}"
+                "iconURL":"https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/{{champion}}.png"
             },
             "footer": {
                 "text":"Ausgeführt von {{requester}}",
-                "icon_url":"{{requester_icon}}"
+                "iconURL":"{{requester_icon}}"
             }
         },
         "fields": [
@@ -135,44 +136,36 @@
             "value":"🕐 Dauer: {{duration} · KDA: {{kills}}/{{deaths}}/{{assists}} · CS: {{cs}} {{cs_emote}} ({{cspm}}/min) · [🔗 Informationen]({{link}})",
             "inline":false
             }
-        ],
-        "win": {
-            "win":"🟢 **Gewonnen**",
-            "loss":"🔴 **Verloren**",
-            "remake":"⚙️ **Unterbrochen**"
-        }
+        ]
     },
     "link_command": {
         "instructions_embed": {
             "color":"#5d779d",
             "author": {
                 "name":"{{region}} · {{name}}",
-                "icon_url":"{{icon_url}}"
+                "iconURL":"{{iconURL}}"
             },
             "title":"Kontoverknüpfung - Folgende Schritte durchführen:",
             "description":"Um dein League of Legends Account zu verknüpfen, musst du dein Profilbild im Spiel ändern. Dafür hast du 5 Minuten Zeit.",
-            "thumbnail": {
-                "url":"{{requiered_icon}}"
-            },
+            "thumbnail": "{{requiered_icon}}",
             "footer": {
                 "text":"Ausgeführt von {{requester}}",
-                "icon_url":"{{requester_icon}}"
+                "iconURL":"{{requester_icon}}"
             }
         },
+        "button": "Ich habe mein Symbol geändert!",
         "success_embed": {
             "color":"#5d779d",
             "author": {
                 "name":"{{region}} · {{name}}",
-                "icon_url":"{{icon_url}}"
+                "iconURL":"{{iconURL}}"
             },
             "title":"Kontoverkenüpfung",
             "description":"Du hast dein League of Legends Konto erfolgreich verknüpft. Du kannst nun die Befehle verwenden. {{prefix}}.",
-            "thumbnail": {
-                "url":"https://i.imgur.com/K7uO7Eh.png"
-            },
+            "thumbnail": "https://i.imgur.com/K7uO7Eh.png",
             "footer": {
                 "text":"Ausgeführt von {{requester}}",
-                "icon_url":"{{requester_icon}}"
+                "iconURL":"{{requester_icon}}"
             }
         }
     },
@@ -181,12 +174,12 @@
             "color":"#5d779d",
             "author": {
                 "name":"Live Spiel von [{{region}}] {{name}}",
-                "icon_url":"{{icon_url}}"
+                "iconURL":"{{iconURL}}"
             },
             "title":"{{map}} · {{queue}}",
             "footer": {
                 "text":"Ausgeführt von {{requester}}",
-                "icon_url":"{{requester_icon}}"
+                "iconURL":"{{requester_icon}}"
             }
         },
         "fields": [
@@ -200,10 +193,6 @@
             "soloq":"Solo/Duo: {{emote}} {{tier}} {{division}} ({{lp}} LP) · {{wins}}W · {{losses}}L · {{winrate}}% WR",
             "flex":"Flex: {{emote}} {{tier}} {{division}} ({{lp}} LP) · {{wins}}W · {{losses}}L · {{winrate}}% WR",
             "none":"N/A"
-        },
-        "team": {
-            "blue":"🔵",
-            "red":"🔴"
         }
     },
     "masteries_command": {
@@ -216,7 +205,7 @@
             "color": "#5d779d",
             "author": {
                 "name": "Meisterschaften von {{name}}",
-                "icon_url": "{{icon_url}}"
+                "iconURL": "{{iconURL}}"
             },
             "title": "Gefundene Informationen:",
             "fields": [
@@ -243,7 +232,7 @@
             ],
             "footer": {
                 "text": "Ausgeführt von {{requester}}",
-                "icon_url": "{{requester_icon}}"
+                "iconURL": "{{requester_icon}}"
             }
         }
     },
@@ -251,22 +240,18 @@
         "color": "#5d779d",
         "author": {
             "name": "Patch Informationen {{version}}",
-            "icon_url": "https://i.imgur.com/hGG9kLU.png"
+            "iconURL": "https://i.imgur.com/hGG9kLU.png"
         },
+        "thumbnail": "https://i.imgur.com/VhYn8km.png",
         "title": "Aktuelle Patchnotes:",
         "description": "[🔗 Patchnotes]({{patch_notes}})",
         "footer": {
             "text": "Ausgeführt von {{requester}}",
-            "icon_url": "{{requester_icon}}"
+            "iconURL": "{{requester_icon}}"
         }
     },
     "profile_command": {
         "masteries_row": "{{emote}} **[{{level}}]** {{champion}} - {{points}} Punkte\n",
-        "win": {
-            "win":"🟢 **Gewonnen**",
-            "loss":"🔴 **Verloren**",
-            "remake":"⚙️ **Unterbrochen**"
-        },
         "playing": {
             "playing":"🟢 **Spielt:** {{emote}} {{champion}} · {{map}} · {{queue}}\n🕐 **Verstrichene Zeit:** {{time}}\n📅 **Datum:** {{date}} ·  🔗 Informationen: [Porofessor](https://porofessor.gg/de/live/{{region}}/{{name}})",
             "not_playing":"Dieser Spieler ist grade nicht im Spiel."
@@ -279,7 +264,7 @@
             "color": "#5d779d",
             "author": {
                 "name": "[{{region}}] {{name}} {{discord}}",
-                "icon_url": "{{icon_url}}"
+                "iconURL": "{{iconURL}}"
             },
             "title": "Folgende Spielerinformationen wurden gefunden:",
             "fields": [
@@ -321,7 +306,7 @@
             ],
             "footer": {
                 "text": "Ausgeführt von {{requester}}",
-                "icon_url": "{{requester_icon}}"
+                "iconURL": "{{requester_icon}}"
             }
         }
     },
@@ -330,15 +315,13 @@
             "color": "#5d779d",
             "author": {
                 "name": "Wöchentliche Rotation {{date}}",
-                "description": "Hier sind die kostenlosen Champions für diese Woche:",
-                "icon_url": "https://i.imgur.com/hGG9kLU.png"
+                "iconURL": "https://i.imgur.com/hGG9kLU.png"
             },
-            "thumbnail": {
-                "url": "https://i.imgur.com/wYXRu2i.png"
-            },
+            "description": "Hier sind die kostenlosen Champions für diese Woche:",
+            "thumbnail": "https://i.imgur.com/wYXRu2i.png",
             "footer": {
                 "text": "Ausgeführt von {{requester}}",
-                "icon_url": "{{requester_icon}}"
+                "iconURL": "{{requester_icon}}"
             },
             "fields": [
                 {
@@ -359,13 +342,13 @@
             "color": "#5d779d",
             "author": {
                 "name": "Server Status {{region}}",
-                "icon_url": "https://i.imgur.com/hGG9kLU.png"
+                "iconURL": "https://i.imgur.com/hGG9kLU.png"
             },
             "title": "Aktuelle Probleme:",
             "description": "Aktuell gibt es {{count}} Wartungen und {{count2}} bekannte Probleme.",
             "footer": {
                 "text": "Ausgeführt von {{requester}}",
-                "icon_url": "{{requester_icon}}"
+                "iconURL": "{{requester_icon}}"
             }
         },
         "maintenance": {
@@ -384,16 +367,14 @@
             "color": "#5d779d",
             "author": {
                 "name": "Alles bereit!",
-                "icon_url": "https://i.imgur.com/hGG9kLU.png"
+                "iconURL": "https://i.imgur.com/hGG9kLU.png"
             },
-            "thumbnail": {
-                "url": "https://i.imgur.com/BQUpB5n.png"
-            },
+            "thumbnail": "https://i.imgur.com/BQUpB5n.png",
             "title": "Kontoverknüpfung wurde aufgehoben",
             "description": "Du kannst deinen Account nun neu verknüpfen.",
             "footer": {
                 "text": "Ausgeführt von {{requester}}",
-                "icon_url": "{{requester_icon}}"
+                "iconURL": "{{requester_icon}}"
             }
         }
     }

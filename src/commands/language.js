@@ -22,6 +22,7 @@ module.exports = {
                 .addChoices(
                     { name: 'English', value: 'en-US' },
                     { name: 'Español', value: 'es-ES' },
+                    { name: 'Deutsch', value: 'de-DE' },
                 )),
     async execute(interaction) {
         var lang = servers.get(interaction.guild.id).language;
