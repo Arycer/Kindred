@@ -1,14 +1,3 @@
-const Summoner = require('../../../util/league/classes/summoner');
-const LiveGame = require('../../../util/league/classes/livegame');
-const Region = require('../../../util/league/classes/region');
-const { EmbedBuilder } = require('discord.js');
-const error = require('../../../util/error');
-const MeowDB = require('meowdb');
-
-var db = new MeowDB({
-    dir: './src/database',
-    name: 'accounts'
-});
 
 async function execute(interaction) {
     var username = interaction.options.getString('jugador') || interaction.options.getString('player');
