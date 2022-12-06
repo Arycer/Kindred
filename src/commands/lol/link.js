@@ -1,5 +1,6 @@
 const { SlashCommandSubcommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionCollector } = require('discord.js');
 const Account = require('../../util/league/classes/account');
+const error = require('../../util/error');
 const MeowDB = require('meowdb');
 
 const servers = new MeowDB({
@@ -14,12 +15,16 @@ var db = new MeowDB({
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
-        .setName('link').setNameLocalization('es-ES', 'vincular')
+        .setName('link')
         .setDescription('Links your League of Legends account to your Discord account')
-        .setDescriptionLocalization('es-ES', 'Vincula tu cuenta de League of Legends con tu cuenta de Discord')
+        .setDescriptionLocalizations({
+            'es-ES': 'Vincula tu cuenta de League of Legends con tu cuenta de Discord',
+        })
         .addStringOption(option => option
             .setName('region').setNameLocalization('es-ES', 'región')
-            .setDescription('Player region').setDescriptionLocalization('es-ES', 'Región del jugador')
+            .setDescription('Player region').setDescriptionLocalizations({
+                'es-ES': 'Región del jugador',
+            })
             .setRequired(true)
             .addChoices(
                 { name: 'EUW', value: 'euw1' },
@@ -37,7 +42,9 @@ module.exports = {
         )
         .addStringOption(option => option
             .setName('player').setNameLocalization('es-ES', 'jugador')
-            .setDescription('League of Legends username').setDescriptionLocalization('es-ES', 'Nombre de usuario de League of Legends')
+            .setDescription('League of Legends username').setDescriptionLocalizations({
+                'es-ES': 'Nombre de usuario de League of Legends',
+            })
             .setRequired(true)
         ),
     async execute(interaction) {
@@ -48,21 +55,8 @@ module.exports = {
         var region = interaction.options.getString('region') || interaction.options.getString('región');
         
         var account = new Account(); account.region.get_region(region);
-        await account.summoner.get_summoner(account.region, username);
-    
-        if (!account.summoner.identifiers.s_id) {
-            var localized_error = locale.error_messages['profile-not-found'];
-            var localized_embed = locale.error_embed;
-            var embed = new EmbedBuilder()
-                .setThumbnail(localized_embed.thumbnail)
-                .setAuthor(localized_embed.author)
-                .setTitle(localized_embed.title)
-                .setDescription(localized_error)
-                .setColor(localized_embed.color)
-                .setFooter({ text: localized_embed.footer.text.replace('{{requester}}', interaction.user.tag), iconURL: interaction.user.avatarURL() })
-                .setTimestamp();
-            return interaction.followUp({ embeds: [embed] });
-        }
+        await account.summoner.get_summoner(account.region, username);    
+        if (!account.summoner.identifiers.s_id) return error(interaction, locale, 'profile_not_found');
     
         do {
             var random = Math.floor(Math.random() * 21);
@@ -70,29 +64,20 @@ module.exports = {
     
         var requiered_icon = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${random}.jpg`;
         var old_icon = account.summoner.icon.url;
-        
-        var localized_data = locale.link_command;
-        var instructions = localized_data.instructions_embed;
 
-        var embed = new EmbedBuilder()
-            .setAuthor({
-                name: instructions.author.name
-                    .replace('{{region}}', account.region.name)
-                    .replace('{{name}}', account.summoner.name),
-                iconURL: account.summoner.icon.url
-            })
-            .setTitle(instructions.title)
-            .setDescription(instructions.description)
-            .setThumbnail(requiered_icon)
-            .setColor(instructions.color)
-            .setFooter({ text: instructions.footer.text.replace('{{requester}}', interaction.user.tag), iconURL: interaction.user.avatarURL() })
-            .setTimestamp();
+        var embed = new EmbedBuilder(JSON.parse(JSON.stringify(locale.link_command.instructions_embed)
+            .replace('{{region}}', account.region.name)
+            .replace('{{name}}', account.summoner.name)
+            .replace('{{iconURL}}', account.summoner.icon.url)
+            .replace('{{requester}}', interaction.user.tag)
+            .replace('{{requester_icon}}', interaction.user.avatarURL())
+        )).setThumbnail(requiered_icon).setTimestamp();
 
         var row = new ActionRowBuilder()
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('verify')
-                    .setLabel(localized_data.button)
+                    .setLabel(locale.link_command.button)
                     .setStyle(ButtonStyle.Primary)
             );
 
@@ -106,62 +91,32 @@ module.exports = {
             
         collector.on('collect', async () => {
             var summoner = await account.summoner.get_summoner(account.region, username);
-
-            if (summoner.icon.id == random) {
-                account.discord_id = interaction.user.id;
-                account.summoner = summoner;
-
-                if (db.get(account.discord_id)) db.delete(account.discord_id);
-                db.create(account.discord_id, account);
-
-                var success = localized_data.success_embed;
-
-                var embed = new EmbedBuilder()
-                    .setAuthor({
-                        name: success.author.name
-                            .replace('{{region}}', account.region.name)
-                            .replace('{{name}}', account.summoner.name),
-                        iconURL: old_icon
-                    })
-                    .setTitle(success.title)
-                    .setDescription(success.description)
-                    .setThumbnail(success.thumbnail)
-                    .setColor(success.color)
-                    .setFooter({ text: success.footer.text.replace('{{requester}}', interaction.user.tag), iconURL: interaction.user.avatarURL() })
-                    .setTimestamp();
-
-                await interaction.followUp({ embeds: [embed], components: [] });
-                await message.delete();
-            } else {
-                var error = locale.error_embed;
-                var embed = new EmbedBuilder()
-                    .setThumbnail(error.thumbnail)
-                    .setAuthor(error.author)
-                    .setTitle(error.title)
-                    .setDescription(locale.error_messages['link-failed'])
-                    .setColor(error.color)
-                    .setFooter({ text: error.footer.text.replace('{{requester}}', interaction.user.tag), iconURL: interaction.user.avatarURL() })
-                    .setTimestamp();
-
-                await interaction.followUp({ embeds: [embed], components: [] });
-                await message.delete();
+            if (summoner.icon.id != random) {
+                error(interaction, locale, 'link-failed');
+                return await message.delete();
             }
+            account.discord_id = interaction.user.id;
+            account.summoner = summoner;
+
+            if (db.get(account.discord_id)) db.delete(account.discord_id);
+            db.create(account.discord_id, account);
+
+            var embed = new EmbedBuilder(JSON.parse(JSON.stringify(locale.link_command.success_embed)
+                .replace('{{region}}', account.region.name)
+                .replace('{{name}}', account.summoner.name)
+                .replace('{{iconURL}}', old_icon)
+                .replace('{{requester}}', interaction.user.tag)
+                .replace('{{requester_icon}}', interaction.user.avatarURL())
+            )).setTimestamp();
+            await interaction.followUp({ embeds: [embed] });
+            await message.delete();
         });
 
         collector.on('end', async (collected) => {
-            if (collected.size > 0) return;
-            var error = locale.error_embed;
-            var embed = new EmbedBuilder()
-                .setThumbnail(error.thumbnail)
-                .setAuthor(error.author)
-                .setTitle(error.title)
-                .setDescription(locale.error_messages['link-timeout'])
-                .setColor(error.color)
-                .setFooter({ text: error.footer.text.replace('{{requester}}', interaction.user.tag), iconURL: interaction.user.avatarURL() })
-                .setTimestamp();
-
-            await interaction.followUp({ embeds: [embed], components: [] });
-            await message.delete();
+            if (collected.size == 0) {
+                error(interaction, locale, 'link-timeout');
+                return await message.delete();
+            }
         });
     }
 }

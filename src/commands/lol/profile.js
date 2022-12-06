@@ -43,50 +43,11 @@ module.exports = {
     async execute(interaction) {
         var lang = servers.get(interaction.guild.id).language;
         var locale = require(`../../locales/${lang}.json`);
+
         var identifiers = await get_user(interaction);
+        if (typeof identifiers == 'string') return error(interaction, locale, identifiers);
 
-        if (identifiers == null) {
-            if (interaction.options.getUser('mención') || interaction.options.getUser('mention')) {
-                var localized_error = locale.error_messages['no-linked-member'];
-                var localized_embed = locale.error_embed;
-                var embed = new EmbedBuilder()
-                    .setThumbnail(localized_embed.thumbnail)
-                    .setAuthor(localized_embed.author)
-                    .setTitle(localized_embed.title)
-                    .setDescription(localized_error)
-                    .setColor(localized_embed.color)
-                    .setFooter({ text: localized_embed.footer.text.replace('{{requester}}', interaction.user.tag), iconURL: interaction.user.avatarURL() })
-                    .setTimestamp();
-                return interaction.followUp({ embeds: [embed] });
-            } else {
-                var localized_error = locale.error_messages['no-linked-account'];
-                var localized_embed = locale.error_embed;
-                var embed = new EmbedBuilder()
-                    .setThumbnail(localized_embed.thumbnail)
-                    .setAuthor(localized_embed.author)
-                    .setTitle(localized_embed.title)
-                    .setDescription(localized_error)
-                    .setColor(localized_embed.color)
-                    .setFooter({ text: localized_embed.footer.text.replace('{{requester}}', interaction.user.tag), iconURL: interaction.user.avatarURL() })
-                    .setTimestamp();
-                return interaction.followUp({ embeds: [embed] });
-            }
-        }
-
-        const profile = await new Profile().init(identifiers.region, identifiers.id);
-        if (!profile.summoner_data.identifiers.s_id) {
-            var localized_error = locale.error_messages['profile-not-found'];
-            var localized_embed = locale.error_embed;
-            var embed = new EmbedBuilder()
-                .setThumbnail(localized_embed.thumbnail)
-                .setAuthor(localized_embed.author)
-                .setTitle(localized_embed.title)
-                .setDescription(localized_error)
-                .setColor(localized_embed.color)
-                .setFooter({ text: localized_embed.footer.text.replace('{{requester}}', interaction.user.tag), iconURL: interaction.user.avatarURL() })
-                .setTimestamp();
-            return interaction.followUp({ embeds: [embed] });
-        }
+        const profile = await new Profile().init(identifiers.region.id, identifiers.puuid);
         var localized_data = locale.profile_command;
 
         var m_text = '';

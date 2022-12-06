@@ -10,7 +10,7 @@ const servers = new MeowDB({
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
-        .setName('status').setNameLocalization('es-ES', 'estado')
+        .setName('status')
         .setDescription('Shows the status of the specified League of Legends region')
         .setDescriptionLocalization('es-ES', 'Muestra el estado de la región de League of Legends especificada')
         .addStringOption(option => option
@@ -51,24 +51,15 @@ module.exports = {
     
             var maintenances = data.maintenances;
             var incidents = data.incidents;
-    
-            var localized_data = locale.status_command;
-            var embed = new EmbedBuilder()
-                .setAuthor({
-                    name: localized_data.embed.author.name.replace('{{region}}', region.name),
-                    iconURL: localized_data.embed.author.iconURL,
-                })
-                .setTitle(localized_data.embed.title)
-                .setDescription(localized_data.embed.description.replace('{{count}}', maintenances.length).replace('{{count}}', incidents.length))
-                .setThumbnail(localized_data.embed.thumbnail)
-                .setColor(localized_data.embed.color)
-                .setFooter({
-                    text: localized_data.embed.footer.text
-                        .replace('{{requester}}', interaction.user.tag),
-                    iconURL: interaction.user.avatarURL(),
-                })
-                .setTimestamp();
 
+            var embed = new EmbedBuilder(JSON.parse(JSON.stringify(locale.status_command.embed)
+                .replace('{{region}}', region.name)
+                .replace('{{count}}', maintenances.length)
+                .replace('{{count}}', incidents.length)
+                .replace('{{requester}}', interaction.user.tag)
+                .replace('{{requester_icon}}', interaction.user.avatarURL())
+            )).setTimestamp();
+    
             for (var i = 0; i < maintenances.length; i++) {
                 var entry = maintenances[i];
                 for (var j = 0; j < entry.updates.length; j++) {
@@ -79,7 +70,7 @@ module.exports = {
                 var translated_title = entry.titles.find(t => t.locale == lang.replace('-', '_'));
     
                 embed.addFields({
-                    name: localized_data.maintenance.name.replace('{{name}}', translated_title.content),
+                    name: locale.status_command.maintenance.name.replace('{{name}}', translated_title.content),
                     value: translated_update.content
                 });
             }
@@ -95,7 +86,7 @@ module.exports = {
                 var translated_title = entry.titles.find(t => t.locale == lang.replace('-', '_'));
     
                 embed.addFields({
-                    name: localized_data.incident.name.replace('{{name}}', translated_title.content),
+                    name: locale.status_command.incident.name.replace('{{name}}', translated_title.content),
                     value: translated_update.content
                 });
             }

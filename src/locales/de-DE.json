@@ -13,6 +13,7 @@
     "no-masteries": "Der gesuchte Spieler hat keine Meisterschaftsseiten.",
     "no-voice-channel": "Du musst dafür in einem Voicechannel sein.",
     "no-connection": "Mit keinem Sprachkanal verbunden.",
+    "empty-queue": "Die Warteschlange ist leer.",
     "shuffle-error": "In der Warteschlange befinden sich nicht genug Songs für die Shuffle Funktion.",
     "already-paused": "Die Musik ist bereits pausiert.",
     "already-resumed": "Die Musik läuft bereits.",
@@ -35,7 +36,7 @@
     "CHALLENGER": "Herausforderer"
   },
   "error_embed": {
-    "color": "#5d779d",
+    "color": 6125469,
     "author": {
       "name": "Etwas ist schief gelaufen...",
       "iconURL": "https://i.imgur.com/hGG9kLU.png"
@@ -88,10 +89,10 @@
   },
   "build_command": {
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Empfohlene Gegenstände für {{champion}} - {{lane}}",
-        "iconURL": "{{iconURL}}"
+        "iconURL": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/{{champion}}.png"
       },
       "title": "Das habe ich gefunden:",
       "image": {
@@ -105,7 +106,7 @@
   },
   "runes_command": {
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Empfohlene Items für {{champion}} - {{lane}}",
         "iconURL": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/{{champion}}.png"
@@ -123,7 +124,7 @@
   "history_command": {
     "champion_error": "Champion wurde nicht gefunden.",
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Die letzten 10 Spiele von {{name}} · {{winrate}}% WR",
         "iconURL": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/{{champion}}.png"
@@ -143,14 +144,13 @@
   },
   "link_command": {
     "instructions_embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "{{region}} · {{name}}",
         "iconURL": "{{iconURL}}"
       },
       "title": "Kontoverknüpfung - Folgende Schritte durchführen:",
       "description": "Um dein League of Legends Account zu verknüpfen, musst du dein Profilbild im Spiel ändern. Dafür hast du 5 Minuten Zeit.",
-      "thumbnail": "{{requiered_icon}}",
       "footer": {
         "text": "Ausgeführt von {{requester}}",
         "iconURL": "{{requester_icon}}"
@@ -158,14 +158,16 @@
     },
     "button": "Ich habe mein Symbol geändert!",
     "success_embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "{{region}} · {{name}}",
         "iconURL": "{{iconURL}}"
       },
       "title": "Kontoverkenüpfung",
       "description": "Du hast dein League of Legends Konto erfolgreich verknüpft. Du kannst nun die Befehle verwenden. {{prefix}}.",
-      "thumbnail": "https://i.imgur.com/K7uO7Eh.png",
+      "thumbnail": {
+        "url": "https://i.imgur.com/K7uO7Eh.png"
+      },
       "footer": {
         "text": "Ausgeführt von {{requester}}",
         "iconURL": "{{requester_icon}}"
@@ -174,7 +176,7 @@
   },
   "live_command": {
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Live Spiel von [{{region}}] {{name}}",
         "iconURL": "{{iconURL}}"
@@ -204,35 +206,30 @@
       "mastered": "Masteries",
       "footer": "**Champions:** {{champions}} · **Level:** {{levels}} · **Meisterschaftspunkte:** {{points}} · **Kisten:** {{chests}}/{{champions}}"
     },
+    "fields": [
+      {
+        "name": "Champion",
+        "value": "{{champion_data}}",
+        "inline": true
+      },
+      {
+        "name": "Letztes Spiel",
+        "value": "{{last_played}}",
+        "inline": true
+      },
+      {
+        "name": "Meisterschaftspunkte",
+        "value": "{{chests_tokens}}",
+        "inline": true
+      }
+    ],
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Meisterschaften von {{name}}",
         "iconURL": "{{iconURL}}"
       },
       "title": "Gefundene Informationen:",
-      "fields": [
-        {
-          "name": "Champion",
-          "value": "{{champion_data}}",
-          "inline": true
-        },
-        {
-          "name": "Letztes Spiel",
-          "value": "{{last_played}}",
-          "inline": true
-        },
-        {
-          "name": "Meisterschaftspunkte",
-          "value": "{{chests_tokens}}",
-          "inline": true
-        },
-        {
-          "name": "​",
-          "value": "{{footer}}",
-          "inline": false
-        }
-      ],
       "footer": {
         "text": "Ausgeführt von {{requester}}",
         "iconURL": "{{requester_icon}}"
@@ -240,12 +237,14 @@
     }
   },
   "patch_command": {
-    "color": "#5d779d",
+    "color": 6125469,
     "author": {
       "name": "Patch Informationen {{version}}",
       "iconURL": "https://i.imgur.com/hGG9kLU.png"
     },
-    "thumbnail": "https://i.imgur.com/VhYn8km.png",
+    "thumbnail": {
+      "url": "https://i.imgur.com/VhYn8km.png"
+    },
     "title": "Aktuelle Patchnotes:",
     "description": "[🔗 Patchnotes]({{patch_notes}})",
     "footer": {
@@ -264,7 +263,7 @@
       "unclasified": "N/A"
     },
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "[{{region}}] {{name}} {{discord}}",
         "iconURL": "{{iconURL}}"
@@ -315,37 +314,30 @@
   },
   "rotation_command": {
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Wöchentliche Rotation {{date}}",
         "iconURL": "https://i.imgur.com/hGG9kLU.png"
       },
       "description": "Hier sind die kostenlosen Champions für diese Woche:",
-      "thumbnail": "https://i.imgur.com/wYXRu2i.png",
+      "thumbnail": {
+        "url": "https://i.imgur.com/wYXRu2i.png"
+      },
       "footer": {
         "text": "Ausgeführt von {{requester}}",
         "iconURL": "{{requester_icon}}"
-      },
-      "fields": [
-        {
-          "name": "​",
-          "value": "{{champions}}",
-          "inline": true
-        },
-        {
-          "name": "​",
-          "value": "{{champions2}}",
-          "inline": true
-        }
-      ]
+      }
     }
   },
   "status_command": {
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Server Status {{region}}",
         "iconURL": "https://i.imgur.com/hGG9kLU.png"
+      },
+      "thumbnail": {
+        "url": "https://i.imgur.com/BQUpB5n.png"
       },
       "title": "Aktuelle Probleme:",
       "description": "Aktuell gibt es {{count}} Wartungen und {{count2}} bekannte Probleme.",
@@ -367,18 +359,192 @@
   },
   "unlink_command": {
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Alles bereit!",
         "iconURL": "https://i.imgur.com/hGG9kLU.png"
       },
-      "thumbnail": "https://i.imgur.com/BQUpB5n.png",
+      "thumbnail": {
+        "url": "https://i.imgur.com/BQUpB5n.png"
+      },
       "title": "Kontoverknüpfung wurde aufgehoben",
       "description": "Du kannst deinen Account nun neu verknüpfen.",
       "footer": {
         "text": "Ausgeführt von {{requester}}",
         "iconURL": "{{requester_icon}}"
       }
+    }
+  },
+  "language_command": {
+    "embed": {
+        "color": 6125469,
+        "author": {
+            "name": "Alles erledigt!",
+            "iconURL": "https://i.imgur.com/hGG9kLU.png"
+        },
+        "thumbnail": "https://i.imgur.com/BQUpB5n.png",
+        "title": "Die Sprache vom Server wurde auf Deutsch umgestellt.",
+        "description": "Du kannst die Sprache vom Server mit dem Befehl /language anpassen.",
+        "footer": {
+            "text": "Angefragt von {{requester}}",
+            "iconURL": "{{requester_icon}}"
+        }
+    }
+  },
+  "help_command": {
+    "embed": {
+        "color": 6125469,
+        "author": {
+            "name": "Befehlsübersicht",
+            "iconURL": "https://i.imgur.com/hGG9kLU.png"
+        },
+        "description": "Hey, ich bin Kindred. Folgende Befehle kannst du mit mir verwenden:",
+        "footer": {
+            "text": "Ausgeführt von {{requester}}",
+            "iconURL": "{{requester_icon}}"
+        }
+    },
+    "categories": {
+        "no-category": {
+            "fields": [
+                {
+                    "name": "/help [kategorie]",
+                    "value": "Zeigt die Liste der Befehle für eine Kategorie an.",
+                    "inline": false
+                },
+                {
+                    "name": "/language [Sprache]",
+                    "value": "Ändert die Sprache der Bot Nachrichten.",
+                    "inline": false
+                }
+            ]
+        },
+        "league": {
+            "fields": [
+                {
+                    "name": "/lol build [champion] [rolle]",
+                    "value": "Zeigt den empfohlenen Build für einen Champion an.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol history [@erwähnen] || [region] [spieler]",
+                    "value": "Zeigt die letzten 10 Spiele des ausgewählten Spielers.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol link [region] [spieler]",
+                    "value": "Verknüpft dein League of Legends Account mit dem Bot.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol live [@erwähnen] || [region] [spieler]",
+                    "value": "Zeigt Live Informationen über den angegebenen Spieler.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol masteries [@erwähnen] || [region] [spieler]",
+                    "value": "Zeigt die Meisterschaften des ausgewählten Spielers an.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol patch",
+                    "value": "Zeigt aktuelle Patch Informationen.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol profile [@erwähnen] || [region] [spieler]",
+                    "value": "Zeigt Informationen über den angegebenen Spieler an.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol rotation",
+                    "value": "Zeigt die aktuell kostenlose Champion Rotation an.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol runes [champion] [rolle]",
+                    "value": "Zeigt die empfohlenen Runen für einen Champion an.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol state [region]",
+                    "value": "Zeigt den Status einer League of Legends Region an.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol unlink",
+                    "value": "Entfernt die Verlinkung zum League of Legends Account.",
+                    "inline": false
+                }
+            ]
+        },
+        "music": {
+            "fields": [
+                {
+                    "name": "/play [titel]",
+                    "value": "Spielt das ausgewählte Lied ab.",
+                    "inline": false
+                },
+                {
+                    "name": "/skip",
+                    "value": "Zum nächsten Song in der Liste springen.",
+                    "inline": false
+                },
+                {
+                    "name": "/stop",
+                    "value": "Stoppt den Musikbot.",
+                    "inline": false
+                },
+                {
+                    "name": "/queue",
+                    "value": "Zeigt die aktuelle Wiedergabeliste an.",
+                    "inline": false
+                },
+                {
+                    "name": "/pause",
+                    "value": "Pausiert das aktuelle Lied.",
+                    "inline": false
+                },
+                {
+                    "name": "/resume",
+                    "value": "Spielt das aktuelle Lied weiter.",
+                    "inline": false
+                },
+                {
+                    "name": "/shuffle",
+                    "value": "Spielt die Lieder der Wiedergabeliste zufällig ab.",
+                    "inline": false
+                },
+                {
+                    "name": "/remove [titel]",
+                    "value": "Entfernt ein Lied aus der Wiedergabeliste.",
+                    "inline": false
+                },
+                {
+                    "name": "/loop",
+                    "value": "Spielt das aktuelle Lied in einer Dauerschleife.",
+                    "inline": false
+                }
+            ]
+        }
+    }
+  },
+  "tournament_results": {
+    "embed": {
+      "color": 6125469,
+      "author": {
+        "name": "Das Spiel ist vorbei!",
+        "iconURL": "https://i.imgur.com/hGG9kLU.png"
+      },
+      "description": "Karte: {{map}} · {{date}}",
+      "footer": {
+        "text": "Füge mich zu deinem Server hinzu: mendozaax.es/kindred"
+      }
+    },
+    "fields": {
+      "name": "{{team}} {{name}} · KDA: {{kills}}/{{deaths}}/{{assists}} · {{cs_emote}} {{cs}} ({{cspm}}CS/min)",
+      "value": "{{emote}} {{champion}} · {{spell1}} {{spell2}} · {{trinket}} {{item1}} {{item2}} {{item3}} {{item4}} {{item5}} {{item6}}",
+      "inline": false
     }
   }
 }

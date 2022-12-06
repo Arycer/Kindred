@@ -13,6 +13,7 @@
     "no-masteries": "The player does not have any masteries.",
     "no-voice-channel": "You must be in a voice channel to use this command!",
     "no-connection": "I'm not connected to any voice channel!",
+    "empty-queue": "The queue is empty.",
     "shuffle-error": "Not enough songs in queue to shuffle.",
     "already-paused": "The song is already paused!",
     "already-resumed": "The song is not currently paused.",
@@ -35,7 +36,7 @@
     "CHALLENGER": "Challenger"
   },
   "error_embed": {
-    "color": "#5d779d",
+    "color": 6125469,
     "author": {
       "name": "Something went wrong!",
       "iconURL": "https://i.imgur.com/hGG9kLU.png"
@@ -88,7 +89,7 @@
   },
   "build_command": {
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Recommended items for {{champion}} - {{lane}}",
         "iconURL": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/{{champion}}.png"
@@ -104,7 +105,7 @@
   },
   "runes_command": {
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Recommended runes for {{champion}} - {{lane}}",
         "iconURL": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/{{champion}}.png"
@@ -121,7 +122,7 @@
   "history_command": {
     "champion_error": "Champion not found",
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "{{name}}'s last 10 games · {{winrate}}% WR",
         "iconURL": "{{iconURL}}"
@@ -141,14 +142,13 @@
   },
   "link_command": {
     "instructions_embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "{{region}} · {{name}}",
         "iconURL": "{{iconURL}}"
       },
       "title": "Linking account! This is what you have to do:",
       "description": "To verify your account, you must change your League of Legends icon to the one shown in this message. Next, press the following button. You must do this within 5 minutes.",
-      "thumbnail": "{{requiered_icon}}",
       "footer": {
         "text": "Requested by {{requester}}",
         "iconURL": "{{requester_icon}}"
@@ -156,14 +156,16 @@
     },
     "button": "I changed my icon!",
     "success_embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "{{region}} · {{name}}",
         "iconURL": "{{iconURL}}"
       },
       "title": "Account linked!",
       "description": "Your League of Legends account has been successfully linked.",
-      "thumbnail": "https://i.imgur.com/K7uO7Eh.png",
+      "thumbnail": {
+        "url": "https://i.imgur.com/K7uO7Eh.png"
+      },
       "footer": {
         "text": "Requested by {{requester}}",
         "iconURL": "{{requester_icon}}"
@@ -172,7 +174,7 @@
   },
   "live_command": {
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Live [{{region}}] game {{name}}",
         "iconURL": "{{iconURL}}"
@@ -202,35 +204,31 @@
       "mastered": "Mastered",
       "footer": "**Champions:** {{champions}} · **Levels:** {{levels}} · **Mastery points:** {{points}} · **Chests:** {{chests}}/{{champions}}"
     },
+    "fields": [
+      {
+        "name": "Champions",
+        "value": "{{champion_data}}",
+        "inline": true
+      },
+      {
+        "name": "Last played",
+        "value": "{{last_played}}",
+        "inline": true
+      },
+      {
+        "name": "Mastery",
+        "value": "{{chests_tokens}}",
+        "inline": true
+      }
+    ],
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "{{name}}'s masteries",
         "iconURL": "{{iconURL}}"
       },
       "title": "This is what I found:",
-      "fields": [
-        {
-          "name": "Champions",
-          "value": "{{champion_data}}",
-          "inline": true
-        },
-        {
-          "name": "Last played",
-          "value": "{{last_played}}",
-          "inline": true
-        },
-        {
-          "name": "Mastery",
-          "value": "{{chests_tokens}}",
-          "inline": true
-        },
-        {
-          "name": "​",
-          "value": "{{footer}}",
-          "inline": false
-        }
-      ],
+
       "footer": {
         "text": "Requested by {{requester}}",
         "iconURL": "{{requester_icon}}"
@@ -238,12 +236,14 @@
     }
   },
   "patch_command": {
-    "color": "#5d779d",
+    "color": 6125469,
     "author": {
       "name": "Version {{version}}",
       "iconURL": "https://i.imgur.com/hGG9kLU.png"
     },
-    "thumbnail": "https://i.imgur.com/VhYn8km.png",
+    "thumbnail": {
+      "url": "https://i.imgur.com/VhYn8km.png"
+    },
     "title": "These are the current patch notes:",
     "description": "[🔗 Patch notes]({{patch_notes}})",
     "footer": {
@@ -262,7 +262,7 @@
       "unclasified": "Unranked."
     },
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "[{{region}}] {{name}} {{discord}}",
         "iconURL": "{{iconURL}}"
@@ -313,39 +313,31 @@
   },
   "rotation_command": {
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Weekly rotation as of {{date}}",
         "description": "These are the free champions of this week:",
         "iconURL": "https://i.imgur.com/hGG9kLU.png"
       },
-      "thumbnail": "https://i.imgur.com/wYXRu2i.png",
+      "thumbnail": {
+        "url": "https://i.imgur.com/wYXRu2i.png"
+      },
       "footer": {
         "text": "Requested by {{requester}}",
         "iconURL": "{{requester_icon}}"
-      },
-      "fields": [
-        {
-          "name": "​",
-          "value": "{{champions}}",
-          "inline": true
-        },
-        {
-          "name": "​",
-          "value": "{{champions2}}",
-          "inline": true
-        }
-      ]
+      }
     }
   },
   "status_command": {
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "{{region}} server status",
         "iconURL": "https://i.imgur.com/hGG9kLU.png"
       },
-      "thumbnail": "https://i.imgur.com/BQUpB5n.png",
+      "thumbnail": {
+        "url": "https://i.imgur.com/BQUpB5n.png"
+      },
       "title": "Current incidents:",
       "description": "There are {{count}} maintenances and {{count2}} incidents en este momento.",
       "footer": {
@@ -366,18 +358,192 @@
   },
   "unlink_command": {
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "All done!",
         "iconURL": "https://i.imgur.com/hGG9kLU.png"
       },
-      "thumbnail": "https://i.imgur.com/BQUpB5n.png",
+      "thumbnail": {
+        "url": "https://i.imgur.com/BQUpB5n.png"
+      },
       "title": "Your account has been successfully unlinked.",
       "description": "You can relink your account by using the /lol link command.",
       "footer": {
         "text": "Requested by {{requester}}",
         "iconURL": "{{requester_icon}}"
       }
+    }
+  },
+  "language_command": {
+    "embed": {
+        "color": 6125469,
+        "author": {
+            "name": "All done!",
+            "iconURL": "https://i.imgur.com/hGG9kLU.png"
+        },
+        "thumbnail": "https://i.imgur.com/BQUpB5n.png",
+        "title": "The server language has been set to English.",
+        "description": "You can modify the server language with the command /language.",
+        "footer": {
+            "text": "Requested by {{requester}}",
+            "iconURL": "{{requester_icon}}"
+        }
+    }
+  },
+  "help_command": {
+    "embed": {
+        "color": 6125469,
+        "author": {
+            "name": "Command list",
+            "iconURL": "https://i.imgur.com/hGG9kLU.png"
+        },
+        "description": "Hi! I'm Kindred, a bot that will help you to get information about League of Legends. You can use the following commands:",
+        "footer": {
+            "text": "Requested by {{requester}}",
+            "iconURL": "{{requester_icon}}"
+        }
+    },
+    "categories": {
+        "no-category": {
+            "fields": [
+                {
+                    "name": "/help [category]",
+                    "value": "Shows the list of commands of a category.",
+                    "inline": false
+                },
+                {
+                    "name": "/idioma [idioma]",
+                    "value": "Changes the bot's server language.",
+                    "inline": false
+                }
+            ]
+        },
+        "league": {
+            "fields": [
+                {
+                    "name": "/lol build [champion] [role]",
+                    "value": "Shows the most popular build for a champion in a given role.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol history [@mention] || [region] [player]",
+                    "value": "Shows the last 10 games of a player.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol link [region] [player]",
+                    "value": "Links your Discord account with your League of Legends account.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol live [@mention] || [region] [player]",
+                    "value": "Shows the current game of a player.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol masteries [@mention] || [region] [player]",
+                    "value": "Shows the masteries of a player.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol patch",
+                    "value": "Shows the current patch notes.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol profile [@mention] || [region] [player]",
+                    "value": "Shows the profile of a player.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol rotation",
+                    "value": "Shows the free champions of the week.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol runes [champion] [role]",
+                    "value": "Shows the most popular runes for a champion in a given role.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol status [región]",
+                    "value": "Shows the current status of the servers.",
+                    "inline": false
+                },
+                {
+                    "name": "/lol unlink",
+                    "value": "Unlinks your Discord account from your League of Legends account.",
+                    "inline": false
+                }
+            ]
+        },
+        "music": {
+            "fields": [
+                {
+                    "name": "/play [song]",
+                    "value": "Plays a song from YouTube.",
+                    "inline": false
+                },
+                {
+                    "name": "/skip",
+                    "value": "Skips the current song.",
+                    "inline": false
+                },
+                {
+                    "name": "/stop",
+                    "value": "Stops the music and leaves the voice channel.",
+                    "inline": false
+                },
+                {
+                    "name": "/queue",
+                    "value": "Shows the current queue.",
+                    "inline": false
+                },
+                {
+                    "name": "/pause",
+                    "value": "Pauses the current song.",
+                    "inline": false
+                },
+                {
+                    "name": "/resume",
+                    "value": "Resumes the current song.",
+                    "inline": false
+                },
+                {
+                    "name": "/shuffle",
+                    "value": "Shuffles the current queue.",
+                    "inline": false
+                },
+                {
+                    "name": "/remove [número]",
+                    "value": "Removes a song from the queue.",
+                    "inline": false
+                },
+                {
+                    "name": "/loop",
+                    "value": "Loops the current song.",
+                    "inline": false
+                }
+            ]
+        }
+    }
+  },
+  "tournament_results": {
+    "embed": {
+      "color": 6125469,
+      "author": {
+        "name": "The game has ended!",
+        "iconURL": "https://i.imgur.com/hGG9kLU.png"
+      },
+      "description": "Map: {{map}} · {{date}}",
+      "footer": {
+        "text": "Add me to your server: mendozaax.es/kindred"
+      }
+    },
+    "fields": {
+      "name": "{{team}} {{name}} · KDA: {{kills}}/{{deaths}}/{{assists}} · {{cs_emote}} {{cs}} ({{cspm}}CS/min)",
+      "value": "{{emote}} {{champion}} · {{spell1}} {{spell2}} · {{trinket}} {{item1}} {{item2}} {{item3}} {{item4}} {{item5}} {{item6}}",
+      "inline": false
     }
   }
 }

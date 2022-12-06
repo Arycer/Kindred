@@ -27,24 +27,15 @@ module.exports = {
     
         var response = await axios.get(endpoint, opts)
             .then(async (response) => {
+                var embed = new EmbedBuilder(JSON.parse(JSON.stringify(locale.rotation_command.embed)
+                    .replace('{{date}}', new Date().toLocaleDateString(lang))
+                    .replace('{{requester}}', interaction.user.tag)
+                    .replace('{{requester_icon}}', interaction.user.avatarURL())
+                )).setTimestamp();
+
                 var data = response.data;
                 var free_champions = data.freeChampionIds;
-                var localized_data = locale.rotation_command;
 
-                var embed = new EmbedBuilder()
-                    .setAuthor({
-                        name: localized_data.embed.author.name.replace('{{date}}', new Date().toLocaleDateString(lang)),
-                        iconURL: localized_data.embed.author.iconURL,
-                    })
-                    .setDescription(localized_data.embed.description)
-                    .setThumbnail(localized_data.embed.thumbnail)
-                    .setColor(localized_data.embed.color)
-                    .setFooter({
-                        text: localized_data.embed.footer.text.replace('{{requester}}', interaction.user.tag),
-                        iconURL: interaction.user.avatarURL()
-                    })
-                    .setTimestamp();
-    
                 var half = Math.ceil(free_champions.length / 2);
                 var first_half = free_champions.slice(0, half);
                 var second_half = free_champions.slice(half, free_champions.length);

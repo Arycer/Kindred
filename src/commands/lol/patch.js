@@ -21,23 +21,12 @@ module.exports = {
     
         var notes = `https://www.leagueoflegends.com/${lang.toLowerCase()}/news/game-updates/patch-${patch}-notes/`;
 
-        var localized_data = locale.patch_command;
-        var embed = new EmbedBuilder()
-            .setAuthor({
-                name: localized_data.author.name
-                    .replace('{{version}}', version.data[0]),
-                iconURL: localized_data.author.iconURL,
-            })
-            .setTitle(localized_data.title)
-            .setDescription(localized_data.description.replace('{{patch_notes}}', notes))
-            .setThumbnail(localized_data.thumbnail)
-            .setColor(localized_data.color)
-            .setFooter({
-                text: localized_data.footer.text
-                    .replace('{{requester}}', interaction.user.tag),
-                iconURL: interaction.user.avatarURL()
-            })
-            .setTimestamp();
-        return await interaction.followUp({ embeds: [embed] });
+        var embed = new EmbedBuilder(JSON.parse(JSON.stringify(locale.patch_command)
+            .replace('{{version}}', version.data[0])
+            .replace('{{patch_notes}}', notes)
+            .replace('{{requester}}', interaction.user.tag)
+            .replace('{{requester_icon}}', interaction.user.avatarURL())
+        )).setTimestamp();
+        return interaction.followUp({ embeds: [embed] });
     }
 }

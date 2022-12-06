@@ -1,5 +1,6 @@
 const { SlashCommandSubcommandBuilder, EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const Champion = require('../../util/league/classes/champion');
+const error = require('../../util/error');
 const MeowDB = require('meowdb');
 
 const servers = new MeowDB({
@@ -11,15 +12,25 @@ module.exports = {
     data: new SlashCommandSubcommandBuilder()
         .setName('build')
         .setDescription('Shows the build of a champion')
-        .setDescriptionLocalization('es-ES', 'Muestra la build de un campeón')
+        .setDescriptionLocalizations({
+            'es-ES': 'Muestra la build de un campeón',
+        })
         .addStringOption(option => option
-            .setName('champion').setNameLocalization('es-ES', 'campeón')
-            .setDescription('Champion name').setDescriptionLocalization('es-ES', 'Nombre del campeón')
+            .setName('champion').setNameLocalizations({
+                'es-ES': 'campeón',
+            })
+            .setDescription('Champion name').setDescriptionLocalizations({
+                'es-ES': 'Nombre del campeón',
+            })
             .setRequired(true)
         )
         .addStringOption(option => option
-            .setName('position').setNameLocalization('es-ES', 'posición')
-            .setDescription('Position of the champion').setDescriptionLocalization('es-ES', 'Posición del campeón')
+            .setName('position').setNameLocalizations({
+                'es-ES': 'posición',
+            })
+            .setDescription('Position of the champion').setDescriptionLocalizations({
+                'es-ES': 'Posición del campeón',
+            })
             .setRequired(true)
             .addChoices(
                 { name: 'Top', value: 'top' },
@@ -37,25 +48,7 @@ module.exports = {
         var position = interaction.options.getString('position') || interaction.options.getString('posición');
     
         var champ = await new Champion().get_champion(champion);
-    
-        if (!champ) {
-            var localized_error = locale.error_messages['champ-not-found'];
-            var localized_embed = locale.error_embed;
-            
-            var embed = new EmbedBuilder()
-                .setThumbnail(localized_embed.thumbnail)
-                .setAuthor(localized_embed.author)
-                .setTitle(localized_embed.title)
-                .setDescription(localized_error)
-                .setColor(localized_embed.color)
-                .setFooter({
-                    text: localized_embed.footer.text
-                        .replace('{{requester}}', interaction.user.tag),
-                    iconURL: interaction.user.avatarURL()
-                })
-                .setTimestamp();
-            return await interaction.followUp({ embeds: [embed] });
-        }
+        if (!champ) return error(interaction, locale, 'champ-not-found');
     
         var { captureAll } = require('capture-all');
         var { join } = require('path');
@@ -77,50 +70,22 @@ module.exports = {
                 var filename = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + '.png';
                 fs.writeFileSync(join(__dirname, filename), result.image);
                 var attachment = new AttachmentBuilder(join(__dirname, filename));
-                var localized_data = locale.build_command;
-                var embed = new EmbedBuilder()
-                    .setAuthor({
-                        name: localized_data.embed.author.name
-                            .replace('{{champion}}', champ.name)
-                            .replace('{{lane}}', locale.lanes[position]),
-                        iconURL: localized_data.embed.author.iconURL
-                            .replace('{{champion}}', champ.id)
-                    })
-                    .setTitle(localized_data.embed.title)
-                    .setColor(localized_data.embed.color)
-                    .setImage(`attachment://${filename}`)
-                    .setFooter({
-                        text: localized_data.embed.footer.text
-                            .replace('{{requester}}', interaction.user.tag),
-                        iconURL: interaction.user.avatarURL()
-                    })
-                    .setTimestamp();
+                var embed = new EmbedBuilder(JSON.parse(JSON.stringify(locale.build_command.embed)
+                    .replace('{{champion}}', champ.name)
+                    .replace('{{lane}}', locale.lanes[position])
+                    .replace('{{champion}}', champ.id)
+                    .replace('{{requester}}', interaction.user.tag)
+                    .replace('{{requester_icon}}', interaction.user.avatarURL())
+                )).setImage(`attachment://${filename}`).setTimestamp();
                 await interaction.followUp({ embeds: [embed], files: [attachment] });
-                replied = true;
                 fs.unlinkSync(join(__dirname, filename));
-                return;
+                return replied = true;
             });
         });
 
         setTimeout(() => {
-            if (!replied) {
-                var localized_error = locale.error_messages['build-not-found'];
-                var localized_embed = locale.error_embed;
-
-                var embed = new EmbedBuilder()
-                    .setThumbnail(localized_embed.thumbnail)
-                    .setAuthor(localized_embed.author)
-                    .setTitle(localized_embed.title)
-                    .setDescription(localized_error)
-                    .setColor(localized_embed.color)
-                    .setFooter({
-                        text: localized_embed.footer.text
-                            .replace('{{requester}}', interaction.user.tag),
-                        iconURL: interaction.user.avatarURL()
-                    })
-                    .setTimestamp();
-                return interaction.followUp({ embeds: [embed] });
-            }
-        }, 10000);
+            if (replied) return;
+            error(interaction, locale, 'build-not-found');
+        }, 15000);
     }
-}
+};

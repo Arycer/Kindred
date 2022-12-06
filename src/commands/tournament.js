@@ -1,4 +1,5 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, TimestampStyles, time, Embed } = require('discord.js');
+const get_emote = require('../util/league/functions/get_emote');
 const error = require('../util/error.js');
 const { join } = require('node:path');
 const MeowDB = require('meowdb');
@@ -95,13 +96,87 @@ const server = http.createServer(async (req, res) => {
 
         try {
             await game.init(match);
-            const post_channel = client.channels.cache.get(game.channel);
+            var locale = require(`../locales/${game.lang}.json`);
+            var localized_data = locale.tournament_results;
+            var cs_emote = get_emote('cs');
 
-            var lang = game.lang;
-            var embed_creator = require(`./etc/${lang}/make-tournament-embed.js`);
+            var embed = new EmbedBuilder()
+                .setAuthor(localized_data.embed.author)
+                .setTitle(game.title)
+                .setDescription(
+                    localized_data.embed.description
+                        .replace('{{map}}', locale.maps[game.map])
+                        .replace('{{date}}', time(new Date(game.timestamp), TimestampStyles.ShortDateTime))
+                    )
+                .setFooter({ text: localized_data.embed.footer.text })
+                .setColor(localized_data.embed.color)
+                .setTimestamp();
 
-            var embed = await embed_creator(game);
-            return await post_channel.send({ embeds: [embed] });
+            for (var i = 0; i < game.participants.winningTeam.length; i++) {
+                var player = game.participants.winningTeam[i];
+                var summoner = player.summoner;
+                var match = player.match;
+                var champ = match.champion;
+
+                embed.addFields({
+                    name: localized_data.fields.name
+                        .replace('{{team}}', '🔵')
+                        .replace('{{name}}', summoner.name)
+                        .replace('{{kills}}', match.stats.kills)
+                        .replace('{{deaths}}', match.stats.deaths)
+                        .replace('{{assists}}', match.stats.assists)
+                        .replace('{{cs_emote}}', cs_emote)
+                        .replace('{{cs}}', match.stats.cs)
+                        .replace('{{cspm}}', match.stats.cspm),
+                    value: localized_data.fields.value
+                        .replace('{{emote}}', champ.emote)
+                        .replace('{{champion}}', champ.name)
+                        .replace('{{spell1}}', match.spells.spell1.emote)
+                        .replace('{{spell2}}', match.spells.spell2.emote)
+                        .replace('{{trinket}}', match.inventory.trinket.emote)
+                        .replace('{{item1}}', match.inventory.items[0].emote)
+                        .replace('{{item2}}', match.inventory.items[1].emote)
+                        .replace('{{item3}}', match.inventory.items[2].emote)
+                        .replace('{{item4}}', match.inventory.items[3].emote)
+                        .replace('{{item5}}', match.inventory.items[4].emote)
+                        .replace('{{item6}}', match.inventory.items[5].emote),
+                    inline: false
+                });
+            }
+
+            for (var i = 0; i < game.participants.losingTeam.length; i++) {
+                var player = game.participants.losingTeam[i];
+                var summoner = player.summoner;
+                var match = player.match;
+                var champ = match.champion;
+
+                embed.addFields({
+                    name: localized_data.fields.name
+                        .replace('{{team}}', '🔴')
+                        .replace('{{name}}', summoner.name)
+                        .replace('{{kills}}', match.stats.kills)
+                        .replace('{{deaths}}', match.stats.deaths)
+                        .replace('{{assists}}', match.stats.assists)
+                        .replace('{{cs_emote}}', cs_emote)
+                        .replace('{{cs}}', match.stats.cs)
+                        .replace('{{cspm}}', match.stats.cspm),
+                    value: localized_data.fields.value
+                        .replace('{{emote}}', champ.emote)
+                        .replace('{{champion}}', champ.name)
+                        .replace('{{spell1}}', match.spells.spell1.emote)
+                        .replace('{{spell2}}', match.spells.spell2.emote)
+                        .replace('{{trinket}}', match.inventory.trinket.emote)
+                        .replace('{{item1}}', match.inventory.items[0].emote)
+                        .replace('{{item2}}', match.inventory.items[1].emote)
+                        .replace('{{item3}}', match.inventory.items[2].emote)
+                        .replace('{{item4}}', match.inventory.items[3].emote)
+                        .replace('{{item5}}', match.inventory.items[4].emote)
+                        .replace('{{item6}}', match.inventory.items[5].emote),
+                    inline: false
+                });
+            }
+            var post_channel = client.channels.cache.get(game.channel);
+            post_channel.send({ embeds: [embed] });
         } catch (err) {
             console.log(err);
         }

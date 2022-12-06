@@ -25,10 +25,6 @@ class Queue {
         this.current.url = next.url;
     }
 
-    get_current() {
-        return this.current;
-    }
-
     shuffle() {
         var currentIndex = this.songs.length, temporaryValue, randomIndex;
         while (0 !== currentIndex) {
@@ -40,11 +36,6 @@ class Queue {
         }
 
         return this.songs;
-    }
-
-    remove(index) {
-        if (index < 0 || index > this.songs.length) return;
-        return this.songs.splice(index, 1)[0];
     }
 
     looped() {

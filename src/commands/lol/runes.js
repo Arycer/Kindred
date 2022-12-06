@@ -35,25 +35,7 @@ module.exports = {
         var position = interaction.options.getString('position') || interaction.options.getString('posición');
     
         var champ = await new Champion().get_champion(champion);
-    
-        if (!champ) {
-            var localized_error = locale.error_messages['champ-not-found'];
-            var localized_embed = locale.error_embed;
-            
-            var embed = new EmbedBuilder()
-                .setThumbnail(localized_embed.thumbnail)
-                .setAuthor(localized_embed.author)
-                .setTitle(localized_embed.title)
-                .setDescription(localized_error)
-                .setColor(localized_embed.color)
-                .setFooter({
-                    text: localized_embed.footer.text
-                        .replace('{{requester}}', interaction.user.tag),
-                    iconURL: interaction.user.avatarURL()
-                })
-                .setTimestamp();
-            return await interaction.followUp({ embeds: [embed] });
-        }
+        if (!champ) return error(interaction, locale, 'champ-not-found');
     
         var { captureAll } = require('capture-all');
         var { join } = require('path');
@@ -75,50 +57,22 @@ module.exports = {
                 var filename = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + '.png';
                 fs.writeFileSync(join(__dirname, filename), result.image);
                 var attachment = new AttachmentBuilder(join(__dirname, filename));
-                var localized_data = locale.runes_command;
-                var embed = new EmbedBuilder()
-                    .setAuthor({
-                        name: localized_data.embed.author.name
-                            .replace('{{champion}}', champ.name)
-                            .replace('{{lane}}', locale.lanes[position]),
-                        iconURL: localized_data.embed.author.iconURL
-                            .replace('{{champion}}', champ.id)
-                    })
-                    .setTitle(localized_data.embed.title)
-                    .setColor(localized_data.embed.color)
-                    .setImage(`attachment://${filename}`)
-                    .setFooter({
-                        text: localized_data.embed.footer.text
-                            .replace('{{requester}}', interaction.user.tag),
-                        iconURL: interaction.user.avatarURL()
-                    })
-                    .setTimestamp();
+                var embed = new EmbedBuilder(JSON.parse(JSON.stringify(locale.runes_command.embed)
+                    .replace('{{champion}}', champ.name)
+                    .replace('{{lane}}', locale.lanes[position])
+                    .replace('{{champion}}', champ.id)
+                    .replace('{{requester}}', interaction.user.tag)
+                    .replace('{{requester_icon}}', interaction.user.avatarURL())
+                )).setImage(`attachment://${filename}`).setTimestamp();
                 await interaction.followUp({ embeds: [embed], files: [attachment] });
-                replied = true;
                 fs.unlinkSync(join(__dirname, filename));
-                return;
+                return replied = true;
             });
         });
 
         setTimeout(() => {
-            if (!replied) {
-                var localized_error = locale.error_messages['runes-not-found'];
-                var localized_embed = locale.error_embed;
-
-                var embed = new EmbedBuilder()
-                    .setThumbnail(localized_embed.thumbnail)
-                    .setAuthor(localized_embed.author)
-                    .setTitle(localized_embed.title)
-                    .setDescription(localized_error)
-                    .setColor(localized_embed.color)
-                    .setFooter({
-                        text: localized_embed.footer.text
-                            .replace('{{requester}}', interaction.user.tag),
-                        iconURL: interaction.user.avatarURL()
-                    })
-                    .setTimestamp();
-                return interaction.followUp({ embeds: [embed] });
-            }
-        }, 10000);
+            if (replied) return;
+            error(interaction, locale, 'runes-not-found');
+        }, 15000);
     }
 }

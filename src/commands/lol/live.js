@@ -44,86 +44,26 @@ module.exports = {
     async execute(interaction) {
         var lang = servers.get(interaction.guild.id).language;
         var locale = require(`../../locales/${lang}.json`);
+
         var identifiers = await get_user(interaction);
-
-        if (identifiers == null) {
-            if (interaction.options.getUser('mención') || interaction.options.getUser('mention')) {
-                var localized_error = locale.error_messages['no-linked-member'];
-                var localized_embed = locale.error_embed;
-                var embed = new EmbedBuilder()
-                    .setThumbnail(localized_embed.thumbnail)
-                    .setAuthor(localized_embed.author)
-                    .setTitle(localized_embed.title)
-                    .setDescription(localized_error)
-                    .setColor(localized_embed.color)
-                    .setFooter({ text: localized_embed.footer.text.replace('{{requester}}', interaction.user.tag), iconURL: interaction.user.avatarURL() })
-                    .setTimestamp();
-                return interaction.followUp({ embeds: [embed] });
-            } else {
-                var localized_error = locale.error_messages['no-linked-account'];
-                var localized_embed = locale.error_embed;
-                var embed = new EmbedBuilder()
-                    .setThumbnail(localized_embed.thumbnail)
-                    .setAuthor(localized_embed.author)
-                    .setTitle(localized_embed.title)
-                    .setDescription(localized_error)
-                    .setColor(localized_embed.color)
-                    .setFooter({ text: localized_embed.footer.text.replace('{{requester}}', interaction.user.tag), iconURL: interaction.user.avatarURL() })
-                    .setTimestamp();
-                return interaction.followUp({ embeds: [embed] });
-            }
-        }
+        if (typeof identifiers == 'string') return error(interaction, locale, identifiers);
     
-        var region = new Region().get_region(identifiers.region);
-        var summoner = await new Summoner().get_summoner(region, identifiers.id);
-    
-        if (!summoner.identifiers.s_id) {
-            var localized_error = locale.error_messages['profile-not-found'];
-            var localized_embed = locale.error_embed;
-            var embed = new EmbedBuilder()
-                .setThumbnail(localized_embed.thumbnail)
-                .setAuthor(localized_embed.author)
-                .setTitle(localized_embed.title)
-                .setDescription(localized_error)
-                .setColor(localized_embed.color)
-                .setFooter({ text: localized_embed.footer.text.replace('{{requester}}', interaction.user.tag), iconURL: interaction.user.avatarURL() })
-                .setTimestamp();
-            return interaction.followUp({ embeds: [embed] });
-        }
-    
+        var summoner = await new Summoner().get_summoner(identifiers.region, identifiers.puuid);
+        
         var livegame = new LiveGame();
-        await livegame.get_livegame(region, summoner.identifiers.s_id);
+        await livegame.get_livegame(identifiers.region, summoner.identifiers.s_id);
     
-        if (!livegame.ingame) {
-            var localized_error = locale.error_messages['not-in-game'];
-            var localized_embed = locale.error_embed;
-            var embed = new EmbedBuilder()
-                .setThumbnail(localized_embed.thumbnail)
-                .setAuthor(localized_embed.author)
-                .setTitle(localized_embed.title)
-                .setDescription(localized_error)
-                .setColor(localized_embed.color)
-                .setFooter({ text: localized_embed.footer.text.replace('{{requester}}', interaction.user.tag), iconURL: interaction.user.avatarURL() })
-                .setTimestamp();
-            return interaction.followUp({ embeds: [embed] });
-        }
+        if (!livegame.ingame) return error(interaction, locale, 'not-in-game');
 
-        var localized_data = locale.live_command;
-        var embed = new EmbedBuilder()
-            .setAuthor({
-                name: localized_data.embed.author.name
-                    .replace('{{region}}', region.name)
-                    .replace('{{name}}', summoner.name),
-                iconURL: summoner.icon.url
-            })
-            .setTitle(localized_data.embed.title.replace('{{map}}', locale.maps[livegame.map]).replace('{{queue}}', locale.queues[livegame.queue]))
-            .setFooter({
-                text: localized_data.embed.footer.text
-                    .replace('{{requester}}', interaction.user.tag),
-                iconURL: interaction.user.avatarURL()
-            })
-            .setColor(localized_data.embed.color)
-            .setTimestamp();
+        var embed = new EmbedBuilder(JSON.parse(JSON.stringify(locale.live_command.embed)
+            .replace('{{region}}', identifiers.region.name)
+            .replace('{{name}}', summoner.name)
+            .replace('{{iconURL}}', summoner.icon.url)
+            .replace('{{map}}', locale.maps[livegame.map])
+            .replace('{{queue}}', locale.queues[livegame.queue])
+            .replace('{{requester}}', interaction.user.tag)
+            .replace('{{requester_icon}}', interaction.user.avatarURL())
+        )).setTimestamp();
 
         var blue = livegame.participants.blue;
         for (var i = 0; i < blue.length; i++) {
@@ -142,7 +82,7 @@ module.exports = {
                 var r_text = locale.ranks['unranked'];
             }
             embed.addFields({
-                name: localized_data.fields[0].name
+                name: locale.live_command.fields[0].name
                     .replace('{{team}}', '🔹')
                     .replace('{{index}}', i + 1)
                     .replace('{{name}}', participant.summoner_data.name)
@@ -174,7 +114,7 @@ module.exports = {
                 var r_text = locale.ranks['unranked'];
             }
             embed.addFields({
-                name: localized_data.fields[0].name
+                name: locale.live_command.fields[0].name
                     .replace('{{team}}', '🔸')
                     .replace('{{index}}', i + 1)
                     .replace('{{name}}', participant.summoner_data.name)

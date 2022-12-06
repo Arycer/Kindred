@@ -13,6 +13,7 @@
     "no-masteries": "El jugador que buscas no tiene maestrías.",
     "no-voice-channel": "Debes estar en un canal de voz para usar este comando.",
     "no-connection": "No estoy conectado a ningún canal de voz.",
+    "empty-queue": "La cola está vacía.",
     "shuffle-error": "No hay suficientes canciones en la cola para reordenarla.",
     "already-paused": "La música ya está pausada.",
     "already-resumed": "La música no está en pausa",
@@ -35,14 +36,15 @@
     "CHALLENGER": "Challenger"
   },
   "error_embed": {
-    "color": "#5d779d",
     "author": {
       "name": "¡Algo ha salido mal!",
       "iconURL": "https://i.imgur.com/hGG9kLU.png"
     },
+    "color": 6125469,
     "title": "Esto es lo que ha pasado:",
-    "description": "{{error}}",
-    "thumbnail": "https://i.imgur.com/81rFFJy.png",
+    "thumbnail": {
+      "url": "https://i.imgur.com/81rFFJy.png"
+    },
     "footer": {
       "text": "Solicitado por {{requester}}",
       "iconURL": "{{requester_icon}}"
@@ -88,7 +90,7 @@
   },
   "build_command": {
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Objetos recomendados para {{champion}} - {{lane}}",
         "iconURL": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/{{champion}}.png"
@@ -105,7 +107,7 @@
   },
   "runes_command": {
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Runas recomendadas para {{champion}} - {{lane}}",
         "iconURL": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/{{champion}}.png"
@@ -123,7 +125,7 @@
   "history_command": {
     "champion_error": "No se ha encontrado el campeón",
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Últimas 10 partidas de {{name}} · {{winrate}}% WR",
         "iconURL": "{{iconURL}}"
@@ -143,14 +145,13 @@
   },
   "link_command": {
     "instructions_embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "{{region}} · {{name}}",
         "iconURL": "{{iconURL}}"
       },
       "title": "¡Enlazando cuenta! Esto es lo que debes hacer:",
       "description": "Para verificar tu cuenta, debes cambiar tu icono de League of Legends al que aparece en este mensaje. Después, pulsa el botón a continiación. Debes hacer esto en un plazo de 5 minutos.",
-      "thumbnail": "{{requiered_icon}}",
       "footer": {
         "text": "Solicitado por {{requester}}",
         "iconURL": "{{requester_icon}}"
@@ -158,14 +159,16 @@
     },
     "button": "¡He cambiado mi icono!",
     "success_embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "{{region}} · {{name}}",
         "iconURL": "{{iconURL}}"
       },
       "title": "¡Cuenta enlazada!",
       "description": "Tu cuenta de League of Legends ha sido enlazada correctamente.",
-      "thumbnail": "https://i.imgur.com/K7uO7Eh.png",
+      "thumbnail": {
+        "url": "https://i.imgur.com/K7uO7Eh.png"
+      },
       "footer": {
         "text": "Solicitado por {{requester}}",
         "iconURL": "{{requester_icon}}"
@@ -174,7 +177,7 @@
   },
   "live_command": {
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Partida en vivo de [{{region}}] {{name}}",
         "iconURL": "{{iconURL}}"
@@ -204,35 +207,30 @@
       "mastered": "Masterizado",
       "footer": "**Campeones:** {{champions}} · **Niveles:** {{levels}} · **Puntos de maestría:** {{points}} · **Cofres:** {{chests}}/{{champions}}"
     },
+    "fields": [
+      {
+        "name": "Campeones",
+        "value": "{{champion_data}}",
+        "inline": true
+      },
+      {
+        "name": "Última vez",
+        "value": "{{last_played}}",
+        "inline": true
+      },
+      {
+        "name": "Masterización",
+        "value": "{{chests_tokens}}",
+        "inline": true
+      }
+    ],
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Maestrías de {{name}}",
         "iconURL": "{{iconURL}}"
       },
       "title": "Esto es lo que he encontrado:",
-      "fields": [
-        {
-          "name": "Campeones",
-          "value": "{{champion_data}}",
-          "inline": true
-        },
-        {
-          "name": "Última vez",
-          "value": "{{last_played}}",
-          "inline": true
-        },
-        {
-          "name": "Masterización",
-          "value": "{{chests_tokens}}",
-          "inline": true
-        },
-        {
-          "name": "​",
-          "value": "{{footer}}",
-          "inline": false
-        }
-      ],
       "footer": {
         "text": "Solicitado por {{requester}}",
         "iconURL": "{{requester_icon}}"
@@ -240,12 +238,14 @@
     }
   },
   "patch_command": {
-    "color": "#5d779d",
+    "color": 6125469,
     "author": {
       "name": "Actualización {{version}}",
       "iconURL": "https://i.imgur.com/hGG9kLU.png"
     },
-    "thumbnail": "https://i.imgur.com/VhYn8km.png",
+    "thumbnail": {
+      "url": "https://i.imgur.com/VhYn8km.png"
+    },
     "title": "Estas son las notas del parche actual:",
     "description": "[🔗 Notas del parche]({{patch_notes}})",
     "footer": {
@@ -264,7 +264,7 @@
       "unclasified": "Sin clasificar"
     },
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "[{{region}}] {{name}} {{discord}}",
         "iconURL": "{{iconURL}}"
@@ -315,39 +315,31 @@
   },
   "rotation_command": {
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Rotación semanal a día {{date}}",
         "iconURL": "https://i.imgur.com/hGG9kLU.png"
       },
       "description": "Estos son los campeones gratuitos de esta semana:",
-      "thumbnail": "https://i.imgur.com/wYXRu2i.png",
+      "thumbnail": {
+        "url": "https://i.imgur.com/wYXRu2i.png"
+      },
       "footer": {
         "text": "Solicitado por {{requester}}",
         "iconURL": "{{requester_icon}}"
-      },
-      "fields": [
-        {
-          "name": "​",
-          "value": "{{champions}}",
-          "inline": true
-        },
-        {
-          "name": "​",
-          "value": "{{champions2}}",
-          "inline": true
-        }
-      ]
+      }
     }
   },
   "status_command": {
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
       "author": {
         "name": "Estado del servidor {{region}}",
         "iconURL": "https://i.imgur.com/hGG9kLU.png"
       },
-      "thumbnail": "https://i.imgur.com/BQUpB5n.png",
+      "thumbnail": {
+        "url": "https://i.imgur.com/BQUpB5n.png"
+      },
       "title": "Incidencias actuales:",
       "description": "Hay {{count}} mantenimientos y {{count}} incidencias en este momento.",
       "footer": {
@@ -368,14 +360,355 @@
   },
   "unlink_command": {
     "embed": {
-      "color": "#5d779d",
+      "color": 6125469,
+      "author": {
+        "name": "¡Todo listo!",
+        "iconURL": "https://i.imgur.com/hGG9kLU.png"
+      },
+      "thumbnail": {
+        "url": "https://i.imgur.com/BQUpB5n.png"
+      },
+      "title": "Tu cuenta ha sido desvinculada correctamente.",
+      "description": "Puedes volver a vincular tu cuenta con el comando /lol vincular.",
+      "footer": {
+        "text": "Solicitado por {{requester}}",
+        "iconURL": "{{requester_icon}}"
+      }
+    }
+  },
+  "language_command": {
+    "embed": {
+      "color": 6125469,
       "author": {
         "name": "¡Todo listo!",
         "iconURL": "https://i.imgur.com/hGG9kLU.png"
       },
       "thumbnail": "https://i.imgur.com/BQUpB5n.png",
-      "title": "Tu cuenta ha sido desvinculada correctamente.",
-      "description": "Puedes volver a vincular tu cuenta con el comando /lol vincular.",
+      "title": "El idioma del servidor ha cambiado a Español.",
+      "description": "Puedes cambiar el idioma del servidor con el comando /idioma.",
+      "footer": {
+        "text": "Solicitado por {{requester}}",
+        "iconURL": "{{requester_icon}}"
+      }
+    }
+  },
+  "help_command": {
+    "embed": {
+      "color": 6125469,
+      "author": {
+        "name": "Lista de comandos",
+        "iconURL": "https://i.imgur.com/hGG9kLU.png"
+      },
+      "description": "¡Hola! Soy Kindred, un bot de Discord destinado a League of Legends. Estos son los comandos que puedes usar:",
+      "footer": {
+        "text": "Solicitado por {{requester}}",
+        "iconURL": "{{requester_icon}}"
+      }
+    },
+    "categories": {
+      "no-category": {
+        "fields": [
+          {
+            "name": "/help [categoría]",
+            "value": "Muestra la lista de comandos de una categoría.",
+            "inline": false
+          },
+          {
+            "name": "/idioma [idioma]",
+            "value": "Cambia el idioma del bot en este servidor.",
+            "inline": false
+          }
+        ]
+      },
+      "league": {
+        "fields": [
+          {
+            "name": "/lol build [campeón] [rol]",
+            "value": "Muestra la build más popular para el campeón y rol seleccionados.",
+            "inline": false
+          },
+          {
+            "name": "/lol historial [@mención] || [región] [jugador]",
+            "value": "Muestra las últimas 10 partidas del jugador seleccionado.",
+            "inline": false
+          },
+          {
+            "name": "/lol vincular [región] [jugador]",
+            "value": "Vincula tu cuenta de League of Legends con el bot.",
+            "inline": false
+          },
+          {
+            "name": "/lol live [@mención] || [región] [jugador]",
+            "value": "Muestra la partida en directo del jugador seleccionado.",
+            "inline": false
+          },
+          {
+            "name": "/lol maestrías [@mención] || [región] [jugador]",
+            "value": "Muestra las maestrías del jugador seleccionado.",
+            "inline": false
+          },
+          {
+            "name": "/lol parche",
+            "value": "Muestra las notas del parche actual.",
+            "inline": false
+          },
+          {
+            "name": "/lol perfil [@mención] || [región] [jugador]",
+            "value": "Muestra el perfil del jugador seleccionado.",
+            "inline": false
+          },
+          {
+            "name": "/lol rotación",
+            "value": "Muestra los campeones gratuitos de la semana.",
+            "inline": false
+          },
+          {
+            "name": "/lol runas [campeón] [rol]",
+            "value": "Muestra las runas más populares para el campeón y rol seleccionados.",
+            "inline": false
+          },
+          {
+            "name": "/lol estado [región]",
+            "value": "Muestra el estado del servidor seleccionado.",
+            "inline": false
+          },
+          {
+            "name": "/lol desvincular",
+            "value": "Desvincula tu cuenta de League of Legends del bot.",
+            "inline": false
+          }
+        ]
+      },
+      "music": {
+        "fields": [
+          {
+            "name": "/play [canción]",
+            "value": "Reproduce la canción seleccionada.",
+            "inline": false
+          },
+          {
+            "name": "/skip",
+            "value": "Salta a la siguiente canción de la lista.",
+            "inline": false
+          },
+          {
+            "name": "/stop",
+            "value": "Detiene la reproducción de música.",
+            "inline": false
+          },
+          {
+            "name": "/queue",
+            "value": "Muestra la lista de reproducción.",
+            "inline": false
+          },
+          {
+            "name": "/pause",
+            "value": "Pausa la reproducción de música.",
+            "inline": false
+          },
+          {
+            "name": "/resume",
+            "value": "Reanuda la reproducción de música.",
+            "inline": false
+          },
+          {
+            "name": "/shuffle",
+            "value": "Reordena la lista de reproducción.",
+            "inline": false
+          },
+          {
+            "name": "/remove [número]",
+            "value": "Elimina la canción seleccionada de la lista.",
+            "inline": false
+          },
+          {
+            "name": "/loop",
+            "value": "Repite la canción actual.",
+            "inline": false
+          }
+        ]
+      }
+    }
+  },
+  "tournament_results": {
+    "embed": {
+      "color": 6125469,
+      "author": {
+        "name": "¡La partida ha terminado!",
+        "iconURL": "https://i.imgur.com/hGG9kLU.png"
+      },
+      "description": "Mapa: {{map}} · {{date}}",
+      "footer": {
+        "text": "Añádeme a tu servidor: mendozaax.es/kindred"
+      }
+    },
+    "fields": {
+      "name": "{{team}} {{name}} · KDA: {{kills}}/{{deaths}}/{{assists}} · {{cs_emote}} {{cs}} ({{cspm}}CS/min)",
+      "value": "{{emote}} {{champion}} · {{spell1}} {{spell2}} · {{trinket}} {{item1}} {{item2}} {{item3}} {{item4}} {{item5}} {{item6}}",
+      "inline": false
+    }
+  },
+  "clear_command": {
+    "embed": {
+      "author":{
+        "name": "Se ha eliminado la cola de reproducción. 🎵",
+        "iconURL": "https://i.imgur.com/hGG9kLU.png"
+      },
+      "color": 6125469,
+      "title": "Reproduce música con /play [canción]",
+      "footer": {
+        "text": "Solicitado por {{requester}}",
+        "iconURL": "{{requester_icon}}"
+      }
+    }
+  },
+  "loop_command": {
+    "embed": {
+      "author": {
+        "name": "Se ha {{action}} el modo de bucle. 🎵",
+        "iconURL": "https://i.imgur.com/hGG9kLU.png"
+      },
+      "color": 6125469,
+      "title": "Usa /loop para activar o desactivar el modo de bucle.",
+      "footer": {
+        "text": "Solicitado por {{requester}}",
+        "iconURL": "{{requester_icon}}"
+      }
+    },
+    "actions": {
+      "enable": "activado",
+      "disable": "desactivado"
+    }
+  },
+  "pause_command": {
+    "embed": {
+      "author": {
+        "name": "Se ha pausado la reproducción de música. 🎵",
+        "iconURL": "https://i.imgur.com/hGG9kLU.png"
+      },
+      "color": 6125469,
+      "title": "Usa /resume para reanudar la reproducción.",
+      "footer": {
+        "text": "Solicitado por {{requester}}",
+        "iconURL": "{{requester_icon}}"
+      }
+    }
+  },
+  "play_command": {
+    "play_embed": {
+      "author": {
+        "name": "Ahora suena: 🎵",
+        "iconURL": "https://i.imgur.com/hGG9kLU.png"
+      },
+      "color": 6125469,
+      "description": "Añade canciones a la cola con /play [canción]",
+      "footer": {
+        "text": "Solicitado por {{requester}}",
+        "iconURL": "{{requester_icon}}"
+      }
+    },
+    "add_embed": {
+      "author": {
+        "name": "Se ha añadido a la cola: 🎵",
+        "iconURL": "https://i.imgur.com/hGG9kLU.png"
+      },
+      "color": 6125469,
+      "description": "Añade canciones a la cola con /play [canción]",
+      "footer": {
+        "text": "Solicitado por {{requester}}",
+        "iconURL": "{{requester_icon}}"
+      }
+    }
+  },
+  "queue_command": {
+    "embed": {
+      "author": {
+        "name": "Cola de reproducción: 🎵",
+        "iconURL": "https://i.imgur.com/hGG9kLU.png"
+      },
+      "color": 6125469,
+      "description": "Ahora suena: {{hyperlink}}",
+      "footer": {
+        "text": "Solicitado por {{requester}}",
+        "iconURL": "{{requester_icon}}"
+      }
+    },
+    "fields": {
+      "name": "{{index}}. {{title}}",
+      "value": "Solicitada por {{requester}}",
+      "inline": false
+    },
+    "empty": {
+      "name": "No hay más canciones en la cola.",
+      "value": "Añade canciones a la cola con /play [canción]",
+      "inline": false
+    }
+  },
+  "remove_command": {
+    "embed": {
+      "author": {
+        "name": "Se ha eliminado de la cola: 🎵",
+        "iconURL": "https://i.imgur.com/hGG9kLU.png"
+      },
+      "color": 6125469,
+      "description": "Añade canciones a la cola con /play [canción]",
+      "footer": {
+        "text": "Solicitado por {{requester}}",
+        "iconURL": "{{requester_icon}}"
+      }
+    }
+  },
+  "resume_command": {
+    "embed": {
+      "author": {
+        "name": "Se ha reanudado la reproducción de música. 🎵",
+        "iconURL": "https://i.imgur.com/hGG9kLU.png"
+      },
+      "color": 6125469,
+      "title": "Usa /pause para pausar la reproducción.",
+      "footer": {
+        "text": "Solicitado por {{requester}}",
+        "iconURL": "{{requester_icon}}"
+      }
+    }
+  }, 
+  "shuffle_command": {
+    "embed": {
+      "author": {
+        "name": "Se ha mezclado la cola de reproducción. 🎵",
+        "iconURL": "https://i.imgur.com/hGG9kLU.png"
+      },
+      "color": 6125469,
+      "title": "Usa /queue para ver el nuevo orden de la cola.",
+      "footer": {
+        "text": "Solicitado por {{requester}}",
+        "iconURL": "{{requester_icon}}"
+      }
+    }
+  },
+  "skip_command": {
+    "embed": {
+      "author": {
+        "name": "Se ha saltado la canción. 🎵",
+        "iconURL": "https://i.imgur.com/hGG9kLU.png"
+      },
+      "color": 6125469,
+      "title": "Reproduciendo la siguiente canción.",
+      "description": "Añade canciones a la cola con /play [canción]",
+      "footer": {
+        "text": "Solicitado por {{requester}}",
+        "iconURL": "{{requester_icon}}"
+      }
+    }
+  },
+  "stop_command": {
+    "embed": {
+      "author": {
+        "name": "Se ha detenido la reproducción de música. 🎵",
+        "iconURL": "https://i.imgur.com/hGG9kLU.png"
+      },
+      "color": 6125469,
+      "title": "Usa /play para reproducir música.",
       "footer": {
         "text": "Solicitado por {{requester}}",
         "iconURL": "{{requester_icon}}"
