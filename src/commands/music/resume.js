@@ -11,6 +11,7 @@ const servers = new MeowDB({
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
         .setName('resume')
+        .setNameLocalization('es-ES', 'reanudar')
         .setDescription('Reanuda la reproducción'),
     async execute(interaction) {
         var lang = servers.get(interaction.guild.id).language;

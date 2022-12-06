@@ -11,7 +11,6 @@ const servers = new MeowDB({
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
         .setName('remove')
-        .setNameLocalization('es-ES', 'eliminar')
         .setDescription('Removes a song from the queue')
         .setDescriptionLocalization('es-ES', 'Elimina una canción de la cola de reproducción')
         .addIntegerOption(option => 

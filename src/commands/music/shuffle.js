@@ -11,7 +11,6 @@ const servers = new MeowDB({
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
         .setName('shuffle')
-        .setNameLocalization('es-ES', 'reordenar')
         .setDescription('Shuffles the queue')
         .setDescriptionLocalization('es-ES', 'Reordena la cola de reproducción'),
     async execute(interaction) {

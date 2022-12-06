@@ -11,7 +11,6 @@ const servers = new MeowDB({
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
         .setName('skip')
-        .setNameLocalization('es-ES', 'saltar')
         .setDescription('Skips the current song')
         .setDescriptionLocalization('es-ES', 'Salta la canción actual'),
     async execute(interaction) {

@@ -15,7 +15,6 @@ const servers = new MeowDB({
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
         .setName('play')
-        .setNameLocalization('es-ES', 'reproducir')
         .setDescription('Plays a song')
         .setDescriptionLocalization('es-ES', 'Reproduce una canción')
         .addStringOption(option =>
