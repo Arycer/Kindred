@@ -21,6 +21,7 @@
     "invalid-position": "La posición que has especificado no es válida.",
     "not-enough-players": "No hay suficientes jugadores con cuenta vinculada para iniciar el evento",
     "invalid-id": "El ID que has especificado no es válido.",
+    "dm-error": "No puedes usar este comando en un mensaje directo.",
     "unknown": "Ha ocurrido un error desconocido."
   },
   "ranks": {
