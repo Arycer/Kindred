@@ -7,19 +7,22 @@ const userdata = new MeowDB({
     name: 'userdata',
 });
 
-module.exports = {
-    data: new SlashCommandSubcommandBuilder()
+async function execute(interaction) {
+    if (!userdata.get(interaction.user.id).league) return error(interaction, 'no-linked-account');
+    var user = userdata.get(interaction.user.id);
+    user.league = undefined;
+    userdata.set(interaction.user.id, user);
+
+    var embed = new EmbedBuilder(JSON.parse(JSON.stringify(interaction.locale.unlink_command.embed)
+        .replace('{{requester}}', interaction.user.tag)
+        .replace('{{requester_icon}}', interaction.user.avatarURL())
+    )).setTimestamp();
+    return await interaction.followUp({ embeds: [embed] });
+}
+
+const data = new SlashCommandSubcommandBuilder()
         .setName('unlink')
         .setDescription('Unlink your League of Legends account from your Discord account')
-        .setDescriptionLocalization('es-ES', 'Desvincula tu cuenta de League of Legends de tu cuenta de Discord'),
-    async execute(interaction) {
-        if (!entry) return error(interaction, 'no-linked-account');
-        userdata.delete(interaction.user.id);
+        .setDescriptionLocalization('es-ES', 'Desvincula tu cuenta de League of Legends de tu cuenta de Discord');
 
-        var embed = new EmbedBuilder(JSON.parse(JSON.stringify(interaction.locale.unlink_command.embed)
-            .replace('{{requester}}', interaction.user.tag)
-            .replace('{{requester_icon}}', interaction.user.avatarURL())
-        )).setTimestamp();
-        return await interaction.followUp({ embeds: [embed] });
-    }
-}
+module.exports = { data, execute };

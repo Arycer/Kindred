@@ -24,23 +24,11 @@ const data = new SlashCommandBuilder()
 module.exports = {
     data: data,
     async execute(interaction) {
-        var lang = servers.get(interaction.guild.id).language;
-        var locale = require(`../locales/${lang}.json`);
-
-        var module = interaction.options.getString('category') || interaction.options.getString('categoría');
-        var localized_data = locale.help_command;
-
-        var embed = new EmbedBuilder()
-            .setAuthor(localized_data.embed.author)
-            .setDescription(localized_data.embed.description)
-            .addFields(localized_data.categories[module]?.fields || localized_data.categories['no-category'].fields)
-            .setColor(localized_data.embed.color)
-            .setFooter({
-                text: localized_data.embed.footer.text.replace('{{requester}}', interaction.user.tag),
-                iconURL: interaction.user.avatarURL()
-            })
-            .setTimestamp();
-
+        var module = interaction.options.getString('category');
+        var embed = new EmbedBuilder(JSON.parse(JSON.stringify(interaction.locale.help_command.embed)
+            .replace('{{requester}}', interaction.user.tag)
+            .replace('{{requester_icon}}', interaction.user.avatarURL())
+        )).addFields(interaction.locale.help_command.categories[module]?.fields || interaction.locale.help_command.categories['no-category'].fields)
         return interaction.followUp({ embeds: [embed] });
     }
 }

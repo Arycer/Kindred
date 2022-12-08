@@ -24,16 +24,31 @@ module.exports = {
             ephemeral: true,
         });
 
-        if (!userdata.get(interaction.user.id).language) {
-            if (!servers.get(interaction.guild.id)) {
-                servers.set(interaction.guild.id, {
+        if (interaction.server) {
+            var server = servers.get(interaction.guild?.id);
+            if (!server) {
+                servers.set(interaction.guild?.id, {
                     language: 'es-ES',
                 });
-            };
+            } else {
+                if (!server.language) {
+                    server.language = 'es-ES';
+                    servers.set(interaction.guild?.id, server);
+                }
+            }
+        }
+
+        var user = userdata.get(interaction.user.id);
+        if (!user) {
             userdata.set(interaction.user.id, {
-                language: servers.get(interaction.guild.id).language,
+                language: 'es-ES',
             });
-        };
+        } else {
+            if (!user.language) {
+                user.language = 'es-ES';
+                userdata.set(interaction.user.id, user);
+            }
+        }
 
         var lang = interaction.guild ? servers.get(interaction.guild.id).language : userdata.get(interaction.user.id).language;
         interaction.locale = require(`../locales/${lang}.json`);

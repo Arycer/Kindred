@@ -2,6 +2,11 @@ const { SlashCommandBuilder, PermissionsBitField, EmbedBuilder } = require('disc
 const error = require('../util/functions/error');
 const MeowDB = require('meowdb');
 
+const userdata = new MeowDB({
+    dir: './src/database',
+    name: 'userdata',
+});
+
 const servers = new MeowDB({
     dir: './src/database',
     name: 'servers',
@@ -25,14 +30,21 @@ module.exports = {
                     { name: 'Deutsch', value: 'de-DE' },
                 )),
     async execute(interaction) {
-        if (!interaction.member.permissions.has(new PermissionsBitField('ManageGuild'))) return error(interaction, 'no-perms');
+        if (!interaction.member?.permissions.has(new PermissionsBitField('ManageGuild')) && interaction.guild) return error(interaction, 'no-perms');
             
-        var newlang = interaction.options.getString('language') || interaction.options.getString('idioma');
+        var newlang = interaction.options.getString('language');
         var newlocale = require(`../locales/${newlang}.json`);
 
-        servers.set(interaction.guild.id, {
-            language: newlang,
-        });
+        if (interaction.guild) {
+            var server = servers.get(interaction.guild.id);
+            server.language = newlang;
+            servers.set(interaction.guild.id, server);
+        } else {
+            var user = userdata.get(interaction.user.id);
+            user.language = newlang;
+            userdata.set(interaction.user.id, user);
+        }
+
 
         var localized_data = newlocale.language_command;
         var embed = new EmbedBuilder()
