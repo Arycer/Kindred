@@ -1,4 +1,4 @@
-const get_emote = require('../functions/get_emote');
+const get_emote = require('../../functions/league/get_emote');
 const axios = require('axios');
 
 class Champion {

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionsBitField, EmbedBuilder } = require('discord.js');
-const error = require('../util/error');
+const error = require('../util/functions/error');
 const MeowDB = require('meowdb');
 
 const servers = new MeowDB({
@@ -25,23 +25,7 @@ module.exports = {
                     { name: 'Deutsch', value: 'de-DE' },
                 )),
     async execute(interaction) {
-        var lang = servers.get(interaction.guild.id).language;
-        var locale = require(`../locales/es-ES.json`);
-
-        if (!interaction.member.permissions.has(new PermissionsBitField('ManageGuild'))) {
-            var localized_embed = locale.error_embed;
-            var embed = new EmbedBuilder()
-                .setAuthor(localized_embed.author)
-                .setTitle(localized_embed.title)
-                .setDescription(locale.error_messages['no-perms'])
-                .setColor(localized_embed.color)
-                .setFooter({
-                    text: localized_embed.footer.text.replace('{{requester}}', interaction.user.tag),
-                    iconURL: interaction.user.avatarURL()
-                })
-                .setTimestamp();
-            return interaction.followUp({ embeds: [embed] });
-        };
+        if (!interaction.member.permissions.has(new PermissionsBitField('ManageGuild'))) return error(interaction, 'no-perms');
             
         var newlang = interaction.options.getString('language') || interaction.options.getString('idioma');
         var newlocale = require(`../locales/${newlang}.json`);

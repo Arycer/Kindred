@@ -30,6 +30,7 @@
     "play-dl": "^1.9.6",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.9",
+    "youtube-dl-exec": "^2.1.10",
     "ytdl-core": "^4.11.2",
     "ytfps": "^1.1.0"
   }

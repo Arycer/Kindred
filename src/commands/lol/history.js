@@ -1,16 +1,8 @@
 const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
-const get_emote = require('../../util/league/functions/get_emote');
-const LastGames = require('../../util/league/classes/last_games');
-const get_user = require('../../util/league/functions/get_user');
-const Summoner = require('../../util/league/classes/summoner');
-const Region = require('../../util/league/classes/region');
-const error = require('../../util/error');
-const MeowDB = require('meowdb');
-
-const servers = new MeowDB({
-    dir: './src/database',
-    name: 'servers',
-});
+const get_summoner = require('../../util/functions/league/get_summoner');
+const get_emote = require('../../util/functions/league/get_emote');
+const LastGames = require('../../util/classes/league/last_games');
+const error = require('../../util/functions/error');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
@@ -62,18 +54,13 @@ module.exports = {
             .setRequired(false)
         ),
     async execute(interaction) {
-        var lang = servers.get(interaction.guild.id).language;
-        var locale = require(`../../locales/${lang}.json`);
+        var summoner = await get_summoner(interaction);
+        if (typeof summoner == 'string') return error(interaction, summoner);
+        const last_games = await new LastGames().get_last_games(summoner.region, summoner.data.identifiers.puuid);
 
-        var identifiers = await get_user(interaction);
-        if (typeof identifiers == 'string') return error(interaction, locale, identifiers);
-    
-        var summoner = await new Summoner().get_summoner(identifiers.region, identifiers.puuid);
-        const last_games = await new LastGames().get_last_games(identifiers.region, identifiers.puuid);
-
-        var embed = new EmbedBuilder(JSON.parse(JSON.stringify(locale.history_command.embed)
-            .replace('{{name}}', summoner.name)
-            .replace('{{iconURL}}', summoner.icon.url)
+        var embed = new EmbedBuilder(JSON.parse(JSON.stringify(interaction.locale.history_command.embed)
+            .replace('{{name}}', summoner.data.name)
+            .replace('{{iconURL}}', summoner.data.icon.url)
             .replace('{{winrate}}', last_games.winrate)
             .replace('{{requester}}', interaction.user.tag)
             .replace('{{requester_icon}}', interaction.user.avatarURL())
@@ -81,15 +68,15 @@ module.exports = {
 
         for (var i = 0; i < last_games.matches.length; i++) {
             var match = last_games.matches[i];
-            var wintext = typeof match.stats.win === 'boolean' ? match.stats.win ? locale.win.win : locale.win.loss : locale.win.remake;
+            var wintext = typeof match.stats.win === 'boolean' ? match.stats.win ? interaction.locale.win.win : interaction.locale.win.loss : interaction.locale.win.remake;
             embed.addFields({
-                name: locale.history_command.fields[0].name
+                name: interaction.locale.history_command.fields[0].name
                     .replace('{{win}}', wintext)
                     .replace('{{emote}}', match.champion.emote)
                     .replace('{{champion}}', match.champion.name)
-                    .replace('{{map}}', locale.maps[match.map])
-                    .replace('{{queue}}', locale.queues[match.queue]),
-                value: locale.history_command.fields[0].value
+                    .replace('{{map}}', interaction.locale.maps[match.map])
+                    .replace('{{queue}}', interaction.locale.queues[match.queue]),
+                value: interaction.locale.history_command.fields[0].value
                     .replace('{{duration}}', `${Math.floor(match.time.duration / 60)}:${match.time.duration % 60 < 10 ? '0' + match.time.duration % 60 : match.time.duration % 60}`)
                     .replace('{{kills}}', match.stats.kills)
                     .replace('{{deaths}}', match.stats.deaths)

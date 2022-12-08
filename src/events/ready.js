@@ -1,15 +1,9 @@
 const { REST, Routes, Events, ActivityType } = require('discord.js');
-const LastGames = require('../util/league/classes/last_games');
+const LastGames = require('../util/classes/league/last_games');
 const { readdirSync } = require('node:fs');
 const { join } = require('node:path');
 const MeowDB = require('meowdb');
 var axios = require('axios');
-
-const db = new MeowDB({
-    dir: 'src/database',
-    name: 'accounts',
-    raw: true,
-});
 
 module.exports = {
     name: Events.ClientReady,
@@ -46,32 +40,45 @@ module.exports = {
         var endpoint = `https://ddragon.leagueoflegends.com/api/versions.json`;
         var version = await axios.get(endpoint);
         var version = version.data[0];
+        var patch = version.split('.')[0] + '.' + version.split('.')[1];
 
 		const activities = [
             { name: `a Lobo | /help`, type: ActivityType.Listening },
-            { name: `parche ${version} | /help`, type: ActivityType.Watching },
-            { name: `a ${client.guilds.cache.size} servidores | /help`, type: ActivityType.Watching },
+            { name: `parche ${patch} | /help`, type: ActivityType.Watching },
+            { name: `{{count}} servidores | /help`, type: ActivityType.Watching }
         ];
 
         var i = 0;
         setInterval(() => {
-            activities[2].name = `${client.guilds.cache.size} servidores | /help`;
-            client.user.setActivity(activities[i++ % activities.length]);
-        }, 15 * 1000);
+            client.user.setActivity({
+                name: activities[i].name.replace('{{count}}', client.guilds.cache.size),
+                type: activities[i].type
+            });
+            i++ >= activities.length - 1 ? i = 0 : i;
+        }, 7.5 * 1000);
 
         update_games();
         setInterval(update_games, 60 * 60 * 1000);
     }
 };
 
+const Region = require('../util/classes/league/region');
+const userdata = new MeowDB({
+    dir: 'src/database',
+    name: 'userdata',
+    raw: true,
+});
+
 async function update_games () {
-    var accounts = Object.values(db.all());
+    var users = Object.values(userdata.all());
     console.log('[%s] Actualizando partidas', new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' }));
-    for (var i = 0; i < accounts.length; i++) {
-        var account = accounts[i];
-        var last_games = new LastGames();
+    for (var i = 0; i < users.length; i++) {
+        if (!users[i].league) continue;
+        var user = users[i];
         try {
-            await last_games.get_last_games(account.region, account.summoner.identifiers.puuid);
+            var last_games = new LastGames();
+            var region = new Region().get_region(user.league.region);
+            await last_games.get_last_games(region, user.league.puuid);
         } catch (error) {
             console.log(error);
             continue;

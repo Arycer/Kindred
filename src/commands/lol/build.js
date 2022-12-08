@@ -1,12 +1,6 @@
 const { SlashCommandSubcommandBuilder, EmbedBuilder, AttachmentBuilder } = require('discord.js');
-const Champion = require('../../util/league/classes/champion');
-const error = require('../../util/error');
-const MeowDB = require('meowdb');
-
-const servers = new MeowDB({
-    dir: './src/database',
-    name: 'servers',
-});
+const Champion = require('../../util/classes/league/champion');
+const error = require('../../util/functions/error');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
@@ -41,19 +35,14 @@ module.exports = {
             )
         ),
     async execute(interaction) {
-        var lang = servers.get(interaction.guild.id).language;
-        var locale = require(`../../locales/${lang}.json`);
-
-        var champion = interaction.options.getString('champion') || interaction.options.getString('campeón');
-        var position = interaction.options.getString('position') || interaction.options.getString('posición');
-    
-        var champ = await new Champion().get_champion(champion);
-        if (!champ) return error(interaction, locale, 'champ-not-found');
+        var champ = await new Champion().get_champion(interaction.options.getString('champion') || interaction.options.getString('campeón'));
+        if (!champ) return error(interaction, 'champ-not-found');
     
         var { captureAll } = require('capture-all');
         var { join } = require('path');
         var fs = require('fs');
-    
+
+        var position = interaction.options.getString('position') || interaction.options.getString('posición');
         var endpoint = `https://app.mobalytics.gg/lol/champions/${champ.key}/build/${position}`;
         var replied = false;
     
@@ -70,9 +59,9 @@ module.exports = {
                 var filename = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + '.png';
                 fs.writeFileSync(join(__dirname, filename), result.image);
                 var attachment = new AttachmentBuilder(join(__dirname, filename));
-                var embed = new EmbedBuilder(JSON.parse(JSON.stringify(locale.build_command.embed)
+                var embed = new EmbedBuilder(JSON.parse(JSON.stringify(interaction.locale.build_command.embed)
                     .replace('{{champion}}', champ.name)
-                    .replace('{{lane}}', locale.lanes[position])
+                    .replace('{{lane}}', interaction.locale.lanes[position])
                     .replace('{{champion}}', champ.id)
                     .replace('{{requester}}', interaction.user.tag)
                     .replace('{{requester_icon}}', interaction.user.avatarURL())
@@ -83,9 +72,6 @@ module.exports = {
             });
         });
 
-        setTimeout(() => {
-            if (replied) return;
-            error(interaction, locale, 'build-not-found');
-        }, 15000);
+        setTimeout(() => replied ? null : error(interaction, 'build-not-found'), 15000);
     }
 };

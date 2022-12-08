@@ -1,12 +1,6 @@
 const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
-const Champion = require('../../util/league/classes/champion');
-const MeowDB = require('meowdb');
+const Champion = require('../../util/classes/league/champion');
 const axios = require('axios');
-
-const servers = new MeowDB({
-    dir: './src/database',
-    name: 'servers',
-});
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
@@ -14,8 +8,6 @@ module.exports = {
         .setDescription('Shows the current free champions')
         .setDescriptionLocalization('es-ES', 'Muestra los campeones gratis de la semana'),
     async execute(interaction) {
-        var lang = servers.get(interaction.guild.id).language;
-        var locale = require(`../../locales/${lang}.json`);
         var endpoint = `https://euw1.api.riotgames.com/lol/platform/v3/champion-rotations`;
         var opts = {
             method: 'GET',
@@ -27,8 +19,8 @@ module.exports = {
     
         var response = await axios.get(endpoint, opts)
             .then(async (response) => {
-                var embed = new EmbedBuilder(JSON.parse(JSON.stringify(locale.rotation_command.embed)
-                    .replace('{{date}}', new Date().toLocaleDateString(lang))
+                var embed = new EmbedBuilder(JSON.parse(JSON.stringify(interaction.locale.rotation_command.embed)
+                    .replace('{{date}}', new Date().toLocaleString(interaction.lang))
                     .replace('{{requester}}', interaction.user.tag)
                     .replace('{{requester_icon}}', interaction.user.avatarURL())
                 )).setTimestamp();

@@ -1,7 +1,12 @@
 const { Events } = require('discord.js');
 const MeowDB = require('meowdb');
 
-const lang = new MeowDB({
+const userdata = new MeowDB({
+    dir: './src/database',
+    name: 'userdata',
+});
+
+const servers = new MeowDB({
     dir: './src/database',
     name: 'servers',
 });
@@ -10,7 +15,6 @@ module.exports = {
     name: Events.InteractionCreate,
     async execute(interaction, client) {
         if (!interaction.isCommand()) return;
-
         console.log(`${interaction.user.tag} ejecutó la interacción /${interaction.commandName} ${interaction.options.data.length ? interaction.options.data[0].name : ''}`);
 
         const command = client.commands.get(interaction.commandName);
@@ -20,11 +24,20 @@ module.exports = {
             ephemeral: true,
         });
 
-        if (!lang.get(interaction.guild.id)) {
-            lang.set(interaction.guild.id, {
-                language: 'es-ES',
+        if (!userdata.get(interaction.user.id).language) {
+            if (!servers.get(interaction.guild.id)) {
+                servers.set(interaction.guild.id, {
+                    language: 'es-ES',
+                });
+            };
+            userdata.set(interaction.user.id, {
+                language: servers.get(interaction.guild.id).language,
             });
         };
+
+        var lang = interaction.guild ? servers.get(interaction.guild.id).language : userdata.get(interaction.user.id).language;
+        interaction.locale = require(`../locales/${lang}.json`);
+        interaction.lang = lang;
 
         try {
             await interaction.deferReply();

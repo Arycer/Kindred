@@ -1,12 +1,6 @@
 const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
-const Region = require('../../util/league/classes/region');
-const MeowDB = require('meowdb');
+const Region = require('../../util/classes/league/region');
 const axios = require('axios');
-
-const servers = new MeowDB({
-    dir: './src/database',
-    name: 'servers',
-});
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
@@ -32,8 +26,6 @@ module.exports = {
             )
         ),
     async execute(interaction) {
-        var lang = servers.get(interaction.guild.id).language;
-        var locale = require(`../../locales/${lang}.json`);
         const server = interaction.options.getString('region') || interaction.options.getString('región');
         const region = new Region().get_region(server);
     
@@ -52,7 +44,7 @@ module.exports = {
             var maintenances = data.maintenances;
             var incidents = data.incidents;
 
-            var embed = new EmbedBuilder(JSON.parse(JSON.stringify(locale.status_command.embed)
+            var embed = new EmbedBuilder(JSON.parse(JSON.stringify(interaction.locale.status_command.embed)
                 .replace('{{region}}', region.name)
                 .replace('{{count}}', maintenances.length)
                 .replace('{{count}}', incidents.length)
@@ -64,13 +56,13 @@ module.exports = {
                 var entry = maintenances[i];
                 for (var j = 0; j < entry.updates.length; j++) {
                     var update = entry.updates[j];
-                    var translated_update = update.translations.find(t => t.locale == lang.replace('-', '_'));
+                    var translated_update = update.translations.find(t => t.interaction.locale == lang.replace('-', '_'));
                 }
     
-                var translated_title = entry.titles.find(t => t.locale == lang.replace('-', '_'));
+                var translated_title = entry.titles.find(t => t.interaction.locale == lang.replace('-', '_'));
     
                 embed.addFields({
-                    name: locale.status_command.maintenance.name.replace('{{name}}', translated_title.content),
+                    name: interaction.locale.status_command.maintenance.name.replace('{{name}}', translated_title.content),
                     value: translated_update.content
                 });
             }
@@ -80,13 +72,13 @@ module.exports = {
     
                 for (var j = 0; j < entry.updates.length; j++) {
                     var update = entry.updates[j];
-                    var translated_update = update.translations.find(t => t.locale == lang.replace('-', '_'));
+                    var translated_update = update.translations.find(t => t.interaction.locale == lang.replace('-', '_'));
                 }
     
-                var translated_title = entry.titles.find(t => t.locale == lang.replace('-', '_'));
+                var translated_title = entry.titles.find(t => t.interaction.locale == lang.replace('-', '_'));
     
                 embed.addFields({
-                    name: locale.status_command.incident.name.replace('{{name}}', translated_title.content),
+                    name: interaction.locale.status_command.incident.name.replace('{{name}}', translated_title.content),
                     value: translated_update.content
                 });
             }

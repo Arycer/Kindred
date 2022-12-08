@@ -1,11 +1,11 @@
 const { joinVoiceChannel, createAudioPlayer } = require('@discordjs/voice');
-const Queue = require('../classes/queue');
+const Queue = require('../../classes/music/queue');
 
 async function create_connection (interaction) {
     const connection = joinVoiceChannel({
-        channelId: interaction.member.voice.channelId,
-        guildId: interaction.guildId,
         adapterCreator: interaction.guild.voiceAdapterCreator,
+        channelId: interaction.member.voice.channelId,
+        guildId: interaction.guildId
     });
 
     connection.queue = new Queue();

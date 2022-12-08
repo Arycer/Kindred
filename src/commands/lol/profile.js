@@ -1,13 +1,8 @@
 const { SlashCommandSubcommandBuilder, EmbedBuilder, TimestampStyles, time } = require('discord.js');
-const get_emote = require('../../util/league/functions/get_emote');
-const get_user = require('../../util/league/functions/get_user');
-const Profile = require('../../util/league/classes/profile');
-const MeowDB = require('meowdb');
-
-var servers = new MeowDB({
-    dir: './src/database',
-    name: 'servers',
-});
+const get_summoner = require('../../util/functions/league/get_summoner');
+const get_emote = require('../../util/functions/league/get_emote');
+const Profile = require('../../util/classes/league/profile');
+const error = require('../../util/functions/error');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
@@ -41,25 +36,21 @@ module.exports = {
             .setDescription('Discord user').setDescriptionLocalization('es-ES', 'Usuario de Discord')
             .setRequired(false)),
     async execute(interaction) {
-        var lang = servers.get(interaction.guild.id).language;
-        var locale = require(`../../locales/${lang}.json`);
+        var summoner = await get_summoner(interaction);
+        if (typeof summoner == 'string') return error(interaction, summoner);
 
-        var identifiers = await get_user(interaction);
-        if (typeof identifiers == 'string') return error(interaction, locale, identifiers);
-
-        const profile = await new Profile().init(identifiers.region.id, identifiers.puuid);
-        var localized_data = locale.profile_command;
+        const profile = await new Profile().init(summoner.region.id, summoner.data.identifiers.puuid);
 
         var m_text = '';
         for (var i = 0; i < 3; i++) {
             if (profile.masteries.champions[i].champion.name) {
                 var champion = profile.masteries.champions[i].champion;
                 var mastery = profile.masteries.champions[i];
-                m_text += localized_data.masteries_row
+                m_text += interaction.locale.profile_command.masteries_row
                     .replace('{{emote}}', champion.emote)
                     .replace('{{level}}', mastery.champion_level)
                     .replace('{{champion}}', champion.name)
-                    .replace('{{points}}', mastery.champion_points.toLocaleString(lang));
+                    .replace('{{points}}', mastery.champion_points.toLocaleString(interaction.lang));
             } else {
                 m_text += 'N/A\n';
                 break;
@@ -69,41 +60,41 @@ module.exports = {
         var r_text = ''; var queue = '';
         if (profile.ranked.solo.tier || profile.ranked.flex.tier) {
             var ranked = profile.ranked.solo.tier ? profile.ranked.solo : profile.ranked.flex;
-            r_text = localized_data.ranked.clasified
+            r_text = interaction.locale.profile_command.ranked.clasified
                 .replace('{{emote}}', ranked.emote)
-                .replace('{{tier}}', locale.ranks[ranked.tier])
+                .replace('{{tier}}', interaction.locale.ranks[ranked.tier])
                 .replace('{{division}}', ranked.rank)
                 .replace('{{lp}}', ranked.lps)
                 .replace('{{wins}}', ranked.wins)
                 .replace('{{losses}}', ranked.losses)
                 .replace('{{winrate}}', ranked.winrate);
-            queue = locale.queues['420'];
+            queue = interaction.locale.queues['420'];
         } else {
-            r_text = localized_data.ranked.unclasified;
-            queue = locale.queues['-1'];
+            r_text = interaction.locale.profile_command.ranked.unclasified;
+            queue = interaction.locale.queues['-1'];
         }
 
         var live_text = '';
         if (profile.livegame.ingame) {
             var livegame = profile.livegame;
-            live_text = localized_data.playing.playing
+            live_text = interaction.locale.profile_command.playing.playing
                 .replace('{{emote}}', livegame.champion.emote)
                 .replace('{{champion}}', livegame.champion.name)
-                .replace('{{map}}', locale.maps[livegame.map])
-                .replace('{{queue}}', locale.queues[livegame.queue])
+                .replace('{{map}}', interaction.locale.maps[livegame.map])
+                .replace('{{queue}}', interaction.locale.queues[livegame.queue])
                 .replace('{{time}}', `${Math.floor(live.time.duration / 60)}:${live.time.duration % 60 < 10 ? '0' + live.time.duration % 60 : live.time.duration % 60}`)
                 .replace('{{date}}', time(new Date(live.time.start), TimestampStyles.ShortDateTime))
                 .replace('{{region}}', profile.region.name.toLowerCase())
                 .replace('{{name}}', profile.summoner_data.name);
         } else {
-            live_text = localized_data.playing.not_playing;
+            live_text = interaction.locale.profile_command.playing.not_playing;
         }
 
         var lastgame = '';
         if (profile.lastgames.matches[0].game_id) {
             var last = profile.lastgames.matches[0];
-            var wintext = typeof last.stats.win === 'boolean' ? last.stats.win ? locale.win.win : locale.win.loss : locale.win.remake;
-            lastgame = localized_data.embed.fields[6].value
+            var wintext = typeof last.stats.win === 'boolean' ? last.stats.win ? interaction.locale.win.win : interaction.locale.win.loss : interaction.locale.win.remake;
+            lastgame = interaction.locale.profile_command.embed.fields[6].value
                 .replace('{{win}}', wintext)
                 .replace('{{emote}}', last.champion.emote)
                 .replace('{{champion}}', last.champion.name)
@@ -128,62 +119,62 @@ module.exports = {
 
         var embed = new EmbedBuilder()
             .setAuthor({
-                name: localized_data.embed.author.name
+                name: interaction.locale.profile_command.embed.author.name
                     .replace('{{region}}', profile.region.name)
                     .replace('{{name}}', profile.summoner_data.name)
                     .replace('{{discord}}', user ? ` - ${user.tag}` : ''),
                 iconURL: profile.summoner_data.icon.url
             })
-            .setTitle(localized_data.embed.title)
+            .setTitle(interaction.locale.profile_command.embed.title)
             .addFields(
                 { 
-                    name: localized_data.embed.fields[0].name, 
-                    value: localized_data.embed.fields[0].value
+                    name: interaction.locale.profile_command.embed.fields[0].name, 
+                    value: interaction.locale.profile_command.embed.fields[0].value
                         .replace('{{level}}', profile.summoner_data.level), 
                     inline: true 
                 },
                 {
-                    name: localized_data.embed.fields[1].name,
-                    value: localized_data.embed.fields[1].value
+                    name: interaction.locale.profile_command.embed.fields[1].name,
+                    value: interaction.locale.profile_command.embed.fields[1].value
                         .replace('{{score}}', profile.masteries.score),
                     inline: true
                 },
                 {
-                    name: localized_data.embed.fields[2].name,
-                    value: localized_data.embed.fields[2].value
+                    name: interaction.locale.profile_command.embed.fields[2].name,
+                    value: interaction.locale.profile_command.embed.fields[2].value
                         .replace('{{winrate}}', profile.lastgames.winrate),
                     inline: true
                 },
                 {
-                    name: localized_data.embed.fields[3].name,
+                    name: interaction.locale.profile_command.embed.fields[3].name,
                     value: m_text,
                     inline: true
                 },
                 {
-                    name: localized_data.embed.fields[4].name
+                    name: interaction.locale.profile_command.embed.fields[4].name
                         .replace('{{queue}}', queue),
                     value: r_text,
                     inline: true
                 },
                 {
-                    name: localized_data.embed.fields[5].name,
+                    name: interaction.locale.profile_command.embed.fields[5].name,
                     value: live_text,
                     inline: false
                 },
                 {
-                    name: localized_data.embed.fields[6].name
-                        .replace('{{map}}', locale.maps[profile.lastgames.matches[0].map])
-                        .replace('{{queue}}', locale.queues[profile.lastgames.matches[0].queue]),
+                    name: interaction.locale.profile_command.embed.fields[6].name
+                        .replace('{{map}}', interaction.locale.maps[profile.lastgames.matches[0].map])
+                        .replace('{{queue}}', interaction.locale.queues[profile.lastgames.matches[0].queue]),
                     value: lastgame,
                     inline: false
                 }
             )
             .setFooter({
-                text: localized_data.embed.footer.text
+                text: interaction.locale.profile_command.embed.footer.text
                     .replace('{{requester}}', interaction.user.tag),
                 iconURL: interaction.user.avatarURL()
             })
-            .setColor(localized_data.embed.color)
+            .setColor(interaction.locale.profile_command.embed.color)
             .setTimestamp();
         return interaction.followUp({ embeds: [embed] });
     }

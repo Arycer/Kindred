@@ -1,6 +1,6 @@
-const { SlashCommandBuilder, EmbedBuilder, TimestampStyles, time, Embed } = require('discord.js');
-const get_emote = require('../util/league/functions/get_emote');
-const error = require('../util/error.js');
+const { SlashCommandBuilder, EmbedBuilder, TimestampStyles, time } = require('discord.js');
+const get_emote = require('../util/functions/league/get_emote');
+const error = require('../util/functions/error.js');
 const { join } = require('node:path');
 const MeowDB = require('meowdb');
 const fs = require('fs');
@@ -8,6 +8,11 @@ const fs = require('fs');
 const whitelist = new MeowDB({
     name: 'tournament_whitelist',
     dir: 'src/database',
+});
+
+const servers = new MeowDB({
+    dir: 'src/database',
+    name: 'servers',
 });
 
 const data = new SlashCommandBuilder()
@@ -27,8 +32,10 @@ for (const file of cmd_files) {
 module.exports = {
     data: data,
     async execute(interaction) {
+        var lang = servers.get(interaction.guild.id).language;
+        var locale = require(`./locales/${lang}.json`)
         var whitelisted = whitelist.get(interaction.user.id);
-        if (!whitelisted && interaction.user.id != process.env.OWNER_ID) return interaction.followUp({ embeds: [error('No tienes acceso a los comandos de torneos.', interaction.user.tag)] });
+        if (!whitelisted && interaction.user.id != process.env.OWNER_ID) return error(interaction, locale, 'no-perms');
 
         for (const file of cmd_files) {
             const cmd_file = join(cmd_dir, file);
@@ -40,7 +47,7 @@ module.exports = {
     }
 };
 
-const TournamentGame = require('../util/league/classes/tournament');
+const TournamentGame = require('../util/classes/league/tournament');
 const { Client, GatewayIntentBits } = require('discord.js');
 const http = require('http');
 

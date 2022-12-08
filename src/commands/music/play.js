@@ -1,16 +1,10 @@
-const { get_title, get_url } = require('../../util/music/functions/get_song_info.js');
-const create_connection = require('../../util/music/functions/create_connection');
+const { get_title, get_url } = require('../../util/functions/music/get_song_info');
+const create_connection = require('../../util/functions/music/create_connection');
 const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
-const create_resource = require('../../util/music/functions/create_resource');
+const create_resource = require('../../util/functions/music/create_resource');
 const { getVoiceConnection } = require('@discordjs/voice');
-const wait = require('../../util/music/functions/wait');
-const error = require('../../util/error');
-const MeowDB = require('meowdb');
-
-const servers = new MeowDB({
-    dir: './src/database/',
-    name: 'servers',
-})
+const wait = require('../../util/functions/music/wait');
+const error = require('../../util/functions/error');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
@@ -24,14 +18,11 @@ module.exports = {
                 .setDescriptionLocalization('es-ES', 'Nombre de la canción')
                 .setRequired(true)),
     async execute(interaction) {
-        var lang = servers.get(interaction.guild.id).language;
-        var locale = require(`../../locales/${lang}.json`);
-
         var query = interaction.options.getString('canción') || interaction.options.getString('song');
-        if (query.includes('list=')) return error(interaction, locale, 'playlist');
+        if (query.includes('list=')) return error(interaction, interaction.locale, 'playlist');
     
         var voice_channel = interaction.member.voice.channelId;
-        if (!voice_channel) return error(interaction, locale, 'no-voice-channel');
+        if (!voice_channel) return error(interaction, interaction.locale, 'no-voice-channel');
     
         var connection = getVoiceConnection(interaction.guildId) ? getVoiceConnection(interaction.guildId) : await create_connection(interaction);
         var player = connection.state.subscription.player;
@@ -41,7 +32,7 @@ module.exports = {
         await queue.add_song(url, interaction.user.tag);
 
         if (queue.playing) {
-            var embed = new EmbedBuilder(JSON.parse(JSON.stringify(locale.play_command.add_embed)
+            var embed = new EmbedBuilder(JSON.parse(JSON.stringify(interaction.locale.play_command.add_embed)
                 .replace('{{requester}}', interaction.user.tag)
                 .replace('{{requester_icon}}', interaction.user.avatarURL())
             )).setTitle(await get_title(url)).setURL(url).setTimestamp();
@@ -53,13 +44,13 @@ module.exports = {
                 var song = queue.current;
                 player.play(await create_resource(song.url));
 
-                var embed = new EmbedBuilder(JSON.parse(JSON.stringify(locale.play_command.play_embed)
+                var embed = new EmbedBuilder(JSON.parse(JSON.stringify(interaction.locale.play_command.play_embed)
                     .replace('{{requester}}', interaction.user.tag)
                     .replace('{{requester_icon}}', interaction.user.avatarURL())
                 )).setTitle(song.title).setURL(song.url).setTimestamp();
 
                 queue.playing ? interaction.channel.send({ embeds: [embed] }) : interaction.followUp({ embeds: [embed] }) && (queue.playing = true);
-                await wait(player);
+                await wait(interaction.client, player);
             } while (queue.songs.length > 0 || queue.looped());
             return connection.destroy();
         }

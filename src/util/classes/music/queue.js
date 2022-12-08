@@ -1,4 +1,4 @@
-const { get_title } = require('../functions/get_song_info');
+const { get_title } = require('../../functions/music/get_song_info');
 const Song = require('./song.js');
 
 class Queue {

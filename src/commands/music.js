@@ -18,6 +18,7 @@ for (const file of cmd_files) {
 module.exports = {
     data: data,
     async execute(interaction) {
+        if (!interaction.guild) return interaction.deleteReply();
         for (const file of cmd_files) {
             const command = require (join(cmd_dir, file));
             if (interaction.options.getSubcommand() === command.data.name) {

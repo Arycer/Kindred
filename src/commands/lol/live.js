@@ -1,15 +1,7 @@
 const { SlashCommandSubcommandBuilder, EmbedBuilder } = require('discord.js');
-const get_user = require('../../util/league/functions/get_user');
-const Summoner = require('../../util/league/classes/summoner');
-const LiveGame = require('../../util/league/classes/livegame');
-const Region = require('../../util/league/classes/region');
-const error = require('../../util/error');
-const MeowDB = require('meowdb');
-
-const servers = new MeowDB({
-    dir: './src/database',
-    name: 'servers'
-});
+const get_summoner = require('../../util/functions/league/get_summoner');
+const LiveGame = require('../../util/classes/league/livegame');
+const error = require('../../util/functions/error');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
@@ -42,25 +34,20 @@ module.exports = {
                 .setDescription('Discord user').setDescriptionLocalization('es-ES', 'Usuario de Discord')
                 .setRequired(false)),
     async execute(interaction) {
-        var lang = servers.get(interaction.guild.id).language;
-        var locale = require(`../../locales/${lang}.json`);
-
-        var identifiers = await get_user(interaction);
-        if (typeof identifiers == 'string') return error(interaction, locale, identifiers);
-    
-        var summoner = await new Summoner().get_summoner(identifiers.region, identifiers.puuid);
+        var summoner = await get_summoner(interaction);
+        if (typeof summoner == 'string') return error(interaction, summoner);
         
         var livegame = new LiveGame();
-        await livegame.get_livegame(identifiers.region, summoner.identifiers.s_id);
+        await livegame.get_livegame(summoner.region, summoner.data.identifiers.s_id);
     
-        if (!livegame.ingame) return error(interaction, locale, 'not-in-game');
+        if (!livegame.ingame) return error(interaction, 'not-in-game');
 
-        var embed = new EmbedBuilder(JSON.parse(JSON.stringify(locale.live_command.embed)
-            .replace('{{region}}', identifiers.region.name)
-            .replace('{{name}}', summoner.name)
-            .replace('{{iconURL}}', summoner.icon.url)
-            .replace('{{map}}', locale.maps[livegame.map])
-            .replace('{{queue}}', locale.queues[livegame.queue])
+        var embed = new EmbedBuilder(JSON.parse(JSON.stringify(interaction.locale.live_command.embed)
+            .replace('{{region}}', summoner.region.name)
+            .replace('{{name}}', summoner.data.name)
+            .replace('{{iconURL}}', summoner.data.icon.url)
+            .replace('{{map}}', interaction.locale.maps[livegame.map])
+            .replace('{{queue}}', interaction.locale.queues[livegame.queue])
             .replace('{{requester}}', interaction.user.tag)
             .replace('{{requester_icon}}', interaction.user.avatarURL())
         )).setTimestamp();
@@ -69,20 +56,20 @@ module.exports = {
         for (var i = 0; i < blue.length; i++) {
             var participant = blue[i];
             if (participant.ranked.solo.tier || participant.ranked.flex.tier) {
-                var rank = participant.ranked.solo.tier ? locale.ranks[participant.ranked.solo.tier] : locale.ranks[participant.ranked.flex.tier];
+                var rank = participant.ranked.solo.tier ? interaction.locale.ranks[participant.ranked.solo.tier] : interaction.locale.ranks[participant.ranked.flex.tier];
                 var emote = participant.ranked.solo.tier ? participant.ranked.solo.emote : participant.ranked.flex.emote;
                 var division = participant.ranked.solo.tier ? participant.ranked.solo.rank : participant.ranked.flex.rank;
                 var lp = participant.ranked.solo.tier ? participant.ranked.solo.lps : participant.ranked.flex.lps;
                 var wins = participant.ranked.solo.tier ? participant.ranked.solo.wins : participant.ranked.flex.wins;
                 var losses = participant.ranked.solo.tier ? participant.ranked.solo.losses : participant.ranked.flex.losses;
                 var winrate = participant.ranked.solo.tier ? participant.ranked.solo.winrate : participant.ranked.flex.winrate;
-                var queue = participant.ranked.solo.tier ? locale.queues[420] : locale.queues[440];
+                var queue = participant.ranked.solo.tier ? interaction.locale.queues[420] : interaction.locale.queues[440];
                 var r_text = `${queue} · ${emote} ${rank} · ${division} ${lp} LP · ${wins}W ${losses}L (${winrate}%)`;
             } else {
-                var r_text = locale.ranks['unranked'];
+                var r_text = interaction.locale.ranks['unranked'];
             }
             embed.addFields({
-                name: locale.live_command.fields[0].name
+                name: interaction.locale.live_command.fields[0].name
                     .replace('{{team}}', '🔹')
                     .replace('{{index}}', i + 1)
                     .replace('{{name}}', participant.summoner_data.name)
@@ -101,20 +88,20 @@ module.exports = {
         for (var i = 0; i < red.length; i++) {
             var participant = red[i];
             if (participant.ranked.solo.tier || participant.ranked.flex.tier) {
-                var rank = participant.ranked.solo.tier ? locale.ranks[participant.ranked.solo.tier] : locale.ranks[participant.ranked.flex.tier];
+                var rank = participant.ranked.solo.tier ? interaction.locale.ranks[participant.ranked.solo.tier] : interaction.locale.ranks[participant.ranked.flex.tier];
                 var emote = participant.ranked.solo.tier ? participant.ranked.solo.emote : participant.ranked.flex.emote;
                 var division = participant.ranked.solo.tier ? participant.ranked.solo.rank : participant.ranked.flex.rank;
                 var lp = participant.ranked.solo.tier ? participant.ranked.solo.lps : participant.ranked.flex.lps;
                 var wins = participant.ranked.solo.tier ? participant.ranked.solo.wins : participant.ranked.flex.wins;
                 var losses = participant.ranked.solo.tier ? participant.ranked.solo.losses : participant.ranked.flex.losses;
                 var winrate = participant.ranked.solo.tier ? participant.ranked.solo.winrate : participant.ranked.flex.winrate;
-                var queue = participant.ranked.solo.tier ? locale.queues[420] : locale.queues[440];
+                var queue = participant.ranked.solo.tier ? interaction.locale.queues[420] : interaction.locale.queues[440];
                 var r_text = `${queue} · ${emote} ${rank} · ${division} ${lp} LP · ${wins}W ${losses}L (${winrate}%)`;
             } else {
-                var r_text = locale.ranks['unranked'];
+                var r_text = interaction.locale.ranks['unranked'];
             }
             embed.addFields({
-                name: locale.live_command.fields[0].name
+                name: interaction.locale.live_command.fields[0].name
                     .replace('{{team}}', '🔸')
                     .replace('{{index}}', i + 1)
                     .replace('{{name}}', participant.summoner_data.name)

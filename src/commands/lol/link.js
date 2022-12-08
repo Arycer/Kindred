@@ -1,16 +1,12 @@
 const { SlashCommandSubcommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionCollector } = require('discord.js');
-const Account = require('../../util/league/classes/account');
-const error = require('../../util/error');
+const get_summoner = require('../../util/functions/league/get_summoner');
+const Userdata = require('../../util/classes/userdata');
+const error = require('../../util/functions/error');
 const MeowDB = require('meowdb');
 
-const servers = new MeowDB({
+const userdata = new MeowDB({
     dir: './src/database',
-    name: 'servers',
-});
-
-var db = new MeowDB({
-    dir: './src/database',
-    name: 'accounts'
+    name: 'userdata',
 });
 
 module.exports = {
@@ -48,27 +44,20 @@ module.exports = {
             .setRequired(true)
         ),
     async execute(interaction) {
-        var lang = servers.get(interaction.guild.id).language;
-        var locale = require(`../../locales/${lang}.json`);
+        var summoner = await get_summoner(interaction);
+        if (typeof summoner == 'string') return error(interaction, summoner);
 
-        var username = interaction.options.getString('jugador') || interaction.options.getString('player');
-        var region = interaction.options.getString('region') || interaction.options.getString('región');
-        
-        var account = new Account(); account.region.get_region(region);
-        await account.summoner.get_summoner(account.region, username);    
-        if (!account.summoner.identifiers.s_id) return error(interaction, locale, 'profile_not_found');
-    
         do {
             var random = Math.floor(Math.random() * 21);
-        } while (account.summoner.icon.id == random);
-    
-        var requiered_icon = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${random}.jpg`;
-        var old_icon = account.summoner.icon.url;
+        } while (summoner.data.icon.id == random);
 
-        var embed = new EmbedBuilder(JSON.parse(JSON.stringify(locale.link_command.instructions_embed)
-            .replace('{{region}}', account.region.name)
-            .replace('{{name}}', account.summoner.name)
-            .replace('{{iconURL}}', account.summoner.icon.url)
+        var requiered_icon = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${random}.jpg`;
+        var old_icon = summoner.data.icon.url;
+
+        var embed = new EmbedBuilder(JSON.parse(JSON.stringify(interaction.locale.link_command.instructions_embed)
+            .replace('{{region}}', summoner.region.name)
+            .replace('{{name}}', summoner.data.name)
+            .replace('{{iconURL}}', summoner.data.icon.url)
             .replace('{{requester}}', interaction.user.tag)
             .replace('{{requester_icon}}', interaction.user.avatarURL())
         )).setThumbnail(requiered_icon).setTimestamp();
@@ -77,7 +66,7 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('verify')
-                    .setLabel(locale.link_command.button)
+                    .setLabel(interaction.locale.link_command.button)
                     .setStyle(ButtonStyle.Primary)
             );
 
@@ -90,20 +79,18 @@ module.exports = {
         })
             
         collector.on('collect', async () => {
-            var summoner = await account.summoner.get_summoner(account.region, username);
-            if (summoner.icon.id != random) {
-                error(interaction, locale, 'link-failed');
-                return await message.delete();
-            }
-            account.discord_id = interaction.user.id;
-            account.summoner = summoner;
+            var summoner = await get_summoner(interaction);
+            if (summoner.data.icon.id != random) return error(interaction, 'link-failed') && await message.delete();
 
-            if (db.get(account.discord_id)) db.delete(account.discord_id);
-            db.create(account.discord_id, account);
+            var account = new Userdata();
+            account.set_league(summoner.region.id, summoner.data.identifiers.puuid)
 
-            var embed = new EmbedBuilder(JSON.parse(JSON.stringify(locale.link_command.success_embed)
-                .replace('{{region}}', account.region.name)
-                .replace('{{name}}', account.summoner.name)
+            if (userdata.get(interaction.user.id)) userdata.delete(interaction.user.id);
+            userdata.create(interaction.user.id, account);
+
+            var embed = new EmbedBuilder(JSON.parse(JSON.stringify(interaction.locale.link_command.success_embed)
+                .replace('{{region}}', summoner.region.name)
+                .replace('{{name}}', summoner.data.name)
                 .replace('{{iconURL}}', old_icon)
                 .replace('{{requester}}', interaction.user.tag)
                 .replace('{{requester_icon}}', interaction.user.avatarURL())
@@ -112,11 +99,6 @@ module.exports = {
             await message.delete();
         });
 
-        collector.on('end', async (collected) => {
-            if (collected.size == 0) {
-                error(interaction, locale, 'link-timeout');
-                return await message.delete();
-            }
-        });
+        collector.on('end', async collected => collected.size == 0 ? error(interaction, 'link-timeout') && await message.delete() : null);
     }
 }
