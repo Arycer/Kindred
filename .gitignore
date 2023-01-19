@@ -1,6 +1,0 @@
-package-lock.json
-.env
-.idea/
-test/
-src/database
-node_modules/
