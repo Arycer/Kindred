@@ -23,10 +23,9 @@ global.db = {
     })
 }
 
-global.riotAxiosOptions = {
-    method: 'GET',
-    timeout: 2000,
+global.axiosOptions = {
     headers: { 'X-Riot-Token': process.env.RIOT_Secret },
+    timeout: 2000
 };
 
 module.exports = {
