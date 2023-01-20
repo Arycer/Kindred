@@ -14,7 +14,7 @@ event_files.forEach(file => {
     client[event.once ? 'once' : 'on'](event.name, (...args) => event.execute(...args, client));
 });
 
-client.commands = new Collection();
+client.cmds = new Collection();
 
 const cmd_path = join(__dirname, 'src', 'cmds');
 const cmd_files = readdirSync(cmd_path)
@@ -22,7 +22,7 @@ const cmd_files = readdirSync(cmd_path)
 
 cmd_files.forEach(file => {
     const command = require(join(cmd_path, file));
-    client.commands.set(command.data.name, command);
+    client.cmds.set(command.data.name, command);
 });
 
 client.login(process.env.BOT_Secret);

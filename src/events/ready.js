@@ -79,5 +79,7 @@ module.exports = {
             client.user.setActivity(activities[i]);
             i++ >= activities.length - 1 ? i = 0 : i;
         }, 7.5 * 1000);
+
+        require('../api/api.js');
     }
 };
