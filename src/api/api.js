@@ -31,10 +31,9 @@ app.get('/kindred/login', function (req, res) {
         return;
     }
     var id = req.query.id;
-    if (!id) {
-        res.status(400).send({ error: 'Bad Request' });
-        return;
-    }
+    if (!id) { 
+        res.status(400).send({ error: 'Bad Request' }); return 
+    };
 
     var link = authorizeURL
         + '?redirect_uri=' + appCallbackURL
