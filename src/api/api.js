@@ -17,8 +17,9 @@ var clientID = process.env.RSO_ID,
     clientSecret = process.env.RSO_Secret;
 
 var appBaseURL = 'https://api.arycer.me/kindred',
-    successURL = appBaseURL + '/success',
-    appCallbackURL = appBaseURL + '/rso';
+    appSuccessURL = appBaseURL + '/success',
+    appCallbackURL = appBaseURL + '/rso',
+    appAuthURL = appBaseURL + '/auth';
 
 var riotURL = 'https://auth.riotgames.com',
     authorizeURL = riotURL + '/authorize',
@@ -30,30 +31,83 @@ app.get('/kindred/login', function (req, res) {
         res.status(401).send({ error: 'Unauthorized' });
         return;
     }
-    var id = req.query.id;
-    if (!id) { 
-        res.status(400).send({ error: 'Bad Request' }); 
-        return 
-    };
+
+    if (!req.query.auth) {
+        res.status(400).send({ error: 'Bad Request' });
+        return;
+    }
+
+    var auth = Buffer.from(req.query.auth, 'base64').toString('ascii').split(':'),
+        discordID = auth[0],
+        token = auth[1];
+
+    if (!discordID || !token) {
+        res.status(400).send({ error: 'Bad Request' });
+        return;
+    }
+
+    var dbEntry = db.linkedLeague.get(discordID);
+    if (!dbEntry || dbEntry.token !== token) {
+        res.status(400).send({ error: 'Bad Request' });
+        return;
+    }
+
+    var link = appAuthURL + '?token=' + req.query.auth;
+    res.status(200).send({ link: link });
+});
+
+app.get('/kindred/auth', function (req, res) {
+    if (!req.query.token) {
+        res.status(400).send({ error: 'Bad Request' });
+        return;
+    }
+
+    var auth = Buffer.from(req.query.token, 'base64').toString('ascii').split(':'),
+        discordID = auth[0],
+        token = auth[1];
+
+    if (!discordID || !token) {
+        res.status(400).send({ error: 'Bad Request' });
+        return;
+    }
+
+    var dbEntry = db.linkedLeague.get(discordID);
+    if (!dbEntry || dbEntry.token !== token) {
+        res.status(400).send({ error: 'Bad Request' });
+        return;
+    }
 
     var link = authorizeURL
         + '?redirect_uri=' + appCallbackURL
         + '&client_id=' + clientID
         + '&response_type=code'
         + '&scope=openid+cpid'
-        + '&state=' + id;
+        + '&state=' + req.query.token;
 
-    res.status(200).send({ link: link });
+    res.status(302).redirect(link);
 });
 
 app.get('/kindred/rso', async function (req, res) {
-    var id = req.query.state;
-    if (!id) { 
-        res.status(400).send({ error: 'Bad Request' }); 
-        return 
-    };
-    var accessCode = req.query.code,
-        discordID = Buffer.from(req.query.state, 'base64').toString('ascii');
+    if (!req.query.code || !req.query.state) {
+        res.status(400).send({ error: 'Bad Request' });
+        return;
+    }
+
+    var auth = Buffer.from(req.query.state, 'base64').toString('ascii').split(':'),
+        accessCode = req.query.code,
+        discordID = auth[0],
+        token = auth[1];
+
+    if (!discordID || !token) {
+        res.status(400).send({ error: 'Bad Request' });
+        return;
+    }
+
+    var dbEntry = db.linkedLeague.get(discordID);
+    if (!dbEntry || dbEntry.token !== token) {
+        res.status(400).send({ error: 'Bad Request' });
+        return;
+    }
 
     var tokenAuth = { username: clientID, password: clientSecret },
         tokenData = new URLSearchParams();
@@ -84,9 +138,9 @@ app.get('/kindred/rso', async function (req, res) {
         summonerPuuid = summonerNameRequest.data.puuid;
 
     db.linkedLeague.set(discordID, { puuid: summonerPuuid, region: cpid });
-    res.status(302).redirect(successURL);
+    res.status(302).redirect(appSuccessURL);
 });
 
 app.get('/kindred/success', function (req, res) {
-    res.status(200).send({ message: 'Success' });
+    res.status(200).send("<script>window.close();</script>");
 });
