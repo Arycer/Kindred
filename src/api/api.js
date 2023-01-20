@@ -32,7 +32,8 @@ app.get('/kindred/login', function (req, res) {
     }
     var id = req.query.id;
     if (!id) { 
-        res.status(400).send({ error: 'Bad Request' }); return 
+        res.status(400).send({ error: 'Bad Request' }); 
+        return 
     };
 
     var link = authorizeURL
@@ -46,6 +47,11 @@ app.get('/kindred/login', function (req, res) {
 });
 
 app.get('/kindred/rso', async function (req, res) {
+    var id = req.query.state;
+    if (!id) { 
+        res.status(400).send({ error: 'Bad Request' }); 
+        return 
+    };
     var accessCode = req.query.code,
         discordID = Buffer.from(req.query.state, 'base64').toString('ascii');
 
